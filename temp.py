@@ -12,6 +12,7 @@ MESSAGES = [
     "Kill the child",
     "Abort the fetus",
     "Consume the pill",
+    "Don't repeat your parents' mistake"
 ]
 
 try:
