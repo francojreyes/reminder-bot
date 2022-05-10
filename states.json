@@ -13,8 +13,8 @@
             "2\ufe0f\u20e3": "in_amount"
         },
         "append": {
-            "1\ufe0f\u20e3": " on...",
-            "2\ufe0f\u20e3": " in..."
+            "1\ufe0f\u20e3": "on",
+            "2\ufe0f\u20e3": "in"
         }
     },
     "date": {
@@ -24,7 +24,7 @@
         },
         "options": [],
         "next_state": "time",
-        "append": " {0} at..."
+        "append": " {0} at"
     },
     "time": {
         "field": {
@@ -33,7 +33,7 @@
         },
         "options": [],
         "next_state": "repeat",
-        "append": " {0}, repeating..."
+        "append": " {0}, repeating"
     },
     "in_amount": {
         "field": {
@@ -42,7 +42,7 @@
         },
         "options": [],
         "next_state": "in_select",
-        "append": " {0}..."
+        "append": " {0}"
     },
     "in_select": {
         "field": {
@@ -57,16 +57,16 @@
         ],
         "next_state": "repeat",
         "append": {
-            "1\ufe0f\u20e3": " hours, repeating...",
-            "2\ufe0f\u20e3": " days, repeating...",
-            "3\ufe0f\u20e3": " weeks, repeating...",
-            "4\ufe0f\u20e3": " months, repeating..."
+            "1\ufe0f\u20e3": " hours, repeating",
+            "2\ufe0f\u20e3": " days, repeating",
+            "3\ufe0f\u20e3": " weeks, repeating",
+            "4\ufe0f\u20e3": " months, repeating"
         }
     },
     "repeat": {
         "field": {
             "name": "Repeat this reminder?",
-            "value": ":regional_indicator_y: - Yes, repeat every...\n:regional_indicator_n: - No, set reminder"
+            "value": ":regional_indicator_y: - Yes, repeat every\n:regional_indicator_n: - No, set reminder"
         },
         "options": [
             "\ud83c\uddfe",
@@ -77,7 +77,7 @@
             "\ud83c\uddf3": "confirm"
         },
         "append": {
-            "\ud83c\uddfe": " every...",
+            "\ud83c\uddfe": " every",
             "\ud83c\uddf3": " never."
         }
     },
@@ -88,7 +88,7 @@
         },
         "options": [],
         "next_state": "repeat_select",
-        "append": " {0}..."
+        "append": " {0}"
     },
     "repeat_select": {
         "field": {
