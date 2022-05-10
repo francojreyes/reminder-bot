@@ -7,13 +7,12 @@ import discord
 import dotenv
 from discord.ext import commands
 
-from prompt import ReminderPrompt
-from states import STATES
-
+from prompt import ReminderPrompt, STATES
 
 class Reminder():
     def __init__(self) -> None:
         pass
+
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -21,6 +20,7 @@ intents.messages = True
 client = commands.Bot(command_prefix='r!', intents=intents)
 client.prompts = []
 client.reminders = []
+
 
 @client.command()
 async def set(ctx, *args):

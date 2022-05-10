@@ -2,9 +2,11 @@
 ReminderPrompt class
 '''
 
+import json
 import discord
 
-from states import STATES
+with open('states.json', 'r') as f:
+    STATES = json.load(f)
 
 class ReminderPrompt():
     def __init__(self, ctx, reminder):
