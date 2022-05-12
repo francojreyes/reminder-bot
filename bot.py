@@ -13,7 +13,7 @@ class ReminderBot(commands.Bot):
         self.prompts = []
         self.reminders = []
 
-        @self.command()
+        @self.slash_command()
         async def set(ctx, *args):
             # See if user currently has a prompt open
             for prompt in self.prompts:
@@ -24,6 +24,10 @@ class ReminderBot(commands.Bot):
             new = ReminderPrompt(ctx, ' '.join(args))
             await new.start()
             self.prompts.append(new)
+        
+        @self.slash_command(guild_ids=[959823163447967774])
+        async def ping(ctx):
+            await ctx.respond("Pong!")
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))

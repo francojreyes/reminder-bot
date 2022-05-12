@@ -7,7 +7,7 @@ import dotenv
 from bot import ReminderBot
 
 intents = discord.Intents.default()
-intents.messages = True
+intents.message_content = True
 client = ReminderBot(command_prefix='r!', intents=intents)
 
 dotenv.load_dotenv()
