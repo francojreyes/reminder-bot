@@ -25,7 +25,6 @@ class ReminderBot(commands.Bot):
             await new.start()
             self.prompts.append(new)
 
-
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
 
