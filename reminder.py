@@ -7,7 +7,7 @@ from datetime import datetime
 import constants
 from prompt import ReminderPrompt
 
-@total_ordering()
+@total_ordering
 class Reminder():
     """
     Represents a reminder
