@@ -1,6 +1,6 @@
-# This example requires the 'members' privileged intents
-import re
-
+'''
+The Reminder Bot bot client
+'''
 import discord
 
 from prompt import ReminderPrompt
@@ -32,9 +32,16 @@ class ReminderBot(discord.Bot):
         
         @self.command()
         async def ping(ctx):
+            """Ping the Reminder Bot"""
             await ctx.respond("Pong!")
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
 
+    async def on_message_delete(self, message):
+        # If a prompt was deleted, cancel it
+        for prompt in self.prompts:
+            if prompt.message.id == message.id:
+                prompt.cancelled = True
+                prompt._view.stop()
 
