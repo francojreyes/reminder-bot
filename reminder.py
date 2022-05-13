@@ -95,10 +95,10 @@ class Reminder():
     
     def __str__(self):
         """Discord syntax string representation for listing"""
-        s = f'_"{self.text}"_ from `@{self.author}`\n\t'
-        s += f'<t:{self.time}:R>'
+        s = f'_"{self.text}"_ from `@{self.author}`\n'
+        s += f'    <t:{self.time}:R>'
         if self.interval:
-            s += f', every {self.interval}'
+            s += f' (repeats every {self.interval})'
         return s
     
     def __eq__(self, other):
