@@ -1,7 +1,11 @@
 '''
 The Reminder Bot bot client
 '''
+from bisect import insort
+from datetime import datetime
+
 import discord
+from discord.ext import tasks
 
 from prompt import ReminderPrompt
 from reminder import Reminder
@@ -9,8 +13,8 @@ from reminder import Reminder
 class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.prompts = []
-        self.reminders = []
+        self.prompts: list[ReminderPrompt] = []
+        self.reminders: list[Reminder] = []
 
         @self.command()
         @discord.option("reminder", description="Enter your reminder", required=True)
@@ -29,22 +33,44 @@ class ReminderBot(discord.Bot):
 
             # Set a reminder with completed prompt
             if not res and not prompt.cancelled:
-                await ctx.respond("This is a lie, this bot doesn't set reminders yet, no reminder has been set", ephemeral=True)
-                self.reminders.append(Reminder.from_prompt(prompt))
+                insort(self.reminders, Reminder.from_prompt(prompt))
             self.prompts.remove(prompt)
-        
+
         @self.command()
         async def ping(ctx):
             """Ping the Reminder Bot"""
             await ctx.respond("Pong!")
 
+        self.execute_reminders.start()
+
     async def on_ready(self):
+        # Signal ready
         print('Logged on as {0}!'.format(self.user))
 
     async def on_message_delete(self, message):
-        # If a prompt was deleted, cancel it
+        """Listen for deletion of UIs"""
         for prompt in self.prompts:
             if prompt.message.id == message.id:
                 prompt.cancelled = True
                 prompt._view.stop()
 
+    @tasks.loop(minutes=1)
+    async def execute_reminders(self):
+        '''Execute all reminders that are in this minute'''
+        for reminder in self.reminders:
+            # Loop until a reminder is no longer this minute
+            if reminder.time // 60 != int(datetime.now().timestamp()) // 60:
+                break
+            self.reminders.remove(reminder)
+
+            # Send reminder
+            channel = self.get_channel(reminder.channel_id)
+            await channel.send(f'<@{reminder.author_id}> {reminder.text}')
+
+            # If reminder repeats, add repeat
+            if reminder.interval:
+                insort(self.reminders, reminder.generate_repeat())
+
+    @execute_reminders.before_loop
+    async def before_my_task(self):
+        await self.wait_until_ready()

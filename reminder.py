@@ -73,6 +73,22 @@ class Reminder():
             interval=interval
         )
     
+    def generate_repeat(self):
+        """Create reminder that is the repeat of self"""
+        if not self.interval:
+            raise ValueError('This reminder has no repeat interval set')
+
+        interval = self.interval.split(' ')
+        repeat_time = datetime.fromtimestamp(self.time) + int(interval[0]) * constants.DELTA[interval[1]]
+        return Reminder(
+            text=self.text,
+            author_id=self.author_id,
+            author=self.author,
+            channel_id=self.channel_id,
+            time=repeat_time,
+            interval=self.interval
+        )
+    
     def __str__(self):
         """String representation for listing"""
         s = f'_"{self.text}"_ from `@{self.author}`\n\t'
