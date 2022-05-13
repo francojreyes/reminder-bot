@@ -212,11 +212,11 @@ class ReminderPrompt():
 class PromptView(discord.ui.View):
     """
     Subclass for discord View model
-    2 minute timeout
+    90 second timeout
     Requires all interactions to be from author
     """
     def __init__(self, prompt: ReminderPrompt):
-        super().__init__(timeout=120)
+        super().__init__(timeout=90)
         self.prompt = prompt
 
     async def interaction_check(self, interaction: discord.Interaction):

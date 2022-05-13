@@ -89,7 +89,7 @@ class Reminder():
             author_id=self.author_id,
             author=self.author,
             channel_id=self.channel_id,
-            time=repeat_time,
+            time=int(repeat_time.timestamp()),
             interval=self.interval
         )
     
