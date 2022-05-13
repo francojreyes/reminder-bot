@@ -2,7 +2,7 @@
 Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 '''
-from datetime import datetime
+from datetime import datetime, date
 import re
 
 import discord
@@ -10,6 +10,29 @@ import discord
 import constants
 
 class ReminderPrompt():
+    """
+    Object for a Reminder Prompt
+
+    Attributes
+    ctx: ApplicationContext
+        Context of the command that opened this prompt
+    text: str
+        Actual text of the reminder
+    _time: list(str)
+        Split string representing the time of the reminder
+    prev_state: function
+        The function to be called when back is called
+    _view: PromptView
+        The Discord View UI of this prompt
+    message: InteractionMessage
+        The message that displays this prompt
+    interaction: Interaction
+        The open interaction that must be responded to
+    fixed_date: str
+        String representing date or None if this has no fixed date
+    cancelled: bool
+        Whether this has been cancelled
+    """
     def __init__(self, ctx: discord.ApplicationContext, text: str):
         '''Opens a new ReminderPrompt'''
         self.ctx = ctx
@@ -21,6 +44,7 @@ class ReminderPrompt():
         self.message: discord.InteractionMessage = None
         self.interaction: discord.Interaction = None
 
+        self.fixed_date = None
         self.cancelled = False
 
     def embed(self):
@@ -65,6 +89,7 @@ class ReminderPrompt():
         self._view.clear_items()
         self._view.add_item(InitialSelect(self))
         self.prev_state = None
+        self.fixed_date = None
         await self.interaction.response.edit_message(embed=self.embed(), view=self.view(no_back=True))
 
     async def on(self):
@@ -212,27 +237,46 @@ class InitialSelect(discord.ui.Select):
         super().__init__(placeholder='Choose a reminder type')
         self.prompt = prompt
         self.add_option(
-            label='on...',
-            value='on',
-            emoji="📅",
-            description="a certain date, at a certain time"
-        )
-        self.add_option(
             label="in...",
             value='in',
             emoji="⌛",
             description="an amount of time from now"
         )
+        self.add_option(
+            label="today at...",
+            value='today',
+            emoji="☀️",
+            description="today at a certain time"
+        )
+        self.add_option(
+            label="tomorrow at...",
+            value='tomorrow',
+            emoji="💤",
+            description="tomorrow at a certain time"
+        )
+        self.add_option(
+            label='on...',
+            value='on',
+            emoji="📅",
+            description="a certain date, at a certain time"
+        )
+
+
 
     async def callback(self, interaction: discord.Interaction):
         selection = self.values[0]
-        self.prompt._time.append(selection)
 
         # Choose path
-        if selection == 'on':
-            await self.prompt.on()
-        elif selection == 'in':
+        if selection == 'in':
+            self.prompt._time.append(selection)
             await self.prompt.in_amount()
+        else:
+            self.prompt._time.append('on')
+            if selection == 'today':
+                self.prompt.fixed_date = date.today().strftime("%d/%m/%Y")
+            elif selection == 'tomorrow':
+                self.prompt.fixed_date = (date.today() + constants.DELTA['days']).strftime("%d/%m/%Y")
+            await self.prompt.on()
 
 
 class DateTimeModal(discord.ui.Modal):
@@ -242,7 +286,8 @@ class DateTimeModal(discord.ui.Modal):
         self.prompt = prompt
         self.add_item(discord.ui.InputText(
             label="Enter a date",
-            placeholder="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY",
+            value=self.prompt.fixed_date
         ))
         self.add_item(discord.ui.InputText(
             label="Enter a time (24 hour AEST)",
