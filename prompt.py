@@ -256,7 +256,7 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid input format
         if not re.fullmatch(r'[0-9]{2}/[0-9]{2}/[0-9]{4}', date):
-            await self.prompt.ctx.respond('Invalid date format! Please use the format DD-MM-YYYY', ephemeral=True)
+            await self.prompt.ctx.respond('Invalid date format! Please use the format DD/MM/YYYY', ephemeral=True)
             await self.prompt.back()
             return
 
@@ -268,7 +268,7 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid datetime
         try:
-            datetime.strptime(date + time, "%d-%m-%Y%H:%M")
+            datetime.strptime(date + time, "%d/%m/%Y%H:%M")
         except ValueError:
             await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
             await self.prompt.back()
