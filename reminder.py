@@ -94,9 +94,9 @@ class Reminder():
         )
     
     def __str__(self):
-        """String representation for listing"""
+        """Discord syntax string representation for listing"""
         s = f'_"{self.text}"_ from `@{self.author}`\n\t'
-        s += datetime.strftime(datetime.fromtimestamp(self.time), "%d/%m/%Y %H:%M")
+        s += f'<t:{self.time}:R>'
         if self.interval:
             s += f', every {self.interval}'
         return s
