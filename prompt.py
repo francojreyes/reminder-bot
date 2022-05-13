@@ -240,25 +240,25 @@ class InitialSelect(discord.ui.Select):
             label="in...",
             value='in',
             emoji="⌛",
-            description="an amount of time from now"
+            description="Remind me in an amount of time from now"
         )
         self.add_option(
             label="today at...",
             value='today',
             emoji="☀️",
-            description="today at a certain time"
+            description="Remind me today at a certain time"
         )
         self.add_option(
             label="tomorrow at...",
             value='tomorrow',
             emoji="💤",
-            description="tomorrow at a certain time"
+            description="Remind me tomorrow at a certain time"
         )
         self.add_option(
             label='on...',
             value='on',
             emoji="📅",
-            description="a certain date, at a certain time"
+            description="Remind me on a certain date, at a certain time"
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -315,9 +315,15 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid datetime
         try:
-            datetime.strptime(date + time, "%d/%m/%Y%H:%M")
+            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M")
         except ValueError:
             await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
+            await self.prompt.back()
+            return
+        
+        # Enforce in future
+        if dt <= datetime.now():
+            await self.prompt.ctx.respond("You can't set a reminder in the past!", ephemeral=True)
             await self.prompt.back()
             return
 
@@ -345,6 +351,12 @@ class AmountModal(discord.ui.Modal):
             await self.prompt.ctx.respond('Invalid format! Please enter a number', ephemeral=True)
             await self.prompt.back()
             return
+        
+        # Enforce > 0
+        if int(inp) <= 0:
+            await self.prompt.ctx.respond('Please enter a positive number', ephemeral=True)
+            await self.prompt.back()
+            return  
 
         self.prompt._time.append(inp)
 
