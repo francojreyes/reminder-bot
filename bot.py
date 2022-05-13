@@ -9,12 +9,14 @@ from discord.ext import tasks
 
 from prompt import ReminderPrompt
 from reminder import Reminder
+from paginator import ReminderList
 
 class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prompts: list[ReminderPrompt] = []
         self.reminders: list[Reminder] = []
+        self.lists: list[ReminderList] = []
 
         @self.command()
         @discord.option("reminder", description="Enter your reminder", required=True)
@@ -35,6 +37,23 @@ class ReminderBot(discord.Bot):
             if not res and not prompt.cancelled:
                 insort(self.reminders, Reminder.from_prompt(prompt))
             self.prompts.remove(prompt)
+        
+        @self.command()
+        async def list(ctx):
+            """List all reminders"""
+            for list_ in self.lists:
+                if list_.ctx.author == ctx.author:
+                    await ctx.respond("You already have a list open", ephemeral=True)
+                    return
+            
+            # Open a new list
+            list_ = ReminderList(ctx, self.reminders)
+            self.lists.append(list_)
+            await list_.respond(ctx.interaction)
+            await list_.wait()
+
+            # After list is done, idk
+            self.lists.remove(list_)
 
         @self.command()
         async def ping(ctx):
