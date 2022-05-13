@@ -9,7 +9,7 @@ import discord
 
 
 class ReminderPrompt():
-    def __init__(self, ctx, reminder: str):
+    def __init__(self, ctx: discord.ApplicationContext, reminder: str):
         '''Opens a new ReminderPrompt'''
         self.author = ctx.author
         self.ctx = ctx
@@ -243,7 +243,7 @@ class DateTimeModal(discord.ui.Modal):
 
 
 class AmountModal(discord.ui.Modal):
-    def __init__(self, prompt: ReminderPrompt, state):
+    def __init__(self, prompt: ReminderPrompt, state: str):
         super().__init__('Reminder Bot')
         self.prompt = prompt
         self.state = state
@@ -269,7 +269,7 @@ class AmountModal(discord.ui.Modal):
 
 
 class PeriodSelect(discord.ui.Select):
-    def __init__(self, prompt: ReminderPrompt, state):
+    def __init__(self, prompt: ReminderPrompt, state: str):
         super().__init__(placeholder='Choose a time period')
         self.prompt = prompt
         self.state = state
@@ -290,7 +290,7 @@ class PeriodSelect(discord.ui.Select):
 
 
 class CancelButton(discord.ui.Button):
-    def __init__(self, prompt):
+    def __init__(self, prompt: ReminderPrompt):
         super().__init__(emoji="❌", label="Cancel")
         self.prompt = prompt
 
@@ -300,7 +300,7 @@ class CancelButton(discord.ui.Button):
 
 
 class BackButton(discord.ui.Button):
-    def __init__(self, prompt, disabled=False):
+    def __init__(self, prompt: ReminderPrompt, disabled: bool = False):
         super().__init__(emoji="↩️", label="Back", disabled=disabled)
         self.prompt = prompt
     
@@ -310,7 +310,7 @@ class BackButton(discord.ui.Button):
 
 
 class YesRepeatButton(discord.ui.Button):
-    def __init__(self, prompt):
+    def __init__(self, prompt: ReminderPrompt):
         super().__init__(label="Repeat every...", emoji="🔁")
         self.prompt = prompt
     
@@ -321,21 +321,21 @@ class YesRepeatButton(discord.ui.Button):
 
 
 class NoRepeatButton(discord.ui.Button):
-    def __init__(self, prompt):
+    def __init__(self, prompt: ReminderPrompt):
         super().__init__(label="Do not repeat", emoji="1️⃣")
         self.prompt = prompt
     
-    async def callback(self, interaction):
+    async def callback(self, interaction: discord.Interaction):
         self.prompt.interaction = interaction
         self.prompt._time.append('never')
         await self.prompt.confirm()
 
 
 class ConfirmButton(discord.ui.Button):
-    def __init__(self, prompt):
+    def __init__(self, prompt: ReminderPrompt):
         super().__init__(style=discord.ButtonStyle.success, label="Confirm", emoji="✅")
         self.prompt = prompt
     
-    async def callback(self, interaction):
+    async def callback(self, interaction: discord.Interaction):
         self.prompt.interaction = interaction
         await self.prompt.finish()
