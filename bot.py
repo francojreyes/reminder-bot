@@ -18,7 +18,7 @@ class ReminderBot(discord.Bot):
             """Set a new reminder"""
             # See if user currently has a prompt open
             for prompt in self.prompts:
-                if prompt.author.id == ctx.author.id:
+                if prompt.ctx.author == ctx.author:
                     await ctx.respond("You are already setting a reminder, finish that one first!", ephemeral=True)
                     return
 
