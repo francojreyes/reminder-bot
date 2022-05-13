@@ -1,11 +1,13 @@
 '''
 Reminder object
 '''
+from functools import total_ordering
 from datetime import datetime
 
 import constants
 from prompt import ReminderPrompt
 
+@total_ordering()
 class Reminder():
     """
     Represents a reminder
@@ -17,7 +19,7 @@ class Reminder():
         User ID of the reminder author
     author_name: str
         name#id of the reminder author
-    channel: int
+    channel_id: int
         Channel ID of the target channel
     time: int
         POSIX timestamp of the time of the reminder
@@ -29,14 +31,14 @@ class Reminder():
             text: str = '',
             author_id: int = 0,
             author: str = '',
-            channel: int = 0,
+            channel_id: int = 0,
             time: int = 0,
             interval: str = ''
         ):
         self.text = text
         self.author_id = author_id
         self.author = author
-        self.channel = channel
+        self.channel_id = channel_id
         self.time = time
         self.interval = interval
 
@@ -66,7 +68,7 @@ class Reminder():
             text=prompt.text,
             author_id=prompt.ctx.author.id,
             author=str(prompt.ctx.author),
-            channel=prompt.ctx.channel_id,
+            channel_id=prompt.ctx.channel_id,
             time=time,
             interval=interval
         )
@@ -78,3 +80,9 @@ class Reminder():
         if self.interval:
             s += f', every {self.interval}'
         return s
+    
+    def __eq__(self, other):
+        return self.time == other.time
+    
+    def __lt__(self, other):
+        return self.time < other.time
