@@ -54,6 +54,8 @@ class Reminder():
             time = int(datetime.strptime(time_str[1], format_str).timestamp())
         else: # time_str[0] == 'in'
             period = time_str[2].split(',')[0]
+            if not period.endswith('s'):
+                period += 's'
             dt = datetime.now() + int(time_str[1]) * constants.DELTA[period]
             time = int(dt.timestamp())
 
@@ -78,8 +80,10 @@ class Reminder():
         if not self.interval:
             raise ValueError('This reminder has no repeat interval set')
 
-        interval = self.interval.split(' ')
-        repeat_time = datetime.fromtimestamp(self.time) + int(interval[0]) * constants.DELTA[interval[1]]
+        amount, period = self.interval.split(' ')
+        if not period.endswith('s'):
+            period += 's'
+        repeat_time = datetime.fromtimestamp(self.time) + int(amount) * constants.DELTA[period]
         return Reminder(
             text=self.text,
             author_id=self.author_id,

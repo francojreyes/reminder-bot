@@ -285,8 +285,8 @@ class AmountModal(discord.ui.Modal):
         self.prompt = prompt
         self.state = state
         self.add_item(discord.ui.InputText(
-            label="Enter an amount",
-            placeholder="123"
+            label="Remind me in _ hours/days/weeks/months",
+            placeholder="Enter an amount e.g. 123"
         ))
 
     async def callback(self, interaction: discord.Interaction):
@@ -318,7 +318,17 @@ class PeriodSelect(discord.ui.Select):
         self.add_option(label='weeks', value='weeks')
         self.add_option(label='months', value='months')
 
+        # Make singular if 1
+        amount = int(self.prompt._time[-1])
+        if amount == 1:
+            for option in self.options:
+                option.label = option.label[:-1]
+                option.value = option.value[:-1]
+
+
     async def callback(self, interaction: discord.Interaction):
+        period = self.values[0]
+
         # Choose path based on what function sent this Select
         if self.state == 'in':
             self.prompt._time.append(f'{self.values[0]}, repeating')
