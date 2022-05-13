@@ -10,10 +10,11 @@ import constants
 class ReminderList(pages.Paginator):
     def __init__(self, ctx, reminders):
         self.ctx = ctx
+        self.reminders = enumerate(reminders)
 
         page_list = []
-        for i in range(0, len(reminders), 5):
-            page_list.append(ReminderListPage(reminders[i:i+5]))
+        for i in range(0, len(self.reminders), 5):
+            page_list.append(ReminderListPage(self.reminders[i:i+5]))
         
         if not reminders:
             page_list = [ReminderListPage(None)]
@@ -39,7 +40,7 @@ class ReminderListPage(pages.Page):
     """Page of a reminder list"""
     def __init__(self, reminders):
         if reminders:
-            content = '\n\n'.join(f'**{idx+1}:** {reminder}' for idx, reminder in enumerate(reminders))
+            content = '\n\n'.join(f'**{idx+1}:** {reminder}' for idx, reminder in reminders)
         else:
             content = 'Nothing to show here...'
 
