@@ -8,7 +8,7 @@ from bot import ReminderBot
 
 intents = discord.Intents.default()
 intents.message_content = True
-client = ReminderBot(command_prefix='r!', intents=intents)
+client = ReminderBot(intents=intents)
 
 dotenv.load_dotenv()
 client.run(os.getenv('DISCORD_TOKEN'))

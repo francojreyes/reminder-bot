@@ -2,65 +2,39 @@
 import re
 
 import discord
-from discord.ext import commands
 
-from reminders import ReminderPrompt
+from prompt import ReminderPrompt
 
 
-class ReminderBot(commands.Bot):
+class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prompts = []
         self.reminders = []
 
-        @self.slash_command()
-        async def set(ctx, *args):
+        @self.command()
+        @discord.option("reminder", description="Enter your reminder", required=True)
+        async def set(ctx, reminder):
+            """Set a new reminder"""
             # See if user currently has a prompt open
             for prompt in self.prompts:
                 if prompt.author.id == ctx.author.id:
+                    await ctx.respond("You are already setting a reminder, finish that one first!", ephemeral=True)
                     return
 
             # Create a new prompt
-            new = ReminderPrompt(ctx, ' '.join(args))
-            await new.start()
+            new = ReminderPrompt(ctx, reminder)
             self.prompts.append(new)
+            res = await new.run()
+            if not res and not new.cancelled:
+                await ctx.respond("This is a lie, this bot doesn't set reminders yet, no reminder has been set")
+            self.prompts.remove(new)
         
-        @self.slash_command(guild_ids=[959823163447967774])
+        @self.command()
         async def ping(ctx):
             await ctx.respond("Pong!")
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
 
-    async def on_message(self, message: discord.Message):
-        """Attempts to take in input for prompts requring text input"""
-        await self.process_commands(message)
-
-        for prompt in self.prompts:
-            if prompt.author.id == message.author.id and not prompt.options:
-                target = prompt
-                break
-        else:
-            return
-
-        inp = message.content.strip()
-        if ('_amount' in target.state and inp.isnumeric()) or \
-        (target.state == 'date' and re.fullmatch(r'[0-9]{2}-[0-9]{2}-[0-9]{4}', inp)) or \
-        (target.state == 'time' and re.fullmatch(r'[0-9]{2}:[0-9]{2}', inp)):
-            await message.delete()
-            await target.update(inp=inp)
-
-    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
-        """Attempts to respond to reaction to prompts"""
-        for prompt in self.prompts:
-            if prompt.author.id == payload.user_id:
-                target = prompt
-                break
-        else:
-            return
-        
-        if payload.emoji.name in prompt.options:
-            await target.update(emoji=payload.emoji.name)
-        else:
-            await target.message.clear_reaction(payload.emoji)
 
