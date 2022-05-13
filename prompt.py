@@ -261,8 +261,6 @@ class InitialSelect(discord.ui.Select):
             description="a certain date, at a certain time"
         )
 
-
-
     async def callback(self, interaction: discord.Interaction):
         selection = self.values[0]
 
@@ -286,11 +284,15 @@ class DateTimeModal(discord.ui.Modal):
         self.prompt = prompt
         self.add_item(discord.ui.InputText(
             label="Enter a date",
+            min_length=10,
+            max_length=10,
             placeholder="DD/MM/YYYY",
             value=self.prompt.fixed_date
         ))
         self.add_item(discord.ui.InputText(
             label="Enter a time (24 hour AEST)",
+            min_length=5,
+            max_length=5,
             placeholder="HH:MM"
         ))
 
