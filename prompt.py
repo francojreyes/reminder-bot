@@ -1,5 +1,6 @@
 '''
-Reminder prompt UI
+Reminder prompt UI that uses the Discord Interaction API
+to take user input on a reminder.
 '''
 import datetime
 import re
@@ -164,7 +165,7 @@ class PromptView(discord.ui.View):
         if interaction.user == self.prompt.author:
             return True
         else:
-            interaction.response.send_message(
+            await interaction.response.send_message(
                 "This isn't your reminder! Go away!", ephemeral=True)
 
     async def on_timeout(self):
@@ -315,7 +316,8 @@ class YesRepeatButton(discord.ui.Button):
     
     async def callback(self, interaction):
         self.prompt.interaction = interaction
-        await self.prompt.repeat()
+        self.prompt._time.append('every')
+        await self.prompt.repeat_amount()
 
 
 class NoRepeatButton(discord.ui.Button):
@@ -325,6 +327,7 @@ class NoRepeatButton(discord.ui.Button):
     
     async def callback(self, interaction):
         self.prompt.interaction = interaction
+        self.prompt._time.append('never')
         await self.prompt.confirm()
 
 
