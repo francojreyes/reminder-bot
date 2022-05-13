@@ -31,11 +31,6 @@ class ReminderBot(discord.Bot):
             if not res and not prompt.cancelled:
                 await ctx.respond("This is a lie, this bot doesn't set reminders yet, no reminder has been set", ephemeral=True)
                 self.reminders.append(Reminder.from_prompt(prompt))
-
-                ### TESTING ###
-                for idx, reminder in enumerate(self.reminders):
-                    channel = self.get_channel(reminder.channel)
-                    await channel.send(f'**{idx + 1}**: {reminder}')
             self.prompts.remove(prompt)
         
         @self.command()
