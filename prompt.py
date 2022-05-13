@@ -130,7 +130,7 @@ class ReminderPrompt():
         embed = discord.Embed.from_dict({
             'title': 'Setting reminder...',
             'description': f'_"{self.text}"_\n{self.time()}.',
-            'color': constants.GREEN
+            'color': constants.BLURPLE
         })
         
         # State was reached from either non-recurring or recurring path
