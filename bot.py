@@ -4,7 +4,7 @@ The Reminder Bot bot client
 import discord
 
 from prompt import ReminderPrompt
-
+from reminder import Reminder
 
 class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
@@ -22,13 +22,21 @@ class ReminderBot(discord.Bot):
                     await ctx.respond("You are already setting a reminder, finish that one first!", ephemeral=True)
                     return
 
-            # Create a new prompt
-            new = ReminderPrompt(ctx, reminder)
-            self.prompts.append(new)
-            res = await new.run()
-            if not res and not new.cancelled:
-                await ctx.respond("This is a lie, this bot doesn't set reminders yet, no reminder has been set")
-            self.prompts.remove(new)
+            # Open a new prompt
+            prompt = ReminderPrompt(ctx, reminder)
+            self.prompts.append(prompt)
+            res = await prompt.run()
+
+            # Set a reminder with completed prompt
+            if not res and not prompt.cancelled:
+                await ctx.respond("This is a lie, this bot doesn't set reminders yet, no reminder has been set", ephemeral=True)
+                self.reminders.append(Reminder.from_prompt(prompt))
+
+                ### TESTING ###
+                for idx, reminder in enumerate(self.reminders):
+                    channel = self.get_channel(reminder.channel)
+                    await channel.send(f'**{idx + 1}**: {reminder}')
+            self.prompts.remove(prompt)
         
         @self.command()
         async def ping(ctx):
