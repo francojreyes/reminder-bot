@@ -2,11 +2,12 @@
 Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 '''
-import datetime
+from datetime import datetime
 import re
 
 import discord
 
+import constants
 
 class ReminderPrompt():
     def __init__(self, ctx: discord.ApplicationContext, text: str):
@@ -27,7 +28,7 @@ class ReminderPrompt():
         return discord.Embed.from_dict({
             'title': 'Setting reminder...',
             'description': f'_"{self.text}"_\n{self.time()}...',
-            'color': 0x5865f2
+            'color': constants.BLURPLE
         })
 
     def time(self):
@@ -129,7 +130,7 @@ class ReminderPrompt():
         embed = discord.Embed.from_dict({
             'title': 'Setting reminder...',
             'description': f'_"{self.text}"_\n{self.time()}.',
-            'color': 0x5865f2
+            'color': constants.GREEN
         })
         
         # State was reached from either non-recurring or recurring path
@@ -148,7 +149,7 @@ class ReminderPrompt():
         embed = discord.Embed.from_dict({
             'title': 'Reminder set!',
             'description': f'_"{self.text}"_\n{self.time()}.',
-            'color': 0x57f287
+            'color': constants.GREEN
         })
         await self.interaction.response.edit_message(embed=embed, view=self._view)
         self._view.stop()
@@ -161,7 +162,7 @@ class ReminderPrompt():
         embed = discord.Embed.from_dict({
             'title': 'Reminder cancelled!',
             'description': f'_"{self.text}"_\n{self.time()}...',
-            'color': 0xed4245
+            'color': constants.RED
         })
 
         await self.interaction.response.edit_message(embed=embed, view=self._view)
@@ -176,7 +177,7 @@ class ReminderPrompt():
         embed = discord.Embed.from_dict({
             'title': 'Reminder timed out!',
             'description': f'_"{self.text}"_\n{self.time()}...',
-            'color': 0xed4245
+            'color': constants.RED
         })
 
         await self.message.edit(embed=embed, view=self._view)
@@ -267,7 +268,7 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid datetime
         try:
-            dt = datetime.datetime.strptime(date + time, "%d-%m-%Y%H:%M")
+            datetime.strptime(date + time, "%d-%m-%Y%H:%M")
         except ValueError:
             await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
             await self.prompt.back()
