@@ -28,7 +28,7 @@ class MyMongoClient():
     def __init__(self):
         dotenv.load_dotenv()
         self.client = MongoClient(
-            os.getenv('MONGODB_URL'), server_api=ServerApi('1'))
+            os.getenv('MONGODB_URL'), server_api=ServerApi('1'), connect=False)
         self.db = self.client.reminderbot
 
     def add_reminder(self, reminder: Reminder):
