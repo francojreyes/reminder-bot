@@ -10,6 +10,7 @@ from src import constants
 from src.classes.prompt import ReminderPrompt
 from src.classes.reminder import Reminder
 from src.classes.list import ReminderList
+from src.data import data
 
 class RemindersCog(commands.Cog):
     def __init__(self, bot):
@@ -32,11 +33,11 @@ class RemindersCog(commands.Cog):
 
         # Set a reminder with completed prompt
         if not res and not prompt.cancelled:
-            insort(self.bot.reminders, Reminder.from_prompt(prompt))
+            data.add_reminder(Reminder.from_prompt(prompt))
         self.bot.prompts.remove(prompt)
     
     @commands.Cog.listener('on_message_delete')
-    async def prompt_deletion(self, message):
+    async def prompt_deletion(self, message: discord.Message):
         """Listen for prompt deletion"""
         for prompt in self.bot.prompts:
             if prompt.message.id == message.id:
@@ -44,23 +45,23 @@ class RemindersCog(commands.Cog):
                 prompt._view.stop()
     
     @commands.slash_command()
-    async def list(self, ctx):
+    async def list(self, ctx: discord.ApplicationContext):
         """List all reminders"""
         for list_ in self.bot.lists:
             if list_.ctx.author == ctx.author:
                 await list_.close()
         
         # Open a new list
-        list_ = ReminderList(ctx, self.bot.reminders)
+        list_ = ReminderList(ctx, data.guild_reminders(ctx.guild_id))
         self.bot.lists.append(list_)
         await list_.respond(ctx.interaction)
         await list_.wait()
 
-        # After list is done, idk
+        # After list is done
         self.bot.lists.remove(list_)
     
     @commands.Cog.listener('on_message_delete')
-    async def prompt_deletion(self, message):
+    async def list_deletion(self, message: discord.Message):
         """Listen for list deletion"""
         for list_ in self.bot.lists:
             if list_.message and list_.message.id == message.id:
@@ -69,18 +70,19 @@ class RemindersCog(commands.Cog):
     @commands.slash_command()
     @discord.option("id", type=int, description="ID of reminder to remove",
         min_value=1, required=True)
-    async def remove(self, ctx: discord.ApplicationContext, id):
+    async def remove(self, ctx: discord.ApplicationContext, id: int):
         """Remove a reminder (use /list to get the reminder ID)"""
-        if len(self.bot.reminders) < id:
+        reminders = data.guild_reminders(ctx.guild_id)
+        if len(reminders) < id:
             await ctx.respond('No reminder exists with that ID', ephemeral=True)
             return
-        reminder = self.bot.reminders[id - 1]
+        reminder = reminders[id - 1]
 
         if ctx.author.id != reminder.author_id:
             await ctx.respond('You cannot remove a reminder that is not yours', ephemeral=True)
             return
         
-        self.bot.reminders.remove(reminder)
+        data.remove_reminder(reminder)
 
         embed = discord.Embed(
             colour=constants.RED,

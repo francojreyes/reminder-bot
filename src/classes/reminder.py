@@ -8,7 +8,7 @@ from src import constants
 from src.classes.prompt import ReminderPrompt
 
 @total_ordering
-class Reminder():
+class Reminder(object):
     """
     Represents a reminder
 
@@ -19,6 +19,8 @@ class Reminder():
         User ID of the reminder author
     author_name: str
         name#id of the reminder author
+    guild_id: int
+        Guild ID of target guild
     channel_id: int
         Channel ID of the target channel
     time: int
@@ -31,6 +33,7 @@ class Reminder():
             text: str = '',
             author_id: int = 0,
             author: str = '',
+            guild_id: int = 0,
             channel_id: int = 0,
             time: int = 0,
             interval: str = ''
@@ -38,6 +41,7 @@ class Reminder():
         self.text = text
         self.author_id = author_id
         self.author = author
+        self.guild_id = guild_id
         self.channel_id = channel_id
         self.time = time
         self.interval = interval
@@ -70,9 +74,22 @@ class Reminder():
             text=prompt.text,
             author_id=prompt.ctx.author.id,
             author=str(prompt.ctx.author),
+            guild_id=prompt.ctx.guild_id,
             channel_id=prompt.ctx.channel_id,
             time=time,
             interval=interval
+        )
+    
+    @classmethod
+    def from_dict(cls, dict):
+        return Reminder(
+            text=dict['text'],
+            author_id=dict['author_id'],
+            author=dict['author'],
+            guild_id=dict['guild_id'],
+            channel_id=dict['channel_id'],
+            time=dict['time'],
+            interval=dict['interval']
         )
     
     def generate_repeat(self):
@@ -88,10 +105,19 @@ class Reminder():
             text=self.text,
             author_id=self.author_id,
             author=self.author,
+            guild_id=self.guild_id,
             channel_id=self.channel_id,
             time=int(repeat_time.timestamp()),
             interval=self.interval
         )
+    
+    async def execute(self, bot):
+        """Execute this reminder with given bot"""
+        channel = bot.get_channel(self.channel_id)
+        if channel is None:
+            # Check that channel still exists
+            return
+        await channel.send(f'<@{self.author_id}> {self.text}')
     
     def __str__(self):
         """Discord syntax string representation for listing"""
