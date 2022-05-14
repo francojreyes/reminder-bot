@@ -4,7 +4,11 @@ import os
 import discord
 import dotenv
 
+from src.data import data
 from src.bot import ReminderBot
+
+ping = data.db.command('ping')
+print('Connected to MongoDB', ping)
 
 intents = discord.Intents.default()
 intents.message_content = True
