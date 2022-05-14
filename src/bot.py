@@ -39,3 +39,4 @@ class ReminderBot(discord.Bot):
     @execute_reminders.before_loop
     async def before_my_task(self):
         await self.wait_until_ready()
+        data.ping()

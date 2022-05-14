@@ -30,6 +30,10 @@ class MyMongoClient():
         self.client = MongoClient(
             os.getenv('MONGODB_URL'), server_api=ServerApi('1'), connect=False)
         self.db = self.client.reminderbot
+    
+    def ping(self):
+        """Ping the database"""
+        self.db.command('ping')
 
     def add_reminder(self, reminder: Reminder):
         """Add a reminder to the database"""
