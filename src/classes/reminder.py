@@ -4,6 +4,7 @@ Reminder object
 from functools import total_ordering
 from datetime import datetime
 
+import discord
 from src import constants
 from src.classes.prompt import ReminderPrompt
 
@@ -17,8 +18,6 @@ class Reminder(object):
         The reminder text
     author_id: int
         User ID of the reminder author
-    author_name: str
-        name#id of the reminder author
     guild_id: int
         Guild ID of target guild
     channel_id: int
@@ -32,7 +31,6 @@ class Reminder(object):
             self, 
             text: str = '',
             author_id: int = 0,
-            author: str = '',
             guild_id: int = 0,
             channel_id: int = 0,
             time: int = 0,
@@ -40,7 +38,6 @@ class Reminder(object):
         ):
         self.text = text
         self.author_id = author_id
-        self.author = author
         self.guild_id = guild_id
         self.channel_id = channel_id
         self.time = time
@@ -73,7 +70,6 @@ class Reminder(object):
         return Reminder(
             text=prompt.text,
             author_id=prompt.ctx.author.id,
-            author=str(prompt.ctx.author),
             guild_id=prompt.ctx.guild_id,
             channel_id=prompt.ctx.channel_id,
             time=time,
@@ -85,7 +81,6 @@ class Reminder(object):
         return Reminder(
             text=dict['text'],
             author_id=dict['author_id'],
-            author=dict['author'],
             guild_id=dict['guild_id'],
             channel_id=dict['channel_id'],
             time=dict['time'],
@@ -104,7 +99,6 @@ class Reminder(object):
         return Reminder(
             text=self.text,
             author_id=self.author_id,
-            author=self.author,
             guild_id=self.guild_id,
             channel_id=self.channel_id,
             time=int(repeat_time.timestamp()),
@@ -117,11 +111,11 @@ class Reminder(object):
         if channel is None:
             # Check that channel still exists
             return
-        await channel.send(f'<@{self.author_id}> {self.text}')
+        await channel.send(f'<@{self.author_id}> {self.text}', allowed_mentions=discord.AllowedMentions(users=True))
     
     def __str__(self):
         """Discord syntax string representation for listing"""
-        s = f'<t:{self.time}:R>\n_"{self.text}"_ from `@{self.author}`'
+        s = f'<t:{self.time}:R>\n_"{self.text}"_ from <@{self.author_id}>'
         if self.interval:
             s += f' (repeats every {self.interval})'
         return s

@@ -11,6 +11,7 @@ from src.data import data
 class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.allowed_mentions = discord.AllowedMentions.none()
         self.prompts = []
         self.lists = []
 
