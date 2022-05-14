@@ -72,12 +72,12 @@ class RemindersCog(commands.Cog):
     async def remove(self, ctx: discord.ApplicationContext, id):
         """Remove a reminder (use /list to get the reminder ID)"""
         if len(self.bot.reminders) < id:
-            await ctx.respond('No reminder exists with that ID', required=True)
+            await ctx.respond('No reminder exists with that ID', ephemeral=True)
             return
         reminder = self.bot.reminders[id - 1]
 
         if ctx.author.id != reminder.author_id:
-            await ctx.respond('You cannot remove a reminder that is not yours', required=True)
+            await ctx.respond('You cannot remove a reminder that is not yours', ephemeral=True)
             return
         
         self.bot.reminders.remove(reminder)
