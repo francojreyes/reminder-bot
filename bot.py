@@ -9,7 +9,7 @@ from discord.ext import tasks
 
 from prompt import ReminderPrompt
 from reminder import Reminder
-from paginator import ReminderList
+from reminder_list import ReminderList
 
 class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
@@ -43,8 +43,7 @@ class ReminderBot(discord.Bot):
             """List all reminders"""
             for list_ in self.lists:
                 if list_.ctx.author == ctx.author:
-                    await ctx.respond("You already have a list open", ephemeral=True)
-                    return
+                    await list_.close()
             
             # Open a new list
             list_ = ReminderList(ctx, self.reminders)
@@ -72,6 +71,10 @@ class ReminderBot(discord.Bot):
             if prompt.message.id == message.id:
                 prompt.cancelled = True
                 prompt._view.stop()
+        
+        for list_ in self.lists:
+            if list_.message.id == message.id:
+                list_.stop()
 
     @tasks.loop(minutes=1)
     async def execute_reminders(self):

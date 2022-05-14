@@ -2,6 +2,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 DELTA = {
+    'minutes': timedelta(minutes=1),
     'hours': timedelta(hours=1),
     'days': timedelta(days=1),
     'weeks': timedelta(days=7),
