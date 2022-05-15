@@ -62,11 +62,18 @@ class SettingsCog(commands.Cog):
     async def channel(self, ctx: discord.ApplicationContext, channel):
         """Set the reminder channel for this server"""
         if channel:
+            # Match
+            try:
+                channel_id = int(channel.strip(' <!#>'))
+            except:
+                await ctx.respond('Not a channel, please enter a channel using #channel-name', ephemeral=True)
+                return
+
             # Channel must be in this guild 
-            channel_id = int(channel.strip(' <!#>'))
             channel = self.bot.get_channel(channel_id)
             if channel is None or channel.guild != ctx.guild:
                 await ctx.respond(f'No channel <#{channel_id}> found in this server.', ephemeral=True)
+                return
 
             data.set_target(ctx.guild_id, channel_id)
             description = f'New Reminder Channel: <#{channel_id}>'
