@@ -294,7 +294,7 @@ class DateTimeModal(discord.ui.Modal):
             value=self.prompt.fixed_date
         ))
         self.add_item(discord.ui.InputText(
-            label="Enter a time (24 hour AEST)",
+            label=f"Enter a time (24 hour GMT{'+' if self.prompt.offset >= 0 else ''}{self.prompt.offset})",
             min_length=5,
             max_length=5,
             placeholder="HH:MM"
