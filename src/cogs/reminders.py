@@ -25,14 +25,14 @@ class RemindersCog(commands.Cog):
                 return
 
         # Open a new prompt
-        prompt = ReminderPrompt(ctx, reminder)
+        offset = data.get_offset(ctx.guild_id)
+        prompt = ReminderPrompt(ctx, reminder, offset)
         self.bot.prompts.append(prompt)
         res = await prompt.run()
 
         # Set a reminder with completed prompt
         if not res and not prompt.cancelled:
-            offset = data.get_offset(ctx.guild_id)
-            data.add_reminder(Reminder.from_prompt(prompt, offset))
+            data.add_reminder(Reminder.from_prompt(prompt))
         self.bot.prompts.remove(prompt)
     
     @commands.Cog.listener('on_message_delete')

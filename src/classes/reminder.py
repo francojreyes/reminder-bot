@@ -44,7 +44,7 @@ class Reminder(object):
         self.interval = interval
 
     @classmethod
-    def from_prompt(cls, prompt: ReminderPrompt, offset: int):
+    def from_prompt(cls, prompt: ReminderPrompt):
         """Create reminder from Prompt object"""
         # Decipher the prompt time string
         time_str = prompt._time
@@ -53,7 +53,7 @@ class Reminder(object):
         if time_str[0] == 'on':
             format_str = '%d/%m/%Y at %H:%M, repeating'
             time = int(datetime.strptime(time_str[1], format_str).timestamp())
-            time -= offset * 3600
+            time -= prompt.offset * 3600
         else: # time_str[0] == 'in'
             period = time_str[2].split(',')[0]
             if not period.endswith('s'):

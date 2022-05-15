@@ -2,13 +2,12 @@
 Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 '''
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 import re
 
 import discord
 
 from src import constants
-from src.data import data
 
 class ReminderPrompt():
     """
@@ -19,6 +18,8 @@ class ReminderPrompt():
         Context of the command that opened this prompt
     text: str
         Actual text of the reminder
+    offset: int
+        The GMT offset that times entered into this prompt have
     _time: list(str)
         Split string representing the time of the reminder
     prev_state: function
@@ -34,10 +35,11 @@ class ReminderPrompt():
     cancelled: bool
         Whether this has been cancelled
     """
-    def __init__(self, ctx: discord.ApplicationContext, text: str):
+    def __init__(self, ctx: discord.ApplicationContext, text: str, offset: int):
         '''Opens a new ReminderPrompt'''
         self.ctx = ctx
         self.text = text
+        self.offset = offset
         self._time = []
 
         self.prev_state = None
@@ -316,8 +318,7 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid datetime
         try:
-            offset = data.get_offset(self.prompt.ctx.guild_id)
-            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M") - offset * constants.DELTA['hours']
+            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M") - self.prompt.offset * constants.DELTA['hours']
         except ValueError:
             await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
             await self.prompt.back()
