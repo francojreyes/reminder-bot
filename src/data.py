@@ -3,7 +3,7 @@ Class to store data using an interface to the MongoDB Client
 Prompts and lists will not persist, fuck em
 """
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 import dotenv
 from pymongo import MongoClient
@@ -61,7 +61,7 @@ class MyMongoClient(MongoClient):
         """Retrieve the target channel of the given guild"""
         guild = self.db.guilds.find_one({'_id': guild_id})
         if guild:
-            return guild['offset']
+            return guild['target']
         else:
             self.db.guilds.insert_one({
                 '_id': guild_id,
@@ -88,7 +88,7 @@ class MyMongoClient(MongoClient):
 
     def current_reminders(self):
         """Generator that finds and deletes all Reminders this minute"""
-        now = round(datetime.now().timestamp() / 60) * 60
+        now = round(datetime.now(timezone.utc).timestamp() / 60) * 60
         # Take advantage of the fact that there should be no reminders lt now
         res = self.db.reminders.find({'time': {'$lt': now + 60}})
 

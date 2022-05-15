@@ -2,7 +2,8 @@
 Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 '''
-from datetime import datetime, date
+from datetime import datetime, date, timezone, timedelta
+from dateutil import tz
 import re
 
 import discord
@@ -318,14 +319,15 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid datetime
         try:
-            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M") - self.prompt.offset * constants.DELTA['hours']
+            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M")
         except ValueError:
             await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
             await self.prompt.back()
             return
         
         # Enforce in future
-        if dt <= datetime.now():
+        dt = dt.replace(tzinfo=tz.tzoffset(None, timedelta(hours=self.prompt.offset)))
+        if dt <= datetime.now(timezone.utc):
             await self.prompt.ctx.respond("You can't set a reminder in the past!", ephemeral=True)
             await self.prompt.back()
             return

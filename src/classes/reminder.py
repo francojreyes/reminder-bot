@@ -2,7 +2,8 @@
 Reminder object
 '''
 from functools import total_ordering
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+from dateutil import tz
 
 import discord
 from src import constants
@@ -52,13 +53,15 @@ class Reminder(object):
         # Get the time of reminder
         if time_str[0] == 'on':
             format_str = '%d/%m/%Y at %H:%M, repeating'
-            time = int(datetime.strptime(time_str[1], format_str).timestamp())
-            time -= prompt.offset * 3600
+            time = datetime.strptime(time_str[1], format_str)
+            time.replace(tzinfo=tz.tzoffset(None, timedelta(hours=prompt.offset)))
+            time = int(time.timestamp())
         else: # time_str[0] == 'in'
             period = time_str[2].split(',')[0]
             if not period.endswith('s'):
                 period += 's'
-            dt = datetime.now() + int(time_str[1]) * constants.DELTA[period]
+            
+            dt = datetime.now(timezone.utc) + int(time_str[1]) * constants.DELTA[period]
             time = int(dt.timestamp())
 
         # Get the repeat interval
