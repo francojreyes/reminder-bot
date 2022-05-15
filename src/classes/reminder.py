@@ -109,9 +109,10 @@ class Reminder(object):
             interval=self.interval
         )
     
-    async def execute(self, bot):
+    async def execute(self, bot, target=None):
         """Execute this reminder with given bot"""
-        channel = bot.get_channel(self.channel_id)
+        target_id = target if target else self.channel_id
+        channel = bot.get_channel(target_id)
         if channel is None:
             # Check that channel still exists
             return
@@ -119,9 +120,10 @@ class Reminder(object):
     
     def __str__(self):
         """Discord syntax string representation for listing"""
-        s = f'<t:{self.time}:R>\n_"{self.text}"_ from <@{self.author_id}>'
+        s = f'<t:{self.time}:R>'
         if self.interval:
             s += f' (repeats every {self.interval})'
+        s += f'\n_"{self.text}"_ from <@{self.author_id}>'
         return s
     
     def __eq__(self, other):

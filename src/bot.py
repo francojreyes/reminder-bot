@@ -34,7 +34,12 @@ class ReminderBot(discord.Bot):
     async def execute_reminders(self):
         '''Execute all reminders that are in this minute'''
         for reminder in data.current_reminders():
-            await reminder.execute(self)
+            # Find target channel
+            target = data.get_target(reminder.guild_id)
+            if self.get_channel(target) is None:
+                target = None
+
+            await reminder.execute(self, target)
             if reminder.interval:
                 data.add_reminder(reminder.generate_repeat())
 
