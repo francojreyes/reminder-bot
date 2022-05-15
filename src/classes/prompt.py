@@ -2,12 +2,13 @@
 Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 '''
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import re
 
 import discord
 
 from src import constants
+from src.data import data
 
 class ReminderPrompt():
     """
@@ -315,7 +316,8 @@ class DateTimeModal(discord.ui.Modal):
 
         # Enforce valid datetime
         try:
-            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M")
+            offset = data.get_offset(self.prompt.ctx.guild_id)
+            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M") - offset * constants.DELTA['hours']
         except ValueError:
             await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
             await self.prompt.back()

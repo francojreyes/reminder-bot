@@ -53,7 +53,7 @@ class Reminder(object):
         if time_str[0] == 'on':
             format_str = '%d/%m/%Y at %H:%M, repeating'
             time = int(datetime.strptime(time_str[1], format_str).timestamp())
-            time += offset * 3600
+            time -= offset * 3600
         else: # time_str[0] == 'in'
             period = time_str[2].split(',')[0]
             if not period.endswith('s'):
