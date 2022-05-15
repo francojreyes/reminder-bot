@@ -1,8 +1,6 @@
 """
 Cog for setting and removing reminders
 """
-from bisect import insort
-
 import discord
 from discord.ext import commands
 
@@ -13,7 +11,7 @@ from src.classes.list import ReminderList
 from src.data import data
 
 class RemindersCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: discord.Bot):
         self.bot = bot
     
     @commands.slash_command()
