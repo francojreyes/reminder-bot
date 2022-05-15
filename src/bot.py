@@ -5,6 +5,7 @@ import discord
 from discord.ext import tasks
 
 from src.cogs.reminders import RemindersCog
+from src.cogs.settings import SettingsCog
 from src.data import data
 
 
@@ -16,6 +17,7 @@ class ReminderBot(discord.Bot):
         self.lists = []
 
         self.add_cog(RemindersCog(self))
+        self.add_cog(SettingsCog(self))
 
         @self.command()
         async def ping(ctx):
@@ -33,8 +35,6 @@ class ReminderBot(discord.Bot):
         '''Execute all reminders that are in this minute'''
         for reminder in data.current_reminders():
             await reminder.execute(self)
-            if reminder.interval:
-                data.add_reminder(reminder.generate_repeat())
 
     @execute_reminders.before_loop
     async def before_my_task(self):
