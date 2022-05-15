@@ -24,9 +24,9 @@ class SettingsCog(commands.Cog):
         embed = {'title': 'Reminder Bot Settings'}
         embed['fields'] = [
             {
-                'name': '🕒 UTC Offset',
-                'value': 'All times entered in this server will be offset from UTC Time by this many hours.\n\n'
-                        f'Current UTC Offset: {offset}\n\n'
+                'name': '🕒 GMT Offset',
+                'value': 'All times entered in this server will be assumed to have this GMT offset. Find the GMT offset for your timezone [here](https://www.google.com/search?q=what+is+my+time+zone)\n\n'
+                        f'Current GMT Offset: {offset}\n\n'
                         'Use `/settings offset <offset>` to set the offset.\n'
             },
             {
@@ -47,12 +47,12 @@ class SettingsCog(commands.Cog):
     @discord.option('offset', type=int, min_value=-12, max_value=12, required=True,
         description='The number of hours to offset by')
     async def offset(self, ctx: discord.ApplicationContext, offset: int):
-        """Set the UTC offset for this server"""
+        """Set the GMT offset for this server"""
         data.set_offset(ctx.guild_id, offset)
         embed = {
             'color': constants.BLURPLE,
             'title': 'Setting changed!',
-            'description': f"New UTC Offset: {'+' if offset >= 0 else ''}{offset}"
+            'description': f"New GMT Offset: {'+' if offset >= 0 else ''}{offset}"
         }
         await ctx.respond(embed=discord.Embed.from_dict(embed))
     
