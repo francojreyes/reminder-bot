@@ -7,7 +7,6 @@ from datetime import datetime
 import discord
 from src import constants
 from src.classes.prompt import ReminderPrompt
-from src.data import data
 
 @total_ordering
 class Reminder(object):
@@ -45,7 +44,7 @@ class Reminder(object):
         self.interval = interval
 
     @classmethod
-    def from_prompt(cls, prompt: ReminderPrompt):
+    def from_prompt(cls, prompt: ReminderPrompt, offset: int):
         """Create reminder from Prompt object"""
         # Decipher the prompt time string
         time_str = prompt._time
@@ -54,7 +53,7 @@ class Reminder(object):
         if time_str[0] == 'on':
             format_str = '%d/%m/%Y at %H:%M, repeating'
             time = int(datetime.strptime(time_str[1], format_str).timestamp())
-            time += data.get_offset(prompt.ctx.guild_id) * 3600
+            time += offset * 3600
         else: # time_str[0] == 'in'
             period = time_str[2].split(',')[0]
             if not period.endswith('s'):
@@ -114,9 +113,6 @@ class Reminder(object):
             # Check that channel still exists
             return
         await channel.send(f'<@{self.author_id}> {self.text}', allowed_mentions=discord.AllowedMentions(users=True))
-
-        if self.interval:
-            data.add_reminder(self.generate_repeat())
     
     def __str__(self):
         """Discord syntax string representation for listing"""

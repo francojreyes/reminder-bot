@@ -35,6 +35,8 @@ class ReminderBot(discord.Bot):
         '''Execute all reminders that are in this minute'''
         for reminder in data.current_reminders():
             await reminder.execute(self)
+            if reminder.interval:
+                data.add_reminder(reminder.generate_repeat())
 
     @execute_reminders.before_loop
     async def before_my_task(self):
