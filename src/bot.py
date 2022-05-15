@@ -40,6 +40,8 @@ class ReminderBot(discord.Bot):
                 target = None
 
             await reminder.execute(self, target)
+            data.remove_reminder(reminder)
+
             if reminder.interval:
                 data.add_reminder(reminder.generate_repeat())
 
