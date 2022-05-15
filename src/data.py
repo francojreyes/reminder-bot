@@ -1,16 +1,6 @@
 """
-Class to store reminders data
+Class to store data using an interface to the MongoDB Client
 Prompts and lists will not persist, fuck em
-
-Stored in a dict of the form
-{
-    guild_id (int) : {
-        'target_channel': int,
-        'utc_offest': int,
-        'reminders': [Reminder dicts]
-    },
-    ...
-}
 """
 import os
 from datetime import datetime
@@ -22,14 +12,14 @@ from pymongo.server_api import ServerApi
 from src.classes.reminder import Reminder
 
 
-class MyMongoClient():
+class MyMongoClient(MongoClient):
     """Custom interface for MongoDB database"""
 
     def __init__(self):
         dotenv.load_dotenv()
-        self.client = MongoClient(
+        super().__init__(
             os.getenv('MONGODB_URL'), server_api=ServerApi('1'), connect=False)
-        self.db = self.client.reminderbot
+        self.db = self.reminderbot
     
     def ping(self):
         """Ping the database"""
@@ -55,9 +45,20 @@ class MyMongoClient():
                 'target': None
             })
             return 0
+    
+    def set_offset(self, guild_id: int, offset: int):
+        """Update the UTC offset of the given guild"""
+        guild = self.db.guilds.find_one_and_update(
+            {'_id': guild_id}, {'$set': {'offset': offset}})
+        if not guild:
+            self.db.guilds.insert_one({
+                '_id': guild_id,
+                'offset': offset,
+                'target': None
+            })
 
     def get_target(self, guild_id: int):
-        """Retrieve the UTC offset of the given guild"""
+        """Retrieve the target channel of the given guild"""
         guild = self.db.guilds.find_one({'_id': guild_id})
         if guild:
             return guild['offset']
@@ -68,6 +69,17 @@ class MyMongoClient():
                 'target': None
             })
             return None
+    
+    def set_target(self, guild_id: int, target: int):
+        """Update the target channel of the given guild"""
+        guild = self.db.guilds.find_one_and_update(
+            {'_id': guild_id}, {'$set': {'target': target}})
+        if not guild:
+            self.db.guilds.insert_one({
+                '_id': guild_id,
+                'offset': 0,
+                'target': target
+            })
 
     def guild_reminders(self, guild_id: int):
         """Returns a list of all reminders matching the given guild_id"""
