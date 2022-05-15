@@ -18,15 +18,15 @@ class SettingsCog(commands.Cog):
         offset = data.get_offset(ctx.guild_id)
         offset = f"{'+' if offset >= 0 else ''}{offset}"
 
-        target = data.get_offset(ctx.guild_id)
-        target = f'<#{target}>' if target else 'None'
+        target = data.get_target(ctx.guild_id)
+        target = f'<#{target}>' if target else '`None`'
 
         embed = {'title': 'Reminder Bot Settings'}
         embed['fields'] = [
             {
                 'name': '🕒 GMT Offset',
-                'value': 'All times entered in this server will be assumed to have this GMT offset. Find the GMT offset for your timezone [here](https://www.google.com/search?q=what+is+my+time+zone)\n\n'
-                        f'Current GMT Offset: {offset}\n\n'
+                'value': 'All times entered in this server will be assumed to have this GMT offset. Find the GMT offset for your timezone [here](https://www.google.com/search?q=what+is+my+time+zone).\n\n'
+                        f'Current GMT Offset: `GMT{offset}`\n\n'
                         'Use `/settings offset <offset>` to set the offset.\n'
             },
             {
@@ -52,7 +52,7 @@ class SettingsCog(commands.Cog):
         embed = {
             'color': constants.BLURPLE,
             'title': 'Setting changed!',
-            'description': f"New GMT Offset: {'+' if offset >= 0 else ''}{offset}"
+            'description': f"New GMT Offset: `GMT{'+' if offset >= 0 else ''}{offset}`"
         }
         await ctx.respond(embed=discord.Embed.from_dict(embed))
     
@@ -63,11 +63,10 @@ class SettingsCog(commands.Cog):
         """Set the reminder channel for this server"""
         if channel:
             # Channel must be in this guild 
-            channel_id = channel.strip(' <#>')
+            channel_id = int(channel.strip(' <!#>'))
             channel = self.bot.get_channel(channel_id)
             if channel is None or channel.guild != ctx.guild:
-                ctx.respond(f'No channel <#{channel_id}> found in this server.', ephemeral=True)
-
+                await ctx.respond(f'No channel <#{channel_id}> found in this server.', ephemeral=True)
 
             data.set_target(ctx.guild_id, channel_id)
             description = f'New Reminder Channel: <#{channel_id}>'
