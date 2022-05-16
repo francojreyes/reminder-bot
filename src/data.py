@@ -35,7 +35,7 @@ class MyMongoClient(MongoClient):
 
     def get_offset(self, guild_id: int):
         """Retrieve the UTC offset of the given guild"""
-        guild = self.db.guilds.find_one({'_id': guild_id})
+        guild = self.db.guilds.find_one({'_id': guild_id}, {'offset': 1, '_id': 0})
         if guild:
             return guild['offset']
         else:
@@ -59,7 +59,7 @@ class MyMongoClient(MongoClient):
 
     def get_target(self, guild_id: int):
         """Retrieve the target channel of the given guild"""
-        guild = self.db.guilds.find_one({'_id': guild_id})
+        guild = self.db.guilds.find_one({'_id': guild_id}, {'target': 1, '_id': 0})
         if guild:
             return guild['target']
         else:
