@@ -115,7 +115,7 @@ class Reminder(object):
         s = f'<t:{self.time}:R>'
         if self.interval:
             s += f' (repeats every {self.interval})'
-        s += f'\n_"{self.text}"_ from <@{self.author_id}>'
+        s += f'\n_"{self.text}"_ from <@!{self.author_id}>'
         return s
     
     def __eq__(self, other):
