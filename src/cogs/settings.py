@@ -8,15 +8,18 @@ from discord.ext import commands
 from src import constants
 from src.data import data
 
+
 class SettingsCog(commands.Cog, name='Settings'):
     """
     Commands for changing the bot's settings
     """
+
     def __init__(self, bot: discord.Bot):
         self.bot = bot
-    
-    settings_group = discord.commands.SlashCommandGroup("settings", "Change the settings for this server")
-    
+
+    settings_group = discord.commands.SlashCommandGroup(
+        "settings", "Change the settings for this server")
+
     @settings_group.command()
     async def view(self, ctx: discord.ApplicationContext):
         """See information on the settings for this server"""
@@ -49,7 +52,7 @@ class SettingsCog(commands.Cog, name='Settings'):
                     'Otherwise, reminders are sent to the channel they were set in.\n\n'
                     f'Current Reminder Channel: {target}\n\n'
                     'Use `/settings channel <#channel>` to set a channel.\n'
-                    'Use `/settings channel` to unset the reminder channel.\n\n' 
+                    'Use `/settings channel` to unset the reminder channel.\n\n'
                     '\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
         })
         embed['fields'].append({
@@ -62,12 +65,19 @@ class SettingsCog(commands.Cog, name='Settings'):
         })
 
         await ctx.respond(embed=discord.Embed.from_dict(embed))
-    
+
     @settings_group.command()
     @discord.option('offset', type=int, min_value=-12, max_value=12, required=True,
-        description='The number of hours to offset by')
+                    description='The number of hours to offset by')
     async def offset(self, ctx: discord.ApplicationContext, offset: int):
         """Set the GMT offset for this server"""
+        if not ctx.author.guild_permissions.manage_guild:
+            await ctx.respond(
+                "You must have the `Manage Guild` permission to edit settings!",
+                ephemeral=True
+            )
+            return
+
         data.set_offset(ctx.guild_id, offset)
         embed = {
             'color': constants.BLURPLE,
@@ -75,21 +85,27 @@ class SettingsCog(commands.Cog, name='Settings'):
             'description': f"New GMT Offset: `GMT{constants.ISO_TZD(offset)}`"
         }
         await ctx.respond(embed=discord.Embed.from_dict(embed))
-    
+
     @settings_group.command()
     @discord.option('channel', type=str, required=False,
-        description='The channel to send reminders to. If no channel provided, unsets reminder channel.')
+                    description='The channel to send reminders to. If no channel provided, unsets reminder channel.')
     async def channel(self, ctx: discord.ApplicationContext, channel):
         """Set the reminder channel for this server"""
+        if not ctx.author.guild_permissions.manage_guild:
+            await ctx.respond(
+                "You must have the `Manage Guild` permission to edit settings!",
+                ephemeral=True
+            )
+            return
+
         if channel:
-            # Match
             try:
                 channel_id = int(channel.strip(' <!#>'))
             except:
                 await ctx.respond('Not a channel, please enter a channel using #channel-name', ephemeral=True)
                 return
 
-            # Channel must be in this guild 
+            # Channel must be in this guild
             channel = self.bot.get_channel(channel_id)
             if channel is None or channel.guild != ctx.guild:
                 await ctx.respond(f'No channel {channel.mention} found in this server.', ephemeral=True)
@@ -100,19 +116,26 @@ class SettingsCog(commands.Cog, name='Settings'):
         else:
             data.set_target(ctx.guild_id, None)
             description = 'Reminder channel unset.'
-        
+
         embed = {
             'color': constants.BLURPLE,
             'title': 'Setting changed!',
             'description': description
         }
-        await ctx.respond(embed=discord.Embed.from_dict(embed))    
+        await ctx.respond(embed=discord.Embed.from_dict(embed))
 
     @settings_group.command()
     @discord.option('role', type=discord.Role, required=False,
-        description='The role to set as manager. If no role provided, unsets manager role.')
+                    description='The role to set as manager. If no role provided, unsets manager role.')
     async def role(self, ctx: discord.ApplicationContext, role):
         """Set the manager role for this server"""
+        if not ctx.author.guild_permissions.manage_guild:
+            await ctx.respond(
+                "You must have the `Manage Guild` permission to edit settings!",
+                ephemeral=True
+            )
+            return
+
         if role:
             if role.guild != ctx.guild:
                 await ctx.respond(f'No role {role.mention} found in this server.', ephemeral=True)
@@ -123,11 +146,10 @@ class SettingsCog(commands.Cog, name='Settings'):
         else:
             data.set_role(ctx.guild_id, None)
             description = 'Manager role unset.'
-        
+
         embed = {
             'color': constants.BLURPLE,
             'title': 'Setting changed!',
             'description': description
         }
-        await ctx.respond(embed=discord.Embed.from_dict(embed))    
-    
+        await ctx.respond(embed=discord.Embed.from_dict(embed))
