@@ -18,7 +18,7 @@ class SettingsCog(commands.Cog):
     async def view(self, ctx: discord.ApplicationContext):
         """See information on the settings for this server"""
         offset = data.get_offset(ctx.guild_id)
-        offset = f"{'+' if offset >= 0 else ''}{offset}"
+        offset = constants.ISO_TZD(offset)
 
         target = data.get_target(ctx.guild_id)
         target = f'<#{target}>' if target else '`None`'
@@ -33,7 +33,7 @@ class SettingsCog(commands.Cog):
             'name': 'GMT Offset 🕒',
             'value': 'All times entered in this server will be assumed to have this GMT offset.'
                     'Find the GMT offset for your timezone [here](https://www.google.com/search?q=what+is+my+time+zone).\n\n'
-                    f'Current GMT Offset: `GMT+10`\n\n'
+                    f'Current GMT Offset: `GMT{offset}`\n\n'
                     'Use `/settings offset <offset>` to set the offset.\n\n'
                     '\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
         })
@@ -41,7 +41,7 @@ class SettingsCog(commands.Cog):
             'name': 'Reminder Channel 📢',
             'value': 'If specified, all reminders will be sent in this channel.'
                     'Otherwise, reminders are sent to the channel they were set in.\n\n'
-                    f'Current Reminder Channel: <#959823163905175553>\n\n'
+                    f'Current Reminder Channel: {target}\n\n'
                     'Use `/settings channel <#channel>` to set a channel.\n'
                     'Use `/settings channel` to unset the reminder channel.\n' 
         })
@@ -57,7 +57,7 @@ class SettingsCog(commands.Cog):
         embed = {
             'color': constants.BLURPLE,
             'title': 'Setting changed!',
-            'description': f"New GMT Offset: `GMT{'+' if offset >= 0 else ''}{offset}`"
+            'description': f"New GMT Offset: `GMT{constants.ISO_TZD(offset)}`"
         }
         await ctx.respond(embed=discord.Embed.from_dict(embed))
     
