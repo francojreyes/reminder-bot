@@ -19,11 +19,6 @@ class ReminderBot(discord.Bot):
         self.add_cog(RemindersCog(self))
         self.add_cog(SettingsCog(self))
 
-        @self.command()
-        async def ping(ctx):
-            """Ping the Reminder Bot"""
-            await ctx.respond("Pong!")
-
         self.execute_reminders.start()
 
     async def on_ready(self):
