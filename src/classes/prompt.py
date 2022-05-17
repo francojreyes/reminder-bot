@@ -8,7 +8,7 @@ import re
 
 import discord
 
-from src import constants
+from src import constants, parsing
 
 class ReminderPrompt():
     """
@@ -110,13 +110,6 @@ class ReminderPrompt():
         await self.message.edit(embed=self.embed(), view=self.view())
         await self.interaction.response.send_modal(AmountModal(self, 'in'))
 
-    async def in_select(self):
-        """Send a select item for the time period corresponding to inputted amount"""
-        self._view.clear_items()
-        self._view.add_item(PeriodSelect(self, 'in'))
-        self.prev_state = self.in_amount
-        await self.interaction.response.edit_message(embed=self.embed(), view=self.view())
-
     async def repeat(self):
         """Choose between a non-recurring or recurring reminder"""
         self._view.clear_items()
@@ -125,7 +118,7 @@ class ReminderPrompt():
 
         # State was reached either from 'in' or 'on' path
         if 'in' in self._time:
-            self.prev_state = self.in_select
+            self.prev_state = self.in_amount
         elif 'on' in self._time:
             self.prev_state = self.on
 
@@ -137,13 +130,6 @@ class ReminderPrompt():
         self.prev_state = self.repeat
         await self.message.edit(embed=self.embed(), view=self.view())
         await self.interaction.response.send_modal(AmountModal(self, 'repeat'))
-
-    async def repeat_select(self):
-        """Send a select item for the time period for the inputted amount"""
-        self._view.clear_items()
-        self._view.add_item(PeriodSelect(self, 'repeat'))
-        self.prev_state = self.repeat_amount
-        await self.interaction.response.edit_message(embed=self.embed(), view=self.view())
 
     async def back(self):
         """Removed the last most item from the string and return to previous state"""
@@ -166,7 +152,7 @@ class ReminderPrompt():
         if 'never' in self._time:
             self.prev_state = self.repeat
         else:
-            self.prev_state = self.repeat_select
+            self.prev_state = self.repeat_amount
         
         await self.interaction.response.edit_message(embed=embed, view=self.view())
 
@@ -342,34 +328,31 @@ class AmountModal(discord.ui.Modal):
         super().__init__(title='Reminder Bot')
         self.prompt = prompt
         self.state = state
+
+        if self.state == 'in':
+            label = "Remind me in..."
+        elif self.state == 'repeat':
+            label = "Repeat every..."
+
         self.add_item(discord.ui.InputText(
-            label="Remind me in _ hours/days/weeks/months",
-            placeholder="Enter an amount e.g. 123"
+            label=label,
+            placeholder="Enter an amount e.g. 2 days"
         ))
 
     async def callback(self, interaction: discord.Interaction):
         self.prompt.interaction = interaction
-        inp = self.children[0].value.strip()
-
-        # Enforce numeric
-        if not inp.isnumeric():
-            await self.prompt.ctx.respond('Invalid format! Please enter a number', ephemeral=True)
-            await self.prompt.back()
-            return
+        inp = self.children[0].value
         
-        # Enforce > 0
-        if int(inp) <= 0:
-            await self.prompt.ctx.respond('Please enter a positive number', ephemeral=True)
-            await self.prompt.back()
-            return  
-
-        self.prompt._time.append(inp)
+        # Get the string representation
+        res = parsing.normalise_relative(inp)
 
         # Choose path based on what function sent this Modal
         if self.state == 'repeat':
-            await self.prompt.repeat_select()
+            self.prompt._time.append(res)
+            await self.prompt.confirm()
         elif self.state == 'in':
-            await self.prompt.in_select()
+            self.prompt._time.append(f'{res}, repeating')
+            await self.prompt.repeat()
 
 
 class PeriodSelect(discord.ui.Select):
