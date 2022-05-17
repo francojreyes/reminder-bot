@@ -35,16 +35,17 @@ class SettingsCog(commands.Cog, name='Settings'):
         embed = {
             'color': constants.BLURPLE,
             'title': 'Reminder Bot Settings Help',
-            'description': '\_\_\_\_\_\_\_\_\_\_\_\_\_\_',
+            'description': r'\_\_\_\_\_\_\_\_\_\_\_\_\_\_',
             'fields': []
         }
         embed['fields'].append({
             'name': 'GMT Offset 🕒',
             'value': 'All times entered in this server will be assumed to have this GMT offset. '
-                    'Find the GMT offset for your timezone [here](https://www.google.com/search?q=what+is+my+time+zone).\n\n'
+                    'Find the GMT offset for your timezone '
+                    '[here](https://www.google.com/search?q=what+is+my+time+zone).\n\n'
                     f'Current GMT Offset: `GMT{offset}`\n\n'
                     'Use `/settings offset <offset>` to set the offset.\n\n'
-                    '\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
+                    r'\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
         })
         embed['fields'].append({
             'name': 'Reminder Channel 📢',
@@ -53,7 +54,7 @@ class SettingsCog(commands.Cog, name='Settings'):
                     f'Current Reminder Channel: {target}\n\n'
                     'Use `/settings channel <#channel>` to set a channel.\n'
                     'Use `/settings channel` to unset the reminder channel.\n\n'
-                    '\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
+                    r'\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
         })
         embed['fields'].append({
             'name': 'Manager Role 🛠️',
@@ -88,7 +89,8 @@ class SettingsCog(commands.Cog, name='Settings'):
 
     @settings_group.command()
     @discord.option('channel', type=str, required=False,
-                    description='The channel to send reminders to. If no channel provided, unsets reminder channel.')
+                    description='The channel to send reminders to.'
+                                'If no channel provided, unsets reminder channel.')
     async def channel(self, ctx: discord.ApplicationContext, channel):
         """Set the reminder channel for this server"""
         if not ctx.author.guild_permissions.manage_guild:
@@ -101,14 +103,16 @@ class SettingsCog(commands.Cog, name='Settings'):
         if channel:
             try:
                 channel_id = int(channel.strip(' <!#>'))
-            except:
-                await ctx.respond('Not a channel, please enter a channel using #channel-name', ephemeral=True)
+            except ValueError:
+                await ctx.respond(
+                    'Not a channel, please enter a channel using #channel-name', ephemeral=True)
                 return
 
             # Channel must be in this guild
             channel = self.bot.get_channel(channel_id)
             if channel is None or channel.guild != ctx.guild:
-                await ctx.respond(f'No channel {channel.mention} found in this server.', ephemeral=True)
+                await ctx.respond(
+                    f'No channel {channel.mention} found in this server.', ephemeral=True)
                 return
 
             data.set_target(ctx.guild_id, channel_id)
@@ -126,7 +130,8 @@ class SettingsCog(commands.Cog, name='Settings'):
 
     @settings_group.command()
     @discord.option('role', type=discord.Role, required=False,
-                    description='The role to set as manager. If no role provided, unsets manager role.')
+                    description='The role to set as manager. '
+                                'If no role provided, unsets manager role.')
     async def role(self, ctx: discord.ApplicationContext, role):
         """Set the manager role for this server"""
         if not ctx.author.guild_permissions.manage_guild:

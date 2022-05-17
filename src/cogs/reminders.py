@@ -77,14 +77,14 @@ class RemindersCog(commands.Cog, name='Reminders'):
     @commands.slash_command()
     @discord.option("id", type=int, description="ID of reminder to remove",
                     min_value=1, required=True)
-    async def remove(self, ctx: discord.ApplicationContext, id: int):
+    async def remove(self, ctx: discord.ApplicationContext, idx: int):
         """Remove a reminder (use /list to get the reminder ID)"""
 
         reminders = data.guild_reminders(ctx.guild_id)
-        if len(reminders) < id:
+        if len(reminders) < idx:
             await ctx.respond('No reminder exists with that ID', ephemeral=True)
             return
-        reminder = reminders[id - 1]
+        reminder = reminders[idx - 1]
 
         if ctx.author.id != reminder.author_id:
             manager = data.get_role(ctx.guild_id)
@@ -96,7 +96,7 @@ class RemindersCog(commands.Cog, name='Reminders'):
                         ephemeral=True
                     )
                 return
-            elif not ctx.author.guild_permissions.manage_messages:
+            if not ctx.author.guild_permissions.manage_messages:
                 await ctx.respond(
                     "You must have the `Manage Messages` permission to remove reminders that aren't yours!",
                     ephemeral=True
