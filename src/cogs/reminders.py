@@ -10,7 +10,10 @@ from src.classes.reminder import Reminder
 from src.classes.list import ReminderList
 from src.data import data
 
-class RemindersCog(commands.Cog):
+class RemindersCog(commands.Cog, name='Reminders'):
+    """
+    Commands for setting and managing reminders
+    """
     def __init__(self, bot: discord.Bot):
         self.bot = bot
     

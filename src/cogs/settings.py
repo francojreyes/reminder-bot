@@ -8,7 +8,10 @@ from discord.ext import commands
 from src import constants
 from src.data import data
 
-class SettingsCog(commands.Cog):
+class SettingsCog(commands.Cog, name='Settings'):
+    """
+    Commands for changing the bot's settings
+    """
     def __init__(self, bot: discord.Bot):
         self.bot = bot
     
@@ -63,7 +66,7 @@ class SettingsCog(commands.Cog):
     
     @settings_group.command()
     @discord.option('channel', type=str, required=False,
-        description='The channel to send reminders to')
+        description='The channel to send reminders to. If no channel provided, unsets reminder channel.')
     async def channel(self, ctx: discord.ApplicationContext, channel):
         """Set the reminder channel for this server"""
         if channel:

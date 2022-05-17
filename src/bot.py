@@ -6,6 +6,7 @@ from discord.ext import tasks
 
 from src.cogs.reminders import RemindersCog
 from src.cogs.settings import SettingsCog
+from src.cogs.help import HelpCog
 from src.data import data
 
 
@@ -18,6 +19,7 @@ class ReminderBot(discord.Bot):
 
         self.add_cog(RemindersCog(self))
         self.add_cog(SettingsCog(self))
+        self.add_cog(HelpCog(self))
 
         self.execute_reminders.start()
 
