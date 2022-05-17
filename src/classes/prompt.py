@@ -3,7 +3,6 @@ Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 '''
 from datetime import datetime, timezone
-import re
 
 import discord
 
