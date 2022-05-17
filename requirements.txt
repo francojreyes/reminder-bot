@@ -3,4 +3,4 @@ pymongo==4.1.1
 pymongo[srv]
 python-dateutil==2.8.2
 python-dotenv==0.20.0
-git+https://github.com/francojreyes/dateparser.git@support-for-fractional-units#egg=dateparser
+git+https://github.com/francojreyes/dateparser.git@master#egg=dateparser
