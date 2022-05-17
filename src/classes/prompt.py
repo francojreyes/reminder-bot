@@ -24,7 +24,7 @@ class ReminderPrompt():
         Split string representing the time of the reminder
     prev_state: function
         The function to be called when back is called
-    _view: PromptView
+    view_: PromptView
         The Discord View UI of this prompt
     message: InteractionMessage
         The message that displays this prompt
@@ -42,7 +42,7 @@ class ReminderPrompt():
         self.time_ = []
 
         self.prev_state = None
-        self._view: PromptView = PromptView(self)
+        self.view_: PromptView = PromptView(self)
         self.message: discord.InteractionMessage = None
         self.interaction: discord.Interaction = None
 
@@ -67,51 +67,51 @@ class ReminderPrompt():
         no_back (bool)
             Whether or not the back button should be disabled
         """
-        self._view.add_item(BackButton(self, disabled=no_back))
-        self._view.add_item(CancelButton(self))
-        return self._view
+        self.view_.add_item(BackButton(self, disabled=no_back))
+        self.view_.add_item(CancelButton(self))
+        return self.view_
 
     async def run(self):
         """
         Sets up initial state and runs prompt
         Returns True after timeout, or False after natural end
         """
-        self._view.clear_items()
-        self._view.add_item(InitialSelect(self))
+        self.view_.clear_items()
+        self.view_.add_item(InitialSelect(self))
         res = await self.ctx.respond(embed=self.embed(), view=self.view(no_back=True))
         self.message = await res.original_message()
-        return await self._view.wait()
+        return await self.view_.wait()
 
     async def restart(self):
         """
         Sets up initial state
         Used when the initial states is accessed via back
         """
-        self._view.clear_items()
-        self._view.add_item(InitialSelect(self))
+        self.view_.clear_items()
+        self.view_.add_item(InitialSelect(self))
         self.prev_state = None
         await self.interaction.response.edit_message(
             embed=self.embed(), view=self.view(no_back=True))
 
     async def on_datetime(self):
         """Send a modal for the date and time to set a reminder 'on'"""
-        self._view.clear_items()
+        self.view_.clear_items()
         self.prev_state = self.restart
         await self.message.edit(embed=self.embed(), view=self.view())
         await self.interaction.response.send_modal(DateTimeModal(self))
 
     async def in_amount(self):
         """Send a modal for the amount of time to set a reminder 'in'"""
-        self._view.clear_items()
+        self.view_.clear_items()
         self.prev_state = self.restart
         await self.message.edit(embed=self.embed(), view=self.view())
         await self.interaction.response.send_modal(AmountModal(self, 'in'))
 
     async def repeat(self):
         """Choose between a non-recurring or recurring reminder"""
-        self._view.clear_items()
-        self._view.add_item(NoRepeatButton(self))
-        self._view.add_item(YesRepeatButton(self))
+        self.view_.clear_items()
+        self.view_.add_item(NoRepeatButton(self))
+        self.view_.add_item(YesRepeatButton(self))
 
         # State was reached either from 'in' or 'on' path
         if 'in' in self.time_:
@@ -123,7 +123,7 @@ class ReminderPrompt():
 
     async def repeat_amount(self):
         """Send a modal for the amount of the recurrence period"""
-        self._view.clear_items()
+        self.view_.clear_items()
         self.prev_state = self.repeat
         await self.message.edit(embed=self.embed(), view=self.view())
         await self.interaction.response.send_modal(AmountModal(self, 'repeat'))
@@ -135,8 +135,8 @@ class ReminderPrompt():
 
     async def confirm(self):
         """Allow user to confirm or go back and edit"""
-        self._view.clear_items()
-        self._view.add_item(ConfirmButton(self))
+        self.view_.clear_items()
+        self.view_.add_item(ConfirmButton(self))
 
         # Embed finishes with full stop
         embed = discord.Embed.from_dict({
@@ -155,7 +155,7 @@ class ReminderPrompt():
 
     async def finish(self):
         """End prompt and set reminder"""
-        self._view.clear_items()
+        self.view_.clear_items()
 
         # Embed ends with full stop, green highlight
         embed = discord.Embed.from_dict({
@@ -165,12 +165,12 @@ class ReminderPrompt():
         })
         embed.set_footer(text='See your reminder using /list')
 
-        await self.interaction.response.edit_message(embed=embed, view=self._view)
-        self._view.stop()
+        await self.interaction.response.edit_message(embed=embed, view=self.view_)
+        self.view_.stop()
 
     async def cancel(self):
         """Prompt ended via user input"""
-        self._view.clear_items()
+        self.view_.clear_items()
 
         # Embed has red highlight
         embed = discord.Embed.from_dict({
@@ -179,13 +179,13 @@ class ReminderPrompt():
             'color': constants.RED
         })
 
-        await self.interaction.response.edit_message(embed=embed, view=self._view)
+        await self.interaction.response.edit_message(embed=embed, view=self.view_)
         self.cancelled = True
-        self._view.stop()
+        self.view_.stop()
 
     async def timeout(self):
         """Prompt ended via timeout"""
-        self._view.clear_items()
+        self.view_.clear_items()
 
         # Embed has red highlight
         embed = discord.Embed.from_dict({
@@ -194,8 +194,8 @@ class ReminderPrompt():
             'color': constants.RED
         })
 
-        await self.message.edit(embed=embed, view=self._view)
-        self._view.stop()
+        await self.message.edit(embed=embed, view=self.view_)
+        self.view_.stop()
 
 
 class PromptView(discord.ui.View):
