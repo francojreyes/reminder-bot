@@ -62,7 +62,7 @@ def normalise_relative(string: str):
             continue
 
         # Make plural if more than one
-        result.append(f"{n} {period}{'s' if int(n) > 1 else ''}")
+        result.append(f"{n} {period}{'s' if float(n) > 1 else ''}")
     
     return ', '.join(result)
 
@@ -80,7 +80,14 @@ def relative_to_timestamp(string: str, base: int):
     }
     res = parse(string, locales=['en-AU'], settings=settings)
 
+    # print(repr(res))
+
     if res:
-        return res.timestamp()
+        return int(res.timestamp())
     else:
         raise ValueError('Unable to convert')
+
+# s = '1.5 hours'
+# s = normalise_relative(s)
+# print(s)
+# relative_to_timestamp(s, datetime.now().timestamp())
