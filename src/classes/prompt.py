@@ -284,7 +284,7 @@ class InitialSelect(discord.ui.Select):
 class DateTimeModal(discord.ui.Modal):
     """Modal to take in date and time input"""
     def __init__(self, prompt: ReminderPrompt):
-        super().__init__('Reminder Bot')
+        super().__init__(title='Reminder Bot')
         self.prompt = prompt
         self.add_item(discord.ui.InputText(
             label="Enter a date",
@@ -339,7 +339,7 @@ class DateTimeModal(discord.ui.Modal):
 class AmountModal(discord.ui.Modal):
     """Modal to take in an amount"""
     def __init__(self, prompt: ReminderPrompt, state: str):
-        super().__init__('Reminder Bot')
+        super().__init__(title='Reminder Bot')
         self.prompt = prompt
         self.state = state
         self.add_item(discord.ui.InputText(
