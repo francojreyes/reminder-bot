@@ -241,7 +241,6 @@ class InitialSelect(discord.ui.Select):
 
         # Choose path
         if selection == 'in':
-            self.prompt._time.append(selection)
             await self.prompt.in_amount()
         else:
             await self.prompt.on()
