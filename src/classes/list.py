@@ -45,7 +45,7 @@ class ReminderList(pages.Paginator):
         if interaction.user == self.user:
             return True
         else:
-            await interaction.response.send_message("This isn't your reminder! Go away!", ephemeral=True)
+            await interaction.response.send_message("This isn't your list! Go away!", ephemeral=True)
 
     async def on_timeout(self):
         """Timeout message on list timeout"""
