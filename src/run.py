@@ -12,7 +12,8 @@ print('Connected to MongoDB', ping)
 
 intents = discord.Intents.default()
 intents.messages = True
-client = ReminderBot(intents=intents)
+activity = discord.Activity(type=discord.ActivityType.listening, name="/help")
+client = ReminderBot(intents=intents, activity=activity)
 
 dotenv.load_dotenv()
 client.run(os.getenv('DISCORD_TOKEN'))
