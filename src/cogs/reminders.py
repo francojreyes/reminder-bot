@@ -74,19 +74,6 @@ class RemindersCog(commands.Cog, name='Reminders'):
         min_value=1, required=True)
     async def remove(self, ctx: discord.ApplicationContext, id: int):
         """Remove a reminder (use /list to get the reminder ID)"""
-        manager = data.get_role(ctx.guild_id)
-
-        if manager and ctx.guild.get_role(manager):
-            role = ctx.guild.get_role(manager)
-            if not role in ctx.author.roles:
-                await ctx.respond(f'You must have the {role.mention} role to remove reminders!',
-                        epehemeral=True)
-                return
-        else:
-            if not ctx.author.guild_permissions.manage_messages:
-                await ctx.respond('You must have the `Manage Messages` permission to remove reminders!',
-                    epehemeral=True)
-                return
 
         reminders = data.guild_reminders(ctx.guild_id)
         if len(reminders) < id:
@@ -95,9 +82,18 @@ class RemindersCog(commands.Cog, name='Reminders'):
         reminder = reminders[id - 1]
 
         if ctx.author.id != reminder.author_id:
-            await ctx.respond('You cannot remove a reminder that is not yours', ephemeral=True)
-            return
-        
+            manager = data.get_role(ctx.guild_id)
+            if manager:
+                role = ctx.guild.get_role(manager)
+                if not role in ctx.author.roles:
+                    await ctx.respond(f"You must have the {role.mention} role to remove reminders that aren't yours!",
+                            epehemeral=True)
+                return
+            elif not ctx.author.guild_permissions.manage_messages:
+                await ctx.respond("You must have the `Manage Messages` permission to remove reminders that aren't yours!",
+                    epehemeral=True)
+                return
+            
         data.remove_reminder(reminder)
 
         embed = discord.Embed(
