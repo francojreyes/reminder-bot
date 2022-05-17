@@ -1,22 +1,11 @@
 '''
 Utility functions for parsing dates, times and intervals
 '''
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 import re
 from dateparser import parse
-from dateutil import tz
 
 from src import constants
-
-
-# We want to store all as timestamps
-
-# For on date
-# We want to take a date/time
-# Parse it to a specific time (tz aware)
-# Compare it to time now (utc)
-# Represent this time in specific format, local time
-# Later, parse into a timestamp
 
 def str_to_datetime(string: str, offset: int):
     # Process today or tmr
@@ -31,17 +20,6 @@ def str_to_datetime(string: str, offset: int):
         'PARSERS': ['relative-time', 'absolute-time']
     }
     return parse(string, languages=['en'], settings=settings)
-
-# For in time
-# We want to take an interval
-# Normalise it into a set format
-# Later, parse into a timestamp representing time from now
-# Might as well make it aware
-
-# For repeat time
-# We wanat to take an interval
-# Normalise it into a set format
-# Later, parse it into a timestamp from now
 
 def normalise_relative(string: str):
     """
@@ -86,20 +64,7 @@ def relative_to_timestamp(string: str, base: int):
     }
     res = parse(string, locales=['en-AU'], settings=settings)
 
-    # print(repr(res))
-
     if res:
         return int(res.timestamp())
     else:
         raise ValueError('Unable to convert')
-
-
-
-if __name__=='__main__':
-    # s = '1.5 hours'
-    # s = normalise_relative(s)
-    # print(s)
-    # relative_to_timestamp(s, datetime.now().timestamp())
-    date = '8pm'
-    offset = 10
-    print(repr(str_to_datetime(date, offset)))

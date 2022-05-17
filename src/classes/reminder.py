@@ -2,8 +2,7 @@
 Reminder object
 '''
 from functools import total_ordering
-from datetime import datetime, timezone, timedelta
-from dateutil import tz
+from datetime import datetime
 
 import discord
 from src import constants, parsing

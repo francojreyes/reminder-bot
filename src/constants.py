@@ -1,8 +1,4 @@
 import re
-from datetime import timedelta
-
-from dateutil.relativedelta import relativedelta
-
 
 # REGEX taken from
 # https://github.com/wroberts/pytimeparse/blob/master/pytimeparse/timeparse.py
