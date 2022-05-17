@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 from dateutil import tz
 
 import discord
-from src import constants
+from src import constants, parsing
 from src.classes.prompt import ReminderPrompt
 
 @total_ordering
@@ -57,19 +57,16 @@ class Reminder(object):
             time.replace(tzinfo=tz.tzoffset(None, timedelta(hours=prompt.offset)))
             time = int(time.timestamp())
         else: # time_str[0] == 'in'
-            period = time_str[2].split(',')[0]
-            if not period.endswith('s'):
-                period += 's'
-            
-            dt = datetime.now(timezone.utc) + int(time_str[1]) * constants.DELTA[period]
-            time = int(dt.timestamp())
+            period = time_str[1]
+            period = period.replace(', repeating', '')
+            now = int(datetime.now().timestamp())
+            time = parsing.relative_to_timestamp(period, now)
 
         # Get the repeat interval
         if 'never' in time_str:
             interval = None
         else:
-            repeat_idx = time_str.index('every') + 1
-            interval = ' '.join(time_str[repeat_idx:repeat_idx+2])
+            interval = time_str[-1]
         
         return Reminder(
             text=prompt.text,
@@ -95,17 +92,15 @@ class Reminder(object):
         """Create reminder that is the repeat of self"""
         if not self.interval:
             raise ValueError('This reminder has no repeat interval set')
-
-        amount, period = self.interval.split(' ')
-        if not period.endswith('s'):
-            period += 's'
-        repeat_time = datetime.fromtimestamp(self.time) + int(amount) * constants.DELTA[period]
+        
+        time = parsing.relative_to_timestamp(self.interval, self.time)
+    
         return Reminder(
             text=self.text,
             author_id=self.author_id,
             guild_id=self.guild_id,
             channel_id=self.channel_id,
-            time=int(repeat_time.timestamp()),
+            time=time,
             interval=self.interval
         )
     

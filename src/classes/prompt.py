@@ -263,7 +263,7 @@ class InitialSelect(discord.ui.Select):
             if selection == 'today':
                 self.prompt.fixed_date = date.today().strftime("%d/%m/%Y")
             elif selection == 'tomorrow':
-                self.prompt.fixed_date = (date.today() + constants.DELTA['days']).strftime("%d/%m/%Y")
+                self.prompt.fixed_date = (date.today() + time(days=1)).strftime("%d/%m/%Y")
             await self.prompt.on()
 
 
@@ -345,6 +345,12 @@ class AmountModal(discord.ui.Modal):
         
         # Get the string representation
         res = parsing.normalise_relative(inp)
+        if not res:
+            await self.prompt.ctx.respond('Invalid amount', ephemeral=True)
+            await self.prompt.back()
+        elif 'seconds' in res:
+            await self.prompt.ctx.respond('Cannot use seconds', ephemeral=True)
+            await self.prompt.back()
 
         # Choose path based on what function sent this Modal
         if self.state == 'repeat':
@@ -353,36 +359,6 @@ class AmountModal(discord.ui.Modal):
         elif self.state == 'in':
             self.prompt._time.append(f'{res}, repeating')
             await self.prompt.repeat()
-
-
-class PeriodSelect(discord.ui.Select):
-    def __init__(self, prompt: ReminderPrompt, state: str):
-        super().__init__(placeholder='Choose a time period')
-        self.prompt = prompt
-        self.state = state
-        self.add_option(label='hours', value='hours')
-        self.add_option(label='days', value='days')
-        self.add_option(label='weeks', value='weeks')
-        self.add_option(label='months', value='months')
-
-        # Make singular if 1
-        amount = int(self.prompt._time[-1])
-        if amount == 1:
-            for option in self.options:
-                option.label = option.label[:-1]
-                option.value = option.value[:-1]
-
-
-    async def callback(self, interaction: discord.Interaction):
-        period = self.values[0]
-
-        # Choose path based on what function sent this Select
-        if self.state == 'in':
-            self.prompt._time.append(f'{self.values[0]}, repeating')
-            await self.prompt.repeat()
-        elif self.state == 'repeat':
-            self.prompt._time.append(self.values[0])
-            await self.prompt.confirm()
 
 
 class CancelButton(discord.ui.Button):
