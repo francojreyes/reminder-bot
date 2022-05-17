@@ -87,10 +87,23 @@ class MyMongoClient(MongoClient):
         return [Reminder.from_dict(x) for x in res]
 
     def current_reminders(self):
-        """Generator that finds all Reminders this minute"""
+        """Generator that deletes returns all Reminders this minute"""
         now = round(datetime.now(timezone.utc).timestamp() / 60) * 60
         # Take advantage of the fact that there should be no reminders lt now
-        return self.db.reminders.find({'time': {'$lt': now + 60}})
+        cursor = self.db.reminders.find({'time': {'$lt': now + 60}})
+        
+        try:
+            x = next(cursor)
+        except StopIteration:
+            return
+
+        while True:
+            yield Reminder.from_dict(x)
+            self.db.reminders.find_one_and_delete({'_id': x['_id']})
+            try:
+                x = next(cursor)
+            except StopIteration:
+                break
 
 
 data = MyMongoClient()
