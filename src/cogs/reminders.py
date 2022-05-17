@@ -31,12 +31,12 @@ class RemindersCog(commands.Cog, name='Reminders'):
         offset = data.get_offset(ctx.guild_id)
         prompt = ReminderPrompt(ctx, reminder, offset)
         self.bot.prompts.append(prompt)
-        res = await prompt.run()
 
         # Set a reminder with completed prompt
+        res = await prompt.run()
+        self.bot.prompts.remove(prompt)
         if not res and not prompt.cancelled:
             data.add_reminder(Reminder.from_prompt(prompt))
-        self.bot.prompts.remove(prompt)
     
     @commands.Cog.listener('on_message_delete')
     async def prompt_deletion(self, message: discord.Message):
@@ -57,9 +57,9 @@ class RemindersCog(commands.Cog, name='Reminders'):
         list_ = ReminderList(ctx, data.guild_reminders(ctx.guild_id))
         self.bot.lists.append(list_)
         await list_.respond(ctx.interaction)
-        await list_.wait()
 
         # After list is done
+        await list_.wait()
         self.bot.lists.remove(list_)
     
     @commands.Cog.listener('on_message_delete')
