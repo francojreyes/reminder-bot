@@ -62,7 +62,7 @@ class SettingsCog(commands.Cog):
         await ctx.respond(embed=discord.Embed.from_dict(embed))
     
     @settings_group.command()
-    @discord.option('channel', type=discord.TextChannel, required=False,
+    @discord.option('channel', type=str, required=False,
         description='The channel to send reminders to')
     async def channel(self, ctx: discord.ApplicationContext, channel):
         """Set the reminder channel for this server"""
