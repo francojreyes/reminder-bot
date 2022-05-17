@@ -1,5 +1,5 @@
 '''
-Cog that implements the help command
+Cog that implements the modular help command
 '''
 import discord
 from discord.ext import commands
@@ -71,6 +71,7 @@ class OverviewEmbed(discord.Embed):
 
 
 class CogEmbed(discord.Embed):
+    """Embed describing the commands in a cog"""
     def __init__(self, cog: discord.Cog):
         super().__init__(
             title=f'Help: {cog.qualified_name} Module', 
@@ -84,6 +85,7 @@ class CogEmbed(discord.Embed):
 
 
 class CommandEmbed(discord.Embed):
+    """Embed describing the options of a command"""
     def __init__(self, command: discord.ApplicationCommand):
         description = f'{command.description}\n Usage: `/{command.qualified_name} '
         description += ' '.join(f'<{opt.name}>' for opt in command.options)
