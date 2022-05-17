@@ -7,8 +7,9 @@ from dateparser import parse
 
 from src import constants
 
+
 def str_to_datetime(string: str, offset: int):
-    # Process today or tmr
+    """Process a string and GMT offset to an aware datetime"""
     string = re.sub(constants.TODAY, 'today', string)
     string = re.sub(constants.TOMORROW, 'tomorrow', string)
     settings = {
@@ -21,6 +22,7 @@ def str_to_datetime(string: str, offset: int):
     }
     return parse(string, languages=['en'], settings=settings)
 
+
 def normalise_relative(string: str):
     """
     Read an arbitrary relative time string and convert it to
@@ -32,23 +34,24 @@ def normalise_relative(string: str):
     # If no number (e.g. year, day) add the number 1
     if string.isalpha():
         string = '1 ' + string
-    
+
     # Regex match
     match = constants.INTERVAL_REGEX.match(string)
     if not match or not match.group(0).strip():
         return None
-    
+
     # Convert to string
     result = []
-    for period, n in match.groupdict().items():
+    for period, num in match.groupdict().items():
         # Ignore all not found
-        if n is None:
+        if num is None:
             continue
 
         # Make plural if more than one
-        result.append(f"{n} {period}{'s' if float(n) > 1 else ''}")
-    
+        result.append(f"{num} {period}{'s' if float(num) > 1 else ''}")
+
     return ', '.join(result)
+
 
 def relative_to_timestamp(string: str, base: int):
     """
@@ -60,11 +63,11 @@ def relative_to_timestamp(string: str, base: int):
         'TO_TIMEZONE': 'UTC',
         'PREFER_DATES_FROM': 'future',
         'RELATIVE_BASE': datetime.fromtimestamp(base),
-        'PARSERS': ['relative-time'] 
+        'PARSERS': ['relative-time']
     }
     res = parse(string, locales=['en-AU'], settings=settings)
 
-    if res:
-        return int(res.timestamp())
-    else:
+    if not res:
         raise ValueError('Unable to convert')
+
+    return int(res.timestamp())

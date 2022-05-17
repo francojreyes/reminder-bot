@@ -1,3 +1,6 @@
+'''
+Constants used by the application
+'''
 import re
 
 # REGEX taken from

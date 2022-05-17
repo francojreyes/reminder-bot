@@ -11,6 +11,8 @@ from src.data import data
 
 
 class ReminderBot(discord.Bot):
+    """Reminder bot client"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.allowed_mentions = discord.AllowedMentions.none()
@@ -24,8 +26,8 @@ class ReminderBot(discord.Bot):
         self.execute_reminders.start()
 
     async def on_ready(self):
-        # Signal ready
-        print('Logged on as {0}!'.format(self.user))        
+        """Log when ready"""
+        print(f'Logged on as {self.user}!')
 
     @tasks.loop(minutes=1)
     async def execute_reminders(self):
@@ -43,5 +45,6 @@ class ReminderBot(discord.Bot):
 
     @execute_reminders.before_loop
     async def before_my_task(self):
+        '''Wait until ready before executing reminders'''
         await self.wait_until_ready()
         data.ping()

@@ -20,7 +20,7 @@ class MyMongoClient(MongoClient):
         super().__init__(
             os.getenv('MONGODB_URL'), server_api=ServerApi('1'), connect=False)
         self.db = self.reminderbot
-    
+
     def ping(self):
         """Ping the database"""
         self.db.command('ping')
@@ -35,10 +35,9 @@ class MyMongoClient(MongoClient):
 
     def get_offset(self, guild_id: int):
         """Retrieve the UTC offset of the given guild"""
-        guild = self.db.guilds.find_one({'_id': guild_id}, {'offset': 1, '_id': 0})
-        if guild:
-            return guild['offset']
-        else:
+        guild = self.db.guilds.find_one(
+            {'_id': guild_id}, {'offset': 1, '_id': 0})
+        if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': 0,
@@ -46,7 +45,9 @@ class MyMongoClient(MongoClient):
                 'role': None
             })
             return 0
-    
+
+        return guild['offset']
+
     def set_offset(self, guild_id: int, offset: int):
         """Update the UTC offset of the given guild"""
         guild = self.db.guilds.find_one_and_update(
@@ -61,10 +62,9 @@ class MyMongoClient(MongoClient):
 
     def get_target(self, guild_id: int):
         """Retrieve the target channel of the given guild"""
-        guild = self.db.guilds.find_one({'_id': guild_id}, {'target': 1, '_id': 0})
-        if guild:
-            return guild['target']
-        else:
+        guild = self.db.guilds.find_one(
+            {'_id': guild_id}, {'target': 1, '_id': 0})
+        if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': 0,
@@ -72,7 +72,9 @@ class MyMongoClient(MongoClient):
                 'role': None
             })
             return None
-    
+
+        return guild['target']
+
     def set_target(self, guild_id: int, target: int):
         """Update the target channel of the given guild"""
         guild = self.db.guilds.find_one_and_update(
@@ -84,13 +86,12 @@ class MyMongoClient(MongoClient):
                 'target': target,
                 'role': None
             })
-        
+
     def get_role(self, guild_id: int):
         """Retrieve the manager role of the given guild"""
-        guild = self.db.guilds.find_one({'_id': guild_id}, {'role': 1, '_id': 0})
-        if guild:
-            return guild['role']
-        else:
+        guild = self.db.guilds.find_one(
+            {'_id': guild_id}, {'role': 1, '_id': 0})
+        if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': 0,
@@ -98,7 +99,9 @@ class MyMongoClient(MongoClient):
                 'role': None
             })
             return None
-    
+
+        return guild['role']
+
     def set_role(self, guild_id: int, role: int):
         """Update the manager role of the given guild"""
         guild = self.db.guilds.find_one_and_update(
@@ -113,25 +116,26 @@ class MyMongoClient(MongoClient):
 
     def guild_reminders(self, guild_id: int):
         """Returns a list of all reminders matching the given guild_id"""
-        res = self.db.reminders.find({'guild_id': guild_id}, sort=[('time', 1)])
-        return [Reminder.from_dict(x) for x in res]
+        res = self.db.reminders.find(
+            {'guild_id': guild_id}, sort=[('time', 1)])
+        return [Reminder.from_dict(rem) for rem in res]
 
     def current_reminders(self):
         """Generator that deletes returns all Reminders this minute"""
         now = datetime.now(timezone.utc).timestamp() // 60 * 60
         # Take advantage of the fact that there should be no reminders lt now
         cursor = self.db.reminders.find({'time': {'$lt': int(now) + 60}})
-        
+
         try:
-            x = next(cursor)
+            curr = next(cursor)
         except StopIteration:
             return
 
         while True:
-            yield Reminder.from_dict(x)
-            self.db.reminders.find_one_and_delete({'_id': x['_id']})
+            yield Reminder.from_dict(curr)
+            self.db.reminders.find_one_and_delete({'_id': curr['_id']})
             try:
-                x = next(cursor)
+                curr = next(cursor)
             except StopIteration:
                 break
 
