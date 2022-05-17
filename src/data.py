@@ -42,7 +42,8 @@ class MyMongoClient(MongoClient):
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': 0,
-                'target': None
+                'target': None,
+                'role': None
             })
             return 0
     
@@ -54,7 +55,8 @@ class MyMongoClient(MongoClient):
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': offset,
-                'target': None
+                'target': None,
+                'role': None
             })
 
     def get_target(self, guild_id: int):
@@ -66,7 +68,8 @@ class MyMongoClient(MongoClient):
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': 0,
-                'target': None
+                'target': None,
+                'role': None
             })
             return None
     
@@ -78,7 +81,34 @@ class MyMongoClient(MongoClient):
             self.db.guilds.insert_one({
                 '_id': guild_id,
                 'offset': 0,
-                'target': target
+                'target': target,
+                'role': None
+            })
+        
+    def get_role(self, guild_id: int):
+        """Retrieve the manager role of the given guild"""
+        guild = self.db.guilds.find_one({'_id': guild_id}, {'role': 1, '_id': 0})
+        if guild:
+            return guild['role']
+        else:
+            self.db.guilds.insert_one({
+                '_id': guild_id,
+                'offset': 0,
+                'target': None,
+                'role': None
+            })
+            return None
+    
+    def set_role(self, guild_id: int, role: int):
+        """Update the manager role of the given guild"""
+        guild = self.db.guilds.find_one_and_update(
+            {'_id': guild_id}, {'$set': {'role': role}})
+        if not guild:
+            self.db.guilds.insert_one({
+                '_id': guild_id,
+                'offset': 0,
+                'target': None,
+                'role': role
             })
 
     def guild_reminders(self, guild_id: int):

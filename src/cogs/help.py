@@ -22,7 +22,7 @@ class HelpCog(commands.Cog, name='Other'):
     @discord.option('input', str, required=False, description='Specific module or command')
     async def help(self, ctx: discord.ApplicationContext, input: str):
         """Help command"""
-        if input.startswith('/'):
+        if input and input.startswith('/'):
             input = input[1:]
 
         # If no parameter given, send overview

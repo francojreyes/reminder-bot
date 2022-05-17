@@ -26,6 +26,9 @@ class SettingsCog(commands.Cog, name='Settings'):
         target = data.get_target(ctx.guild_id)
         target = f'<#{target}>' if target else '`None`'
 
+        role = data.get_role(ctx.guild_id)
+        role = f'<@&{role}>' if role else '`None`'
+
         embed = {
             'color': constants.BLURPLE,
             'title': 'Reminder Bot Settings Help',
@@ -34,7 +37,7 @@ class SettingsCog(commands.Cog, name='Settings'):
         }
         embed['fields'].append({
             'name': 'GMT Offset 🕒',
-            'value': 'All times entered in this server will be assumed to have this GMT offset.'
+            'value': 'All times entered in this server will be assumed to have this GMT offset. '
                     'Find the GMT offset for your timezone [here](https://www.google.com/search?q=what+is+my+time+zone).\n\n'
                     f'Current GMT Offset: `GMT{offset}`\n\n'
                     'Use `/settings offset <offset>` to set the offset.\n\n'
@@ -42,11 +45,20 @@ class SettingsCog(commands.Cog, name='Settings'):
         })
         embed['fields'].append({
             'name': 'Reminder Channel 📢',
-            'value': 'If specified, all reminders will be sent in this channel.'
+            'value': 'If specified, all reminders will be sent in this channel. '
                     'Otherwise, reminders are sent to the channel they were set in.\n\n'
                     f'Current Reminder Channel: {target}\n\n'
                     'Use `/settings channel <#channel>` to set a channel.\n'
-                    'Use `/settings channel` to unset the reminder channel.\n' 
+                    'Use `/settings channel` to unset the reminder channel.\n\n' 
+                    '\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
+        })
+        embed['fields'].append({
+            'name': 'Manager Role 🛠️',
+            'value': 'If specified, only users with this role will be able to remove reminders. '
+                    'Otherwise, any user with the `Manage Messages` permissions can.\n\n'
+                    f'Current Manager Role: {role}\n\n'
+                    'Use `/settings role <@role>` to set a role.\n'
+                    'Use `/settings role` to unset the manager role.\n\n'
         })
 
         await ctx.respond(embed=discord.Embed.from_dict(embed))
@@ -80,14 +92,37 @@ class SettingsCog(commands.Cog, name='Settings'):
             # Channel must be in this guild 
             channel = self.bot.get_channel(channel_id)
             if channel is None or channel.guild != ctx.guild:
-                await ctx.respond(f'No channel <#{channel_id}> found in this server.', ephemeral=True)
+                await ctx.respond(f'No channel {channel.mention} found in this server.', ephemeral=True)
                 return
 
             data.set_target(ctx.guild_id, channel_id)
-            description = f'New Reminder Channel: <#{channel_id}>'
+            description = f'New Reminder Channel: {channel.mention}'
         else:
             data.set_target(ctx.guild_id, None)
             description = 'Reminder channel unset.'
+        
+        embed = {
+            'color': constants.BLURPLE,
+            'title': 'Setting changed!',
+            'description': description
+        }
+        await ctx.respond(embed=discord.Embed.from_dict(embed))    
+
+    @settings_group.command()
+    @discord.option('role', type=discord.Role, required=False,
+        description='The role to set as manager. If no role provided, unsets manager role.')
+    async def role(self, ctx: discord.ApplicationContext, role):
+        """Set the manager role for this server"""
+        if role:
+            if role.guild != ctx.guild:
+                await ctx.respond(f'No role {role.mention} found in this server.', ephemeral=True)
+                return
+
+            data.set_role(ctx.guild_id, role.id)
+            description = f'New Manager Role: {role.mention}'
+        else:
+            data.set_role(ctx.guild_id, None)
+            description = 'Manager role unset.'
         
         embed = {
             'color': constants.BLURPLE,
