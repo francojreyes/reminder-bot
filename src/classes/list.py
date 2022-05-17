@@ -8,15 +8,22 @@ from discord.ext import pages
 from src import constants
 
 BUTTONS = [
-    pages.PaginatorButton('first', label='<<', style=discord.ButtonStyle.blurple, row=1),
-    pages.PaginatorButton('prev', label='<', style=discord.ButtonStyle.blurple, row=1),
-    pages.PaginatorButton('page_indicator', style=discord.ButtonStyle.gray, row=1, disabled=True),
-    pages.PaginatorButton('next', label='>', style=discord.ButtonStyle.blurple, row=1),
-    pages.PaginatorButton('last', label='>>', style=discord.ButtonStyle.blurple, row=1),
+    pages.PaginatorButton('first',
+                          label='<<', style=discord.ButtonStyle.blurple, row=1),
+    pages.PaginatorButton('prev',
+                          label='<', style=discord.ButtonStyle.blurple, row=1),
+    pages.PaginatorButton('page_indicator',
+                          style=discord.ButtonStyle.gray, row=1, disabled=True),
+    pages.PaginatorButton('next',
+                          label='>', style=discord.ButtonStyle.blurple, row=1),
+    pages.PaginatorButton('last',
+                          label='>>', style=discord.ButtonStyle.blurple, row=1),
 ]
 
 
 class ReminderList(pages.Paginator):
+    """Object representing a paginated reminder list"""
+
     def __init__(self, ctx: discord.ApplicationContext, reminders):
         self.ctx = ctx
         self.message = None
@@ -44,8 +51,10 @@ class ReminderList(pages.Paginator):
     async def interaction_check(self, interaction: discord.Interaction):
         if interaction.user == self.user:
             return True
-        else:
-            await interaction.response.send_message("This isn't your list! Go away!", ephemeral=True)
+
+        await interaction.response.send_message(
+            "This isn't your list! Go away!", ephemeral=True)
+        return False
 
     async def on_timeout(self):
         """Timeout message on list timeout"""
@@ -62,6 +71,8 @@ class ReminderList(pages.Paginator):
 
 
 class ReminderListMenu(discord.ui.Select):
+    """Custom Select menu for the ReminderList"""
+
     def __init__(self, page_groups):
         self.page_groups = page_groups
         self.paginator = None
@@ -96,6 +107,8 @@ class ReminderListMenu(discord.ui.Select):
 
 
 class ReminderListPageGroup(pages.PageGroup):
+    """PageGroup that represents a set of reminder"""
+
     def __init__(self, label, reminders):
         if reminders:
             page_list = []
@@ -128,7 +141,7 @@ class ReminderListPage(pages.Page):
             title='Reminder List',
             description=content
         )
-        embed.set_footer(
-            text='Note: IDs may be inaccurate if reminders have been added/removed since this list was opened.')
+        embed.set_footer(text='Note: IDs may be inaccurate if reminders have '
+                              'been added/removed since this list was opened.')
 
         super().__init__(embeds=[embed])
