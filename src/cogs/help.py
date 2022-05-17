@@ -21,7 +21,7 @@ class HelpCog(commands.Cog, name='Other'):
     @commands.slash_command()
     @discord.option('input', str, required=False, description='Specific module or command')
     async def help(self, ctx: discord.ApplicationContext, input: str):
-        """Shows all modules of that bot"""
+        """Help command"""
         if input.startswith('/'):
             input = input[1:]
 
@@ -91,7 +91,7 @@ class CommandEmbed(discord.Embed):
         usage = f"/{command.qualified_name} {' '.join(f'<{opt.name}>' for opt in command.options)}"
         super().__init__(
             title=f'Help: /{command.qualified_name}',
-            description=f"{command.description}\n Usage: `{usage.strip(' ')}`",
+            description=f"{command.description}.\n Usage: `{usage.strip(' ')}`",
             color=constants.BLURPLE,
         )
 
