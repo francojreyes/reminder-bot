@@ -88,9 +88,9 @@ class MyMongoClient(MongoClient):
 
     def current_reminders(self):
         """Generator that deletes returns all Reminders this minute"""
-        now = round(datetime.now(timezone.utc).timestamp() / 60) * 60
+        now = datetime.now(timezone.utc).timestamp() // 60 * 60
         # Take advantage of the fact that there should be no reminders lt now
-        cursor = self.db.reminders.find({'time': {'$lt': now + 60}})
+        cursor = self.db.reminders.find({'time': {'$lt': int(now) + 60}})
         
         try:
             x = next(cursor)
