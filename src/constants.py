@@ -31,6 +31,12 @@ INTERVAL_FORMAT = r'{YEARS}\s*{MONTHS}\s*{WEEKS}\s*{DAYS}\s*{HOURS}\s*{MINS}\s*{
 
 INTERVAL_REGEX = re.compile(r'\s*' + INTERVAL_FORMAT + r'\s*$', re.I)
 
+TOMORROW    = r'(?:tmrw?|tmw|tomorrow)'
+TODAY       = r'(?:today|tdy)'
+DATE_FORMAT = '%-d %b %Y at %-I:%M %p'
+
+ISO_TZD = lambda n: f"{'+' if n >= 0 else '-'}{abs(n):02}:00"
+
 BLURPLE = 0x5865f2
 GREEN = 0x57f287
 RED = 0xed4245

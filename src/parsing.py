@@ -2,6 +2,7 @@
 Utility functions for parsing dates, times and intervals
 '''
 from datetime import datetime, timedelta, timezone
+import re
 from dateparser import parse
 from dateutil import tz
 
@@ -17,14 +18,19 @@ from src import constants
 # Represent this time in specific format, local time
 # Later, parse into a timestamp
 
-def date_to_str(string, tz):
-    # Read a date, from tz to UTC (aware)
-    # Convert to string
-    pass
-
-def date_to_timestamp(string, tz):
-    # Read a date, from tz to UTC (naive)
-    pass
+def str_to_datetime(string: str, offset: int):
+    # Process today or tmr
+    string = re.sub(constants.TODAY, 'today', string)
+    string = re.sub(constants.TOMORROW, 'tomorrow', string)
+    settings = {
+        'DATE_ORDER': 'DMY',
+        'TIMEZONE': constants.ISO_TZD(offset),
+        'RETURN_AS_TIMEZONE_AWARE': True,
+        'PREFER_DAY_OF_MONTH': 'first',
+        'PREFER_DATES_FROM': 'future',
+        'PARSERS': ['relative-time', 'absolute-time']
+    }
+    return parse(string, languages=['en'], settings=settings)
 
 # For in time
 # We want to take an interval
@@ -87,7 +93,13 @@ def relative_to_timestamp(string: str, base: int):
     else:
         raise ValueError('Unable to convert')
 
-# s = '1.5 hours'
-# s = normalise_relative(s)
-# print(s)
-# relative_to_timestamp(s, datetime.now().timestamp())
+
+
+if __name__=='__main__':
+    # s = '1.5 hours'
+    # s = normalise_relative(s)
+    # print(s)
+    # relative_to_timestamp(s, datetime.now().timestamp())
+    date = '8pm'
+    offset = 10
+    print(repr(str_to_datetime(date, offset)))

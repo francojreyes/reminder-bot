@@ -31,8 +31,6 @@ class ReminderPrompt():
         The message that displays this prompt
     interaction: Interaction
         The open interaction that must be responded to
-    fixed_date: str
-        String representing date or None if this has no fixed date
     cancelled: bool
         Whether this has been cancelled
     """
@@ -48,7 +46,6 @@ class ReminderPrompt():
         self.message: discord.InteractionMessage = None
         self.interaction: discord.Interaction = None
 
-        self.fixed_date = None
         self.cancelled = False
 
     def embed(self):
@@ -93,7 +90,6 @@ class ReminderPrompt():
         self._view.clear_items()
         self._view.add_item(InitialSelect(self))
         self.prev_state = None
-        self.fixed_date = None
         await self.interaction.response.edit_message(embed=self.embed(), view=self.view(no_back=True))
 
     async def on(self):
@@ -166,6 +162,8 @@ class ReminderPrompt():
             'description': f'_"{self.text}"_\n{self.time()}.',
             'color': constants.GREEN
         })
+        embed.set_footer(text='See your reminder using /list')
+
         await self.interaction.response.edit_message(embed=embed, view=self._view)
         self._view.stop()
 
@@ -233,57 +231,41 @@ class InitialSelect(discord.ui.Select):
             description="Remind me in an amount of time from now"
         )
         self.add_option(
-            label="today at...",
-            value='today',
-            emoji="☀️",
-            description="Remind me today at a certain time"
-        )
-        self.add_option(
-            label="tomorrow at...",
-            value='tomorrow',
-            emoji="💤",
-            description="Remind me tomorrow at a certain time"
-        )
-        self.add_option(
             label='on...',
             value='on',
             emoji="📅",
-            description="Remind me on a certain date, at a certain time"
+            description="Remind me on a certain day and/or time"
         )
 
     async def callback(self, interaction: discord.Interaction):
         selection = self.values[0]
+        self.prompt._time.append(selection)
 
         # Choose path
         if selection == 'in':
             self.prompt._time.append(selection)
             await self.prompt.in_amount()
         else:
-            self.prompt._time.append('on')
-            if selection == 'today':
-                self.prompt.fixed_date = date.today().strftime("%d/%m/%Y")
-            elif selection == 'tomorrow':
-                self.prompt.fixed_date = (date.today() + time(days=1)).strftime("%d/%m/%Y")
             await self.prompt.on()
 
 
 class DateTimeModal(discord.ui.Modal):
     """Modal to take in date and time input"""
     def __init__(self, prompt: ReminderPrompt):
-        super().__init__(title='Reminder Bot')
+        super().__init__(title=f'Reminder Bot (GMT{constants.ISO_TZD(prompt.offset)})')
         self.prompt = prompt
         self.add_item(discord.ui.InputText(
-            label="Enter a date",
-            min_length=10,
+            label="Enter a day",
+            min_length=1,
             max_length=10,
-            placeholder="DD/MM/YYYY",
-            value=self.prompt.fixed_date
+            placeholder="e.g. tomorrow or 26/05/2003",
         ))
         self.add_item(discord.ui.InputText(
-            label=f"Enter a time (24 hour GMT{'+' if self.prompt.offset >= 0 else ''}{self.prompt.offset})",
-            min_length=5,
-            max_length=5,
-            placeholder="HH:MM"
+            label=f"Enter a time (optional)",
+            min_length=1,
+            max_length=8,
+            placeholder="e.g. 8pm or 13:37",
+            required=False
         ))
 
     async def callback(self, interaction: discord.Interaction):
@@ -291,34 +273,20 @@ class DateTimeModal(discord.ui.Modal):
         date = self.children[0].value.strip()
         time = self.children[1].value.strip()
 
-        # Enforce valid input format
-        if not re.fullmatch(r'[0-9]{2}/[0-9]{2}/[0-9]{4}', date):
-            await self.prompt.ctx.respond('Invalid date format! Please use the format DD/MM/YYYY', ephemeral=True)
-            await self.prompt.back()
-            return
-
-        # Enforce valid input format
-        if not re.fullmatch(r'[0-9]{2}:[0-9]{2}', time):
-            await self.prompt.ctx.respond('Invalid time format! Please use the format HH:MM', ephemeral=True)
-            await self.prompt.back()
-            return
-
         # Enforce valid datetime
-        try:
-            dt = datetime.strptime(date + time, "%d/%m/%Y%H:%M")
-        except ValueError:
-            await self.prompt.ctx.respond('Date or time does not exist!', ephemeral=True)
+        dt = parsing.str_to_datetime(f'{date} {time}', self.prompt.offset)
+        if not dt:
+            await self.prompt.ctx.respond("Invalid date or time", ephemeral=True)
             await self.prompt.back()
             return
         
         # Enforce in future
-        dt = dt.replace(tzinfo=tz.tzoffset(None, timedelta(hours=self.prompt.offset)))
         if dt <= datetime.now(timezone.utc):
             await self.prompt.ctx.respond("You can't set a reminder in the past!", ephemeral=True)
             await self.prompt.back()
             return
 
-        self.prompt._time.append(f'{date} at {time}, repeating')
+        self.prompt._time.append(f'{dt.strftime(constants.DATE_FORMAT)}, repeating')
         await self.prompt.repeat()
 
 
@@ -332,7 +300,7 @@ class AmountModal(discord.ui.Modal):
         if self.state == 'in':
             label = "Remind me in..."
         elif self.state == 'repeat':
-            label = "Repeat every..."
+            label = "Remind me again every..."
 
         self.add_item(discord.ui.InputText(
             label=label,
@@ -348,9 +316,11 @@ class AmountModal(discord.ui.Modal):
         if not res:
             await self.prompt.ctx.respond('Invalid amount', ephemeral=True)
             await self.prompt.back()
+            return
         elif 'seconds' in res:
             await self.prompt.ctx.respond('Cannot use seconds', ephemeral=True)
             await self.prompt.back()
+            return
 
         # Choose path based on what function sent this Modal
         if self.state == 'repeat':

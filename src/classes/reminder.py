@@ -51,16 +51,14 @@ class Reminder(object):
         time_str = prompt._time
 
         # Get the time of reminder
+        time = time_str[1].replace(', repeating', '')
         if time_str[0] == 'on':
-            format_str = '%d/%m/%Y at %H:%M, repeating'
-            time = datetime.strptime(time_str[1], format_str)
-            time.replace(tzinfo=tz.tzoffset(None, timedelta(hours=prompt.offset)))
+            time += constants.ISO_TZD(prompt.offset)
+            time = datetime.strptime(time, constants.DATE_FORMAT.replace('-', '') + '%z')
             time = int(time.timestamp())
         else: # time_str[0] == 'in'
-            period = time_str[1]
-            period = period.replace(', repeating', '')
             now = int(datetime.now().timestamp())
-            time = parsing.relative_to_timestamp(period, now)
+            time = parsing.relative_to_timestamp(time, now)
 
         # Get the repeat interval
         if 'never' in time_str:
