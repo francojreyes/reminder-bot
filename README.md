@@ -1,4 +1,8 @@
-﻿# Reminder Bot
+<p align="center">
+  <img src="https://raw.githubusercontent.com/francojreyes/reminder-bot/master/img/logo_368.png" />
+</p>
+
+# Reminder Bot
  Simple and powerful Discord bot for sending reminders. [Invite Reminder Bot to your server](https://discord.com/api/oauth2/authorize?client_id=973088919862263808&permissions=2048&scope=bot%20applications.commands)!
  
  ## Key Features
