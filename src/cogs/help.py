@@ -21,33 +21,33 @@ class HelpCog(commands.Cog, name='Other'):
 
     @commands.slash_command()
     @discord.option('input', str, required=False, description='Specific module or command')
-    async def help(self, ctx: discord.ApplicationContext, inp: str):
+    async def help(self, ctx: discord.ApplicationContext, input: str):
         """Help command"""
-        if inp and inp.startswith('/'):
-            inp = inp[1:]
+        if input and input.startswith('/'):
+            input = input[1:]
 
         # If no parameter given, send overview
-        if not inp:
+        if not input:
             await ctx.respond(embed=OverviewEmbed(self.bot))
             return
 
         # iterate through cogs
         for cog in self.bot.cogs:
             # check if cog is the matching one
-            if cog.lower() == inp.lower():
+            if cog.lower() == input.lower():
                 await ctx.respond(embed=CogEmbed(self.bot.cogs[cog]))
                 return
 
             # or look it in its commands to see if its there
             for command in cog_commands(self.bot.cogs[cog]):
-                if command.qualified_name.lower() == inp.lower():
+                if command.qualified_name.lower() == input.lower():
                     await ctx.respond(embed=CommandEmbed(command))
                     return
 
         # if no matches found
         await ctx.respond(embed=discord.Embed(
             title="Not Found",
-            description=f"No module or command found called `{inp}`",
+            description=f"No module or command found called `{input}`",
             color=constants.RED))
 
 
