@@ -88,10 +88,10 @@ class SettingsCog(commands.Cog, name='Settings'):
         await ctx.respond(embed=discord.Embed.from_dict(embed))
 
     @settings_group.command()
-    @discord.option('channel', type=str, required=False,
+    @discord.option('channel', type=discord.TextChannel, required=False,
                     description='The channel to send reminders to.'
                                 'If no channel provided, unsets reminder channel.')
-    async def channel(self, ctx: discord.ApplicationContext, channel):
+    async def channel(self, ctx: discord.ApplicationContext, channel: discord.TextChannel):
         """Set the reminder channel for this server"""
         if not ctx.author.guild_permissions.manage_guild:
             await ctx.respond(
@@ -101,21 +101,12 @@ class SettingsCog(commands.Cog, name='Settings'):
             return
 
         if channel:
-            try:
-                channel_id = int(channel.strip(' <!#>'))
-            except ValueError:
-                await ctx.respond(
-                    'Not a channel, please enter a channel using #channel-name', ephemeral=True)
-                return
-
-            # Channel must be in this guild
-            channel = self.bot.get_channel(channel_id)
-            if channel is None or channel.guild != ctx.guild:
+            if channel.guild != ctx.guild:
                 await ctx.respond(
                     f'No channel {channel.mention} found in this server.', ephemeral=True)
                 return
 
-            data.set_target(ctx.guild_id, channel_id)
+            data.set_target(ctx.guild_id, channel.id)
             description = f'New Reminder Channel: {channel.mention}'
         else:
             data.set_target(ctx.guild_id, None)
