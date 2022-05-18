@@ -3,7 +3,6 @@ Cog that implements the modular help command
 '''
 import discord
 from discord.ext import commands
-from src import constants
 
 
 def cog_commands(cog: discord.Cog):
@@ -70,7 +69,7 @@ class HelpCog(commands.Cog, name='Other'):
         await ctx.respond(embed=discord.Embed(
             title="Not Found",
             description=f"No module or command found called `{input}`",
-            color=constants.RED))
+            color=discord.Color.brand_red()))
 
 
 class OverviewEmbed(discord.Embed):
@@ -80,7 +79,7 @@ class OverviewEmbed(discord.Embed):
         # build Embed
         super().__init__(
             title=f'Help: {bot.user.name}',
-            color=constants.BLURPLE,
+            color=discord.Color.blurple(),
             description='Use `/help <module>` to gain more information about that module.'
         )
 
@@ -106,7 +105,7 @@ class CogEmbed(discord.Embed):
             title=f'Help: {cog.qualified_name} Module',
             description=f'{cog.description}.\n'
                         'Use `/help <command>` to gain more information about that command.',
-            color=constants.BLURPLE)
+            color=discord.Color.blurple())
 
         # getting commands from cog
         for command in cog_commands(cog):
@@ -125,7 +124,7 @@ class CommandEmbed(discord.Embed):
         super().__init__(
             title=f'Help: /{command.qualified_name}',
             description=f"{command.description}.\n Usage: `{usage.strip(' ')}`",
-            color=constants.BLURPLE,
+            color=discord.Color.blurple(),
         )
 
         # Getting optiosn from command
