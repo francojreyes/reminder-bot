@@ -11,6 +11,27 @@ def cog_commands(cog: discord.Cog):
     return [x for x in cog.walk_commands() if not isinstance(x, discord.SlashCommandGroup)]
 
 
+def help_autocomplete(ctx: discord.AutocompleteContext):
+    """Autocomplete with all cogs and commands"""
+
+    # Gather all cogs and commands starting with input
+    inp = ctx.value.lower()
+    result = []
+    for cog in ctx.bot.cogs:
+        # Any cog
+        if cog.lower().startswith(inp):
+            result.append(cog)
+        
+        # Any command that starts with input or input without slash
+        for command in cog_commands(ctx.bot.cogs[cog]):
+            command_name = command.qualified_name.lower()
+            if command_name.startswith(inp) or \
+                (inp.startswith('/') and command_name.startswith(inp[1:])):
+                result.append(f'/{command.qualified_name}')
+
+    return result
+
+
 class HelpCog(commands.Cog, name='Other'):
     """
     Sends this help message
@@ -20,7 +41,8 @@ class HelpCog(commands.Cog, name='Other'):
         self.bot = bot
 
     @commands.slash_command()
-    @discord.option('input', str, required=False, description='Specific module or command')
+    @discord.option('input', str, required=False, autocomplete=help_autocomplete,
+        description='Specific module or command')
     async def help(self, ctx: discord.ApplicationContext, input: str):
         """Help command"""
         if input and input.startswith('/'):
@@ -55,8 +77,9 @@ class OverviewEmbed(discord.Embed):
     '''Overview when help command has no option'''
 
     def __init__(self, bot: discord.Bot):
+        # build Embed
         super().__init__(
-            title='Help: Reminder Bot',
+            title=f'Help: {bot.user.name}',
             color=constants.BLURPLE,
             description='Use `/help <module>` to gain more information about that module.'
         )
@@ -78,6 +101,7 @@ class CogEmbed(discord.Embed):
     """Embed describing the commands in a cog"""
 
     def __init__(self, cog: discord.Cog):
+        # build Embed
         super().__init__(
             title=f'Help: {cog.qualified_name} Module',
             description=f'{cog.description}.\n'
@@ -94,13 +118,17 @@ class CommandEmbed(discord.Embed):
     """Embed describing the options of a command"""
 
     def __init__(self, command: discord.ApplicationCommand):
+        # Generate usage of the form `/command <opt1> <opt2>`
         usage = f"/{command.qualified_name} {' '.join(f'<{opt.name}>' for opt in command.options)}"
+
+        # Build emebed
         super().__init__(
             title=f'Help: /{command.qualified_name}',
             description=f"{command.description}.\n Usage: `{usage.strip(' ')}`",
             color=constants.BLURPLE,
         )
 
+        # Getting optiosn from command
         for option in command.options:
             self.add_field(
                 name=f'`<{option.name}>`' +
