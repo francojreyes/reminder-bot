@@ -89,21 +89,19 @@ class ReminderListMenu(discord.ui.Select):
         selection = self.values[0]
         if selection == 'Show all reminders':
             self.placeholder = 'Showing all reminders...'
-            await self.paginator.update(
-                pages=self.page_groups[0].pages,
-                use_default_buttons=False,
-                custom_buttons=BUTTONS,
-                custom_view=self.paginator.custom_view
-            )
+            pages = self.page_groups[0].pages
         else:  # 'Show my reminders'
             name = self.paginator.user.display_name
             self.placeholder = f"Showing {name}'s reminders..."
-            await self.paginator.update(
-                pages=self.page_groups[1].pages,
-                use_default_buttons=False,
-                custom_buttons=BUTTONS,
-                custom_view=self.paginator.custom_view
-            )
+            pages = self.page_groups[1].pages
+
+        await self.paginator.update(
+            pages=pages,
+            use_default_buttons=False,
+            custom_buttons=BUTTONS,
+            custom_view=self.paginator.custom_view,
+            interaction=interaction
+        )
 
 
 class ReminderListPageGroup(pages.PageGroup):
