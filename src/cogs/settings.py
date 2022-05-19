@@ -9,6 +9,26 @@ from src import constants
 from src.data import data
 
 
+def get_countries(ctx: discord.AutocompleteContext):
+    inp = ctx.value.lower()
+    if not inp:
+        return []
+
+    return [x for x in constants.TZ_COUNTRIES if x.lower().startswith(inp)]
+
+
+def country_timezones(ctx: discord.AutocompleteContext):
+    inp = ctx.value.lower()
+    country = ctx.options['country'].title()
+    if country and country in constants.TZ_COUNTRIES:
+        country_timezones = constants.TZ_COUNTRIES[country]
+        return [tz for tz in country_timezones if inp in tz]
+    
+    if not inp:
+        return []
+    return [tz for tz in list(constants.TZ_DESC) if inp in tz]
+
+
 class SettingsCog(commands.Cog, name='Settings'):
     """
     Commands for changing the bot's settings
@@ -23,8 +43,7 @@ class SettingsCog(commands.Cog, name='Settings'):
     @settings_group.command()
     async def view(self, ctx: discord.ApplicationContext):
         """See information on the settings for this server"""
-        offset = data.get_offset(ctx.guild_id)
-        offset = constants.ISO_TZD(offset)
+        timezone = data.get_timezone(ctx.guild_id)
 
         target = data.get_target(ctx.guild_id)
         target = f'<#{target}>' if target else '`None`'
@@ -35,16 +54,14 @@ class SettingsCog(commands.Cog, name='Settings'):
         embed = {
             'color': constants.BLURPLE,
             'title': 'Reminder Bot Settings Help',
-            'description': r'\_\_\_\_\_\_\_\_\_\_\_\_\_\_',
+            'description': r'\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_',
             'fields': []
         }
         embed['fields'].append({
-            'name': 'GMT Offset 🕒',
-            'value': 'All times entered in this server will be assumed to have this GMT offset. '
-                    'Find the GMT offset for your timezone '
-                    '[here](https://www.google.com/search?q=what+is+my+time+zone).\n\n'
-                    f'Current GMT Offset: `GMT{offset}`\n\n'
-                    'Use `/settings offset <offset>` to set the offset.\n\n'
+            'name': 'Server Timezone 🕒',
+            'value': 'All times entered in this server will be assumed to be in this timezone.\n\n'
+                    f'Current Timezone: `{timezone}`\n\n'
+                    'Use `/settings timezone <country> <timezone>` to set the timezone.\n\n'
                     r'\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_'
         })
         embed['fields'].append({
@@ -68,24 +85,29 @@ class SettingsCog(commands.Cog, name='Settings'):
         await ctx.respond(embed=discord.Embed.from_dict(embed))
 
     @settings_group.command()
-    @discord.option('offset', type=int, min_value=-12, max_value=12, required=True,
-                    description='The number of hours to offset by')
-    async def offset(self, ctx: discord.ApplicationContext, offset: int):
-        """Set the GMT offset for this server"""
+    @discord.option('country', autocomplete=discord.utils.basic_autocomplete(constants.TZ_COUNTRIES),
+        description='Enter a country to filter timezone list', required=True)
+    @discord.option('timezone', autocomplete=discord.utils.basic_autocomplete(country_timezones),
+        description='Select a timezone', required=True)
+    async def timezone(self, ctx: discord.ApplicationContext, country: str, timezone: str):
+        """Set the timezone for this server"""
         if not ctx.author.guild_permissions.manage_guild:
             await ctx.respond(
                 "You must have the `Manage Guild` permission to edit settings!",
                 ephemeral=True
             )
             return
-
-        data.set_offset(ctx.guild_id, offset)
-        embed = {
-            'color': constants.BLURPLE,
-            'title': 'Setting changed!',
-            'description': f"New GMT Offset: `GMT{constants.ISO_TZD(offset)}`"
-        }
-        await ctx.respond(embed=discord.Embed.from_dict(embed))
+        
+        if timezone in constants.TZ_DESC:
+            data.set_timezone(ctx.guild_id, timezone)
+            embed = {
+                'color': constants.BLURPLE,
+                'title': 'Setting changed!',
+                'description': f"New Timezone: `{timezone}`"
+            }
+            await ctx.respond(embed=discord.Embed.from_dict(embed))
+        else:
+            await ctx.respond(f'No timezone `{timezone}` found! Please select one from the list', ephemeral=True)
 
     @settings_group.command()
     @discord.option('channel', type=discord.TextChannel, required=False,
