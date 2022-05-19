@@ -9,24 +9,19 @@ from src import constants
 from src.data import data
 
 
-def get_countries(ctx: discord.AutocompleteContext):
+async def get_countries(ctx: discord.AutocompleteContext):
     inp = ctx.value.lower()
-    if not inp:
-        return []
-
     return [x for x in constants.TZ_COUNTRIES if x.lower().startswith(inp)]
 
 
-def country_timezones(ctx: discord.AutocompleteContext):
+async def country_timezones(ctx: discord.AutocompleteContext):
     inp = ctx.value.lower()
     country = ctx.options['country']
-    if country and country.title() in constants.TZ_COUNTRIES:
-        country_timezones = constants.TZ_COUNTRIES[country.title()]
-        return [tz for tz in country_timezones if inp in tz]
-    
-    if not inp:
-        return []
-    return [tz for tz in list(constants.TZ_DESC) if inp in tz]
+    if country and country in constants.TZ_COUNTRIES:
+        country_timezones = constants.TZ_COUNTRIES[country]
+        return [tz for tz in country_timezones if inp in tz.lower()]
+
+    return [tz for tz in list(constants.TZ_DESC) if inp in tz.lower()]
 
 
 class SettingsCog(commands.Cog, name='Settings'):
@@ -85,10 +80,10 @@ class SettingsCog(commands.Cog, name='Settings'):
         await ctx.respond(embed=discord.Embed.from_dict(embed))
 
     @settings_group.command()
-    @discord.option('country', autocomplete=discord.utils.basic_autocomplete(constants.TZ_COUNTRIES),
-        description='Enter a country to filter timezone list', required=True)
-    @discord.option('timezone', autocomplete=discord.utils.basic_autocomplete(country_timezones),
-        description='Select a timezone', required=True)
+    @discord.option('country', autocomplete=get_countries, required=True,
+        description='Enter a country to filter timezone list')
+    @discord.option('timezone', autocomplete=country_timezones, required=True,
+        description='Select a timezone')
     async def timezone(self, ctx: discord.ApplicationContext, country: str, timezone: str):
         """Set the timezone for this server"""
         if not ctx.author.guild_permissions.manage_guild:
