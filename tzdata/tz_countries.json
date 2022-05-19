@@ -1,63 +1,39 @@
 {
-    "Andorra": [
-        "Europe/Andorra"
-    ],
-    "United Arab Emirates": [
-        "Asia/Dubai"
-    ],
     "Afghanistan": [
         "Asia/Kabul"
-    ],
-    "Antigua & Barbuda": [
-        "America/Antigua"
-    ],
-    "Anguilla": [
-        "America/Anguilla"
     ],
     "Albania": [
         "Europe/Tirane"
     ],
-    "Armenia": [
-        "Asia/Yerevan"
+    "Algeria": [
+        "Africa/Algiers"
+    ],
+    "Andorra": [
+        "Europe/Andorra"
     ],
     "Angola": [
         "Africa/Luanda"
     ],
-    "Antarctica": [
-        "Antarctica/McMurdo",
-        "Antarctica/Rothera",
-        "Antarctica/Palmer",
-        "Antarctica/Mawson",
-        "Antarctica/Davis",
-        "Antarctica/Casey",
-        "Antarctica/Vostok",
-        "Antarctica/DumontDUrville",
-        "Antarctica/Syowa",
-        "Antarctica/Troll"
+    "Antigua and Barbuda": [
+        "America/Antigua"
     ],
     "Argentina": [
         "America/Argentina/Buenos_Aires",
         "America/Argentina/Cordoba",
-        "America/Argentina/Salta",
         "America/Argentina/Jujuy",
         "America/Argentina/Tucuman",
         "America/Argentina/Catamarca",
         "America/Argentina/La_Rioja",
         "America/Argentina/San_Juan",
         "America/Argentina/Mendoza",
-        "America/Argentina/San_Luis",
         "America/Argentina/Rio_Gallegos",
         "America/Argentina/Ushuaia"
     ],
-    "Samoa (American)": [
-        "Pacific/Pago_Pago"
-    ],
-    "Austria": [
-        "Europe/Vienna"
+    "Armenia": [
+        "Asia/Yerevan"
     ],
     "Australia": [
         "Australia/Lord_Howe",
-        "Antarctica/Macquarie",
         "Australia/Hobart",
         "Australia/Currie",
         "Australia/Melbourne",
@@ -67,59 +43,49 @@
         "Australia/Lindeman",
         "Australia/Adelaide",
         "Australia/Darwin",
-        "Australia/Perth",
-        "Australia/Eucla"
+        "Australia/Perth"
     ],
-    "Aruba": [
-        "America/Aruba"
-    ],
-    "Aaland Islands": [
-        "Europe/Mariehamn"
+    "Austria": [
+        "Europe/Vienna"
     ],
     "Azerbaijan": [
         "Asia/Baku"
     ],
-    "Bosnia & Herzegovina": [
-        "Europe/Sarajevo"
-    ],
-    "Barbados": [
-        "America/Barbados"
-    ],
-    "Bangladesh": [
-        "Asia/Dhaka"
-    ],
-    "Belgium": [
-        "Europe/Brussels"
-    ],
-    "Burkina Faso": [
-        "Africa/Ouagadougou"
-    ],
-    "Bulgaria": [
-        "Europe/Sofia"
+    "Bahamas": [
+        "America/Nassau"
     ],
     "Bahrain": [
         "Asia/Bahrain"
     ],
-    "Burundi": [
-        "Africa/Bujumbura"
+    "Bangladesh": [
+        "Asia/Dhaka"
+    ],
+    "Barbados": [
+        "America/Barbados"
+    ],
+    "Belarus": [
+        "Europe/Minsk"
+    ],
+    "Belgium": [
+        "Europe/Brussels"
+    ],
+    "Belize": [
+        "America/Belize"
     ],
     "Benin": [
         "Africa/Porto-Novo"
     ],
-    "St Barthelemy": [
-        "America/St_Barthelemy"
-    ],
-    "Bermuda": [
-        "Atlantic/Bermuda"
-    ],
-    "Brunei": [
-        "Asia/Brunei"
+    "Bhutan": [
+        "Asia/Thimphu"
     ],
     "Bolivia": [
         "America/La_Paz"
     ],
-    "Caribbean Netherlands": [
-        "America/Kralendijk"
+    "Bosnia and Herzegovina": [
+        "Europe/Sarajevo"
+    ],
+    "Botswana": [
+        "Africa/Gaborone"
     ],
     "Brazil": [
         "America/Noronha",
@@ -132,27 +98,29 @@
         "America/Sao_Paulo",
         "America/Campo_Grande",
         "America/Cuiaba",
-        "America/Santarem",
         "America/Porto_Velho",
         "America/Boa_Vista",
         "America/Manaus",
         "America/Eirunepe",
         "America/Rio_Branco"
     ],
-    "Bahamas": [
-        "America/Nassau"
+    "Brunei": [
+        "Asia/Brunei"
     ],
-    "Bhutan": [
-        "Asia/Thimphu"
+    "Bulgaria": [
+        "Europe/Sofia"
     ],
-    "Botswana": [
-        "Africa/Gaborone"
+    "Burkina Faso": [
+        "Africa/Ouagadougou"
     ],
-    "Belarus": [
-        "Europe/Minsk"
+    "Burundi": [
+        "Africa/Bujumbura"
     ],
-    "Belize": [
-        "America/Belize"
+    "Cambodia": [
+        "Asia/Phnom_Penh"
+    ],
+    "Cameroon": [
+        "Africa/Douala"
     ],
     "Canada": [
         "America/St_Johns",
@@ -161,56 +129,39 @@
         "America/Moncton",
         "America/Goose_Bay",
         "America/Blanc-Sablon",
+        "America/Montreal",
         "America/Toronto",
         "America/Nipigon",
         "America/Thunder_Bay",
-        "America/Iqaluit",
         "America/Pangnirtung",
-        "America/Resolute",
+        "America/Iqaluit",
         "America/Atikokan",
         "America/Rankin_Inlet",
         "America/Winnipeg",
         "America/Rainy_River",
+        "America/Cambridge_Bay",
         "America/Regina",
         "America/Swift_Current",
         "America/Edmonton",
-        "America/Cambridge_Bay",
         "America/Yellowknife",
         "America/Inuvik",
-        "America/Creston",
         "America/Dawson_Creek",
         "America/Vancouver",
         "America/Whitehorse",
         "America/Dawson"
     ],
-    "Cocos (Keeling) Islands": [
-        "Indian/Cocos"
+    "Cape Verde": [
+        "Atlantic/Cape_Verde"
     ],
-    "Congo (Dem. Rep.)": [
-        "Africa/Kinshasa",
-        "Africa/Lubumbashi"
-    ],
-    "Central African Rep.": [
+    "Central African Republic": [
         "Africa/Bangui"
     ],
-    "Congo (Rep.)": [
-        "Africa/Brazzaville"
-    ],
-    "Switzerland": [
-        "Europe/Zurich"
-    ],
-    "Cote d'Ivoire": [
-        "Africa/Abidjan"
-    ],
-    "Cook Islands": [
-        "Pacific/Rarotonga"
+    "Chad": [
+        "Africa/Ndjamena"
     ],
     "Chile": [
         "America/Santiago",
         "Pacific/Easter"
-    ],
-    "Cameroon": [
-        "Africa/Douala"
     ],
     "China": [
         "Asia/Shanghai",
@@ -222,20 +173,27 @@
     "Colombia": [
         "America/Bogota"
     ],
+    "Comoros": [
+        "Indian/Comoro"
+    ],
+    "Congo, Democratic Republic of the": [
+        "Africa/Kinshasa",
+        "Africa/Lubumbashi"
+    ],
+    "Congo, Republic of the": [
+        "Africa/Brazzaville"
+    ],
     "Costa Rica": [
         "America/Costa_Rica"
     ],
+    "Cote d'Ivoire": [
+        "Africa/Abidjan"
+    ],
+    "Croatia": [
+        "Europe/Zagreb"
+    ],
     "Cuba": [
         "America/Havana"
-    ],
-    "Cape Verde": [
-        "Atlantic/Cape_Verde"
-    ],
-    "Curacao": [
-        "America/Curacao"
-    ],
-    "Christmas Island": [
-        "Indian/Christmas"
     ],
     "Cyprus": [
         "Asia/Nicosia"
@@ -243,15 +201,11 @@
     "Czech Republic": [
         "Europe/Prague"
     ],
-    "Germany": [
-        "Europe/Berlin",
-        "Europe/Busingen"
+    "Denmark": [
+        "Europe/Copenhagen"
     ],
     "Djibouti": [
         "Africa/Djibouti"
-    ],
-    "Denmark": [
-        "Europe/Copenhagen"
     ],
     "Dominica": [
         "America/Dominica"
@@ -259,49 +213,36 @@
     "Dominican Republic": [
         "America/Santo_Domingo"
     ],
-    "Algeria": [
-        "Africa/Algiers"
+    "East Timor": [
+        "Asia/Dili"
     ],
     "Ecuador": [
         "America/Guayaquil",
         "Pacific/Galapagos"
     ],
-    "Estonia": [
-        "Europe/Tallinn"
-    ],
     "Egypt": [
         "Africa/Cairo"
     ],
-    "Western Sahara": [
-        "Africa/El_Aaiun"
+    "El Salvador": [
+        "America/El_Salvador"
+    ],
+    "Equatorial Guinea": [
+        "Africa/Malabo"
     ],
     "Eritrea": [
-        "Africa/Asmara"
+        "Africa/Asmera"
     ],
-    "Spain": [
-        "Europe/Madrid",
-        "Africa/Ceuta",
-        "Atlantic/Canary"
+    "Estonia": [
+        "Europe/Tallinn"
     ],
     "Ethiopia": [
         "Africa/Addis_Ababa"
     ],
-    "Finland": [
-        "Europe/Helsinki"
-    ],
     "Fiji": [
         "Pacific/Fiji"
     ],
-    "Falkland Islands": [
-        "Atlantic/Stanley"
-    ],
-    "Micronesia": [
-        "Pacific/Chuuk",
-        "Pacific/Pohnpei",
-        "Pacific/Kosrae"
-    ],
-    "Faroe Islands": [
-        "Atlantic/Faroe"
+    "Finland": [
+        "Europe/Helsinki"
     ],
     "France": [
         "Europe/Paris"
@@ -309,56 +250,29 @@
     "Gabon": [
         "Africa/Libreville"
     ],
-    "Britain (UK)": [
-        "Europe/London"
-    ],
-    "Grenada": [
-        "America/Grenada"
+    "Gambia": [
+        "Africa/Banjul"
     ],
     "Georgia": [
         "Asia/Tbilisi"
     ],
-    "French Guiana": [
-        "America/Cayenne"
-    ],
-    "Guernsey": [
-        "Europe/Guernsey"
+    "Germany": [
+        "Europe/Berlin"
     ],
     "Ghana": [
         "Africa/Accra"
     ],
-    "Gibraltar": [
-        "Europe/Gibraltar"
-    ],
-    "Greenland": [
-        "America/Godthab",
-        "America/Danmarkshavn",
-        "America/Scoresbysund",
-        "America/Thule"
-    ],
-    "Gambia": [
-        "Africa/Banjul"
-    ],
-    "Guinea": [
-        "Africa/Conakry"
-    ],
-    "Guadeloupe": [
-        "America/Guadeloupe"
-    ],
-    "Equatorial Guinea": [
-        "Africa/Malabo"
-    ],
     "Greece": [
         "Europe/Athens"
     ],
-    "South Georgia & the South Sandwich Islands": [
-        "Atlantic/South_Georgia"
+    "Grenada": [
+        "America/Grenada"
     ],
     "Guatemala": [
         "America/Guatemala"
     ],
-    "Guam": [
-        "Pacific/Guam"
+    "Guinea": [
+        "Africa/Conakry"
     ],
     "Guinea-Bissau": [
         "Africa/Bissau"
@@ -366,20 +280,23 @@
     "Guyana": [
         "America/Guyana"
     ],
-    "Hong Kong": [
-        "Asia/Hong_Kong"
+    "Haiti": [
+        "America/Guatemala"
     ],
     "Honduras": [
         "America/Tegucigalpa"
     ],
-    "Croatia": [
-        "Europe/Zagreb"
-    ],
-    "Haiti": [
-        "America/Port-au-Prince"
+    "Hong Kong": [
+        "Asia/Hong_Kong"
     ],
     "Hungary": [
         "Europe/Budapest"
+    ],
+    "Iceland": [
+        "Atlantic/Reykjavik"
+    ],
+    "India": [
+        "Asia/Calcutta"
     ],
     "Indonesia": [
         "Asia/Jakarta",
@@ -387,76 +304,29 @@
         "Asia/Makassar",
         "Asia/Jayapura"
     ],
+    "Iran": [
+        "Asia/Tehran"
+    ],
+    "Iraq": [
+        "Asia/Baghdad"
+    ],
     "Ireland": [
         "Europe/Dublin"
     ],
     "Israel": [
         "Asia/Jerusalem"
     ],
-    "Isle of Man": [
-        "Europe/Isle_of_Man"
-    ],
-    "India": [
-        "Asia/Kolkata"
-    ],
-    "British Indian Ocean Territory": [
-        "Indian/Chagos"
-    ],
-    "Iraq": [
-        "Asia/Baghdad"
-    ],
-    "Iran": [
-        "Asia/Tehran"
-    ],
-    "Iceland": [
-        "Atlantic/Reykjavik"
-    ],
     "Italy": [
         "Europe/Rome"
-    ],
-    "Jersey": [
-        "Europe/Jersey"
     ],
     "Jamaica": [
         "America/Jamaica"
     ],
-    "Jordan": [
-        "Asia/Amman"
-    ],
     "Japan": [
         "Asia/Tokyo"
     ],
-    "Kenya": [
-        "Africa/Nairobi"
-    ],
-    "Kyrgyzstan": [
-        "Asia/Bishkek"
-    ],
-    "Cambodia": [
-        "Asia/Phnom_Penh"
-    ],
-    "Kiribati": [
-        "Pacific/Tarawa",
-        "Pacific/Enderbury",
-        "Pacific/Kiritimati"
-    ],
-    "Comoros": [
-        "Indian/Comoro"
-    ],
-    "St Kitts & Nevis": [
-        "America/St_Kitts"
-    ],
-    "Korea (North)": [
-        "Asia/Pyongyang"
-    ],
-    "Korea (South)": [
-        "Asia/Seoul"
-    ],
-    "Kuwait": [
-        "Asia/Kuwait"
-    ],
-    "Cayman Islands": [
-        "America/Cayman"
+    "Jordan": [
+        "Asia/Amman"
     ],
     "Kazakhstan": [
         "Asia/Almaty",
@@ -465,26 +335,40 @@
         "Asia/Aqtau",
         "Asia/Oral"
     ],
+    "Kenya": [
+        "Africa/Nairobi"
+    ],
+    "Kiribati": [
+        "Pacific/Tarawa",
+        "Pacific/Enderbury",
+        "Pacific/Kiritimati"
+    ],
+    "Kuwait": [
+        "Asia/Kuwait"
+    ],
+    "Kyrgyzstan": [
+        "Asia/Bishkek"
+    ],
     "Laos": [
         "Asia/Vientiane"
+    ],
+    "Latvia": [
+        "Europe/Riga"
     ],
     "Lebanon": [
         "Asia/Beirut"
     ],
-    "St Lucia": [
-        "America/St_Lucia"
-    ],
-    "Liechtenstein": [
-        "Europe/Vaduz"
-    ],
-    "Sri Lanka": [
-        "Asia/Colombo"
+    "Lesotho": [
+        "Africa/Maseru"
     ],
     "Liberia": [
         "Africa/Monrovia"
     ],
-    "Lesotho": [
-        "Africa/Maseru"
+    "Libya": [
+        "Africa/Tripoli"
+    ],
+    "Liechtenstein": [
+        "Europe/Vaduz"
     ],
     "Lithuania": [
         "Europe/Vilnius"
@@ -492,212 +376,161 @@
     "Luxembourg": [
         "Europe/Luxembourg"
     ],
-    "Latvia": [
-        "Europe/Riga"
-    ],
-    "Libya": [
-        "Africa/Tripoli"
-    ],
-    "Morocco": [
-        "Africa/Casablanca"
-    ],
-    "Monaco": [
-        "Europe/Monaco"
-    ],
-    "Moldova": [
-        "Europe/Chisinau"
-    ],
-    "Montenegro": [
-        "Europe/Podgorica"
-    ],
-    "St Martin (French part)": [
-        "America/Marigot"
+    "Macedonia": [
+        "Europe/Skopje"
     ],
     "Madagascar": [
         "Indian/Antananarivo"
+    ],
+    "Malawi": [
+        "Africa/Blantyre"
+    ],
+    "Malaysia": [
+        "Asia/Kuala_Lumpur",
+        "Asia/Kuching"
+    ],
+    "Maldives": [
+        "Indian/Maldives"
+    ],
+    "Mali": [
+        "Africa/Bamako"
+    ],
+    "Malta": [
+        "Europe/Malta"
     ],
     "Marshall Islands": [
         "Pacific/Majuro",
         "Pacific/Kwajalein"
     ],
-    "Macedonia": [
-        "Europe/Skopje"
-    ],
-    "Mali": [
-        "Africa/Bamako"
-    ],
-    "Myanmar (Burma)": [
-        "Asia/Rangoon"
-    ],
-    "Mongolia": [
-        "Asia/Ulaanbaatar",
-        "Asia/Hovd",
-        "Asia/Choibalsan"
-    ],
-    "Macau": [
-        "Asia/Macau"
-    ],
-    "Northern Mariana Islands": [
-        "Pacific/Saipan"
-    ],
-    "Martinique": [
-        "America/Martinique"
-    ],
     "Mauritania": [
         "Africa/Nouakchott"
     ],
-    "Montserrat": [
-        "America/Montserrat"
-    ],
-    "Malta": [
-        "Europe/Malta"
-    ],
     "Mauritius": [
         "Indian/Mauritius"
-    ],
-    "Maldives": [
-        "Indian/Maldives"
-    ],
-    "Malawi": [
-        "Africa/Blantyre"
     ],
     "Mexico": [
         "America/Mexico_City",
         "America/Cancun",
         "America/Merida",
         "America/Monterrey",
-        "America/Matamoros",
         "America/Mazatlan",
         "America/Chihuahua",
-        "America/Ojinaga",
         "America/Hermosillo",
-        "America/Tijuana",
-        "America/Santa_Isabel",
-        "America/Bahia_Banderas"
+        "America/Tijuana"
     ],
-    "Malaysia": [
-        "Asia/Kuala_Lumpur",
-        "Asia/Kuching"
+    "Micronesia": [
+        "Pacific/Truk",
+        "Pacific/Ponape",
+        "Pacific/Kosrae"
+    ],
+    "Moldova": [
+        "Europe/Chisinau"
+    ],
+    "Monaco": [
+        "Europe/Monaco"
+    ],
+    "Mongolia": [
+        "Asia/Ulaanbaatar",
+        "Asia/Hovd",
+        "Asia/Choibalsan"
+    ],
+    "Montenegro": [
+        "Europe/Podgorica"
+    ],
+    "Morocco": [
+        "Africa/Casablanca"
     ],
     "Mozambique": [
         "Africa/Maputo"
     ],
+    "Myanmar": [
+        "Asia/Rangoon"
+    ],
     "Namibia": [
         "Africa/Windhoek"
-    ],
-    "New Caledonia": [
-        "Pacific/Noumea"
-    ],
-    "Niger": [
-        "Africa/Niamey"
-    ],
-    "Norfolk Island": [
-        "Pacific/Norfolk"
-    ],
-    "Nigeria": [
-        "Africa/Lagos"
-    ],
-    "Nicaragua": [
-        "America/Managua"
-    ],
-    "Netherlands": [
-        "Europe/Amsterdam"
-    ],
-    "Norway": [
-        "Europe/Oslo"
-    ],
-    "Nepal": [
-        "Asia/Kathmandu"
     ],
     "Nauru": [
         "Pacific/Nauru"
     ],
-    "Niue": [
-        "Pacific/Niue"
+    "Nepal": [
+        "Asia/Katmandu"
+    ],
+    "Netherlands": [
+        "Europe/Amsterdam"
     ],
     "New Zealand": [
         "Pacific/Auckland",
         "Pacific/Chatham"
     ],
+    "Nicaragua": [
+        "America/Managua"
+    ],
+    "Niger": [
+        "Africa/Niamey"
+    ],
+    "Nigeria": [
+        "Africa/Lagos"
+    ],
+    "North Korea": [
+        "Asia/Pyongyang"
+    ],
+    "Norway": [
+        "Europe/Oslo"
+    ],
     "Oman": [
         "Asia/Muscat"
-    ],
-    "Panama": [
-        "America/Panama"
-    ],
-    "Peru": [
-        "America/Lima"
-    ],
-    "French Polynesia": [
-        "Pacific/Tahiti",
-        "Pacific/Marquesas",
-        "Pacific/Gambier"
-    ],
-    "Papua New Guinea": [
-        "Pacific/Port_Moresby"
-    ],
-    "Philippines": [
-        "Asia/Manila"
     ],
     "Pakistan": [
         "Asia/Karachi"
     ],
+    "Palau": [
+        "Pacific/Palau"
+    ],
+    "Panama": [
+        "America/Panama"
+    ],
+    "Papua New Guinea": [
+        "Pacific/Port_Moresby"
+    ],
+    "Paraguay": [
+        "America/Asuncion"
+    ],
+    "Peru": [
+        "America/Lima"
+    ],
+    "Philippines": [
+        "Asia/Manila"
+    ],
     "Poland": [
         "Europe/Warsaw"
-    ],
-    "St Pierre & Miquelon": [
-        "America/Miquelon"
-    ],
-    "Pitcairn": [
-        "Pacific/Pitcairn"
-    ],
-    "Puerto Rico": [
-        "America/Puerto_Rico"
-    ],
-    "Palestine": [
-        "Asia/Gaza",
-        "Asia/Hebron"
     ],
     "Portugal": [
         "Europe/Lisbon",
         "Atlantic/Madeira",
         "Atlantic/Azores"
     ],
-    "Palau": [
-        "Pacific/Palau"
-    ],
-    "Paraguay": [
-        "America/Asuncion"
+    "Puerto Rico": [
+        "America/Puerto_Rico"
     ],
     "Qatar": [
         "Asia/Qatar"
     ],
-    "Reunion": [
-        "Indian/Reunion"
-    ],
     "Romania": [
         "Europe/Bucharest"
-    ],
-    "Serbia": [
-        "Europe/Belgrade"
     ],
     "Russia": [
         "Europe/Kaliningrad",
         "Europe/Moscow",
         "Europe/Volgograd",
         "Europe/Samara",
-        "Europe/Simferopol",
         "Asia/Yekaterinburg",
         "Asia/Omsk",
         "Asia/Novosibirsk",
-        "Asia/Novokuznetsk",
         "Asia/Krasnoyarsk",
         "Asia/Irkutsk",
         "Asia/Yakutsk",
-        "Asia/Khandyga",
         "Asia/Vladivostok",
         "Asia/Sakhalin",
-        "Asia/Ust-Nera",
         "Asia/Magadan",
         "Asia/Kamchatka",
         "Asia/Anadyr"
@@ -705,129 +538,133 @@
     "Rwanda": [
         "Africa/Kigali"
     ],
-    "Saudi Arabia": [
-        "Asia/Riyadh"
+    "Saint Kitts and Nevis": [
+        "America/St_Kitts"
     ],
-    "Solomon Islands": [
-        "Pacific/Guadalcanal"
+    "Saint Lucia": [
+        "America/St_Lucia"
     ],
-    "Seychelles": [
-        "Indian/Mahe"
+    "Saint Vincent and the Grenadines": [
+        "America/St_Vincent"
     ],
-    "Sudan": [
-        "Africa/Khartoum"
-    ],
-    "Sweden": [
-        "Europe/Stockholm"
-    ],
-    "Singapore": [
-        "Asia/Singapore"
-    ],
-    "St Helena": [
-        "Atlantic/St_Helena"
-    ],
-    "Slovenia": [
-        "Europe/Ljubljana"
-    ],
-    "Svalbard & Jan Mayen": [
-        "Arctic/Longyearbyen"
-    ],
-    "Slovakia": [
-        "Europe/Bratislava"
-    ],
-    "Sierra Leone": [
-        "Africa/Freetown"
+    "Samoa": [
+        "Pacific/Apia"
     ],
     "San Marino": [
         "Europe/San_Marino"
     ],
+    "Sao Tome and Principe": [
+        "Africa/Sao_Tome"
+    ],
+    "Saudi Arabia": [
+        "Asia/Riyadh"
+    ],
     "Senegal": [
         "Africa/Dakar"
+    ],
+    "Serbia": [
+        "Europe/Belgrade"
+    ],
+    "Seychelles": [
+        "Indian/Mahe"
+    ],
+    "Sierra Leone": [
+        "Africa/Freetown"
+    ],
+    "Singapore": [
+        "Asia/Singapore"
+    ],
+    "Slovakia": [
+        "Europe/Bratislava"
+    ],
+    "Slovenia": [
+        "Europe/Ljubljana"
+    ],
+    "Solomon Islands": [
+        "Pacific/Guadalcanal"
     ],
     "Somalia": [
         "Africa/Mogadishu"
     ],
+    "South Africa": [
+        "Africa/Johannesburg"
+    ],
+    "South Korea": [
+        "Asia/Seoul"
+    ],
+    "Spain": [
+        "Europe/Madrid",
+        "Africa/Ceuta",
+        "Atlantic/Canary"
+    ],
+    "Sri Lanka": [
+        "Asia/Colombo"
+    ],
+    "Sudan": [
+        "Africa/Khartoum"
+    ],
     "Suriname": [
         "America/Paramaribo"
-    ],
-    "South Sudan": [
-        "Africa/Juba"
-    ],
-    "Sao Tome & Principe": [
-        "Africa/Sao_Tome"
-    ],
-    "El Salvador": [
-        "America/El_Salvador"
-    ],
-    "St Maarten (Dutch part)": [
-        "America/Lower_Princes"
-    ],
-    "Syria": [
-        "Asia/Damascus"
     ],
     "Swaziland": [
         "Africa/Mbabane"
     ],
-    "Turks & Caicos Is": [
-        "America/Grand_Turk"
+    "Sweden": [
+        "Europe/Stockholm"
     ],
-    "Chad": [
-        "Africa/Ndjamena"
+    "Switzerland": [
+        "Europe/Zurich"
     ],
-    "French Southern & Antarctic Lands": [
-        "Indian/Kerguelen"
-    ],
-    "Togo": [
-        "Africa/Lome"
-    ],
-    "Thailand": [
-        "Asia/Bangkok"
-    ],
-    "Tajikistan": [
-        "Asia/Dushanbe"
-    ],
-    "Tokelau": [
-        "Pacific/Fakaofo"
-    ],
-    "East Timor": [
-        "Asia/Dili"
-    ],
-    "Turkmenistan": [
-        "Asia/Ashgabat"
-    ],
-    "Tunisia": [
-        "Africa/Tunis"
-    ],
-    "Tonga": [
-        "Pacific/Tongatapu"
-    ],
-    "Turkey": [
-        "Europe/Istanbul"
-    ],
-    "Trinidad & Tobago": [
-        "America/Port_of_Spain"
-    ],
-    "Tuvalu": [
-        "Pacific/Funafuti"
+    "Syria": [
+        "Asia/Damascus"
     ],
     "Taiwan": [
         "Asia/Taipei"
     ],
+    "Tajikistan": [
+        "Asia/Dushanbe"
+    ],
     "Tanzania": [
         "Africa/Dar_es_Salaam"
     ],
-    "Ukraine": [
-        "Europe/Kiev",
-        "Europe/Uzhgorod",
-        "Europe/Zaporozhye"
+    "Thailand": [
+        "Asia/Bangkok"
+    ],
+    "Togo": [
+        "Africa/Lome"
+    ],
+    "Tonga": [
+        "Pacific/Tongatapu"
+    ],
+    "Trinidad and Tobago": [
+        "America/Port_of_Spain"
+    ],
+    "Tunisia": [
+        "Africa/Tunis"
+    ],
+    "Turkey": [
+        "Europe/Istanbul"
+    ],
+    "Turkmenistan": [
+        "Asia/Ashgabat"
+    ],
+    "Tuvalu": [
+        "Pacific/Funafuti"
     ],
     "Uganda": [
         "Africa/Kampala"
     ],
-    "US minor outlying islands": [
-        "Pacific/Johnston",
-        "Pacific/Midway",
-        "Pacific/Wake"
+    "Ukraine": [
+        "Europe/Kiev",
+        "Europe/Uzhgorod",
+        "Europe/Zaporozhye",
+        "Europe/Simferopol"
+    ],
+    "United Arab Emirates": [
+        "Asia/Dubai"
+    ],
+    "United Kingdom": [
+        "Europe/London"
     ],
     "United States": [
         "America/New_York",
@@ -835,29 +672,25 @@
         "America/Kentucky/Louisville",
         "America/Kentucky/Monticello",
         "America/Indiana/Indianapolis",
-        "America/Indiana/Vincennes",
-        "America/Indiana/Winamac",
         "America/Indiana/Marengo",
-        "America/Indiana/Petersburg",
+        "America/Indiana/Knox",
         "America/Indiana/Vevay",
         "America/Chicago",
-        "America/Indiana/Tell_City",
-        "America/Indiana/Knox",
+        "America/Indiana/Vincennes",
+        "America/Indiana/Petersburg",
         "America/Menominee",
         "America/North_Dakota/Center",
         "America/North_Dakota/New_Salem",
-        "America/North_Dakota/Beulah",
         "America/Denver",
         "America/Boise",
+        "America/Shiprock",
         "America/Phoenix",
         "America/Los_Angeles",
         "America/Anchorage",
         "America/Juneau",
-        "America/Sitka",
         "America/Yakutat",
         "America/Nome",
         "America/Adak",
-        "America/Metlakatla",
         "Pacific/Honolulu"
     ],
     "Uruguay": [
@@ -867,41 +700,20 @@
         "Asia/Samarkand",
         "Asia/Tashkent"
     ],
+    "Vanuatu": [
+        "Pacific/Efate"
+    ],
     "Vatican City": [
         "Europe/Vatican"
-    ],
-    "St Vincent": [
-        "America/St_Vincent"
     ],
     "Venezuela": [
         "America/Caracas"
     ],
-    "Virgin Islands (UK)": [
-        "America/Tortola"
-    ],
-    "Virgin Islands (US)": [
-        "America/St_Thomas"
-    ],
     "Vietnam": [
-        "Asia/Ho_Chi_Minh"
-    ],
-    "Vanuatu": [
-        "Pacific/Efate"
-    ],
-    "Wallis & Futuna": [
-        "Pacific/Wallis"
-    ],
-    "Samoa (western)": [
-        "Pacific/Apia"
+        "Asia/Saigon"
     ],
     "Yemen": [
         "Asia/Aden"
-    ],
-    "Mayotte": [
-        "Indian/Mayotte"
-    ],
-    "South Africa": [
-        "Africa/Johannesburg"
     ],
     "Zambia": [
         "Africa/Lusaka"
