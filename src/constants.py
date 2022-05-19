@@ -2,6 +2,7 @@
 Constants used by the application
 '''
 import re
+import json
 
 # REGEX taken from
 # https://github.com/wroberts/pytimeparse/blob/master/pytimeparse/timeparse.py
@@ -39,3 +40,9 @@ ISO_TZD = lambda n: f"{'+' if n >= 0 else '-'}{abs(n):02}:00"
 BLURPLE = 0x5865f2
 GREEN = 0x57f287
 RED = 0xed4245
+
+with open('tzdata/tz_countries.json', 'r') as f:
+    TZ_COUNTRIES = json.load(f)
+
+with open('tzdata/tz_desc.json', 'r') as f:
+    TZ_DESC = json.load(f)
