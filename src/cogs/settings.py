@@ -19,9 +19,9 @@ def get_countries(ctx: discord.AutocompleteContext):
 
 def country_timezones(ctx: discord.AutocompleteContext):
     inp = ctx.value.lower()
-    country = ctx.options['country'].title()
-    if country and country in constants.TZ_COUNTRIES:
-        country_timezones = constants.TZ_COUNTRIES[country]
+    country = ctx.options['country']
+    if country and country.title() in constants.TZ_COUNTRIES:
+        country_timezones = constants.TZ_COUNTRIES[country.title()]
         return [tz for tz in country_timezones if inp in tz]
     
     if not inp:
