@@ -43,6 +43,3 @@ RED = 0xed4245
 
 with open('tzdata/tz_countries.json', 'r') as f:
     TZ_COUNTRIES = json.load(f)
-
-with open('tzdata/tz_desc.json', 'r') as f:
-    TZ_DESC = json.load(f)
