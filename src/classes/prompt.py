@@ -50,11 +50,14 @@ class ReminderPrompt():
 
     def embed(self):
         """Generates an embed for an in progress reminder prompt"""
-        return discord.Embed.from_dict({
+        embed = discord.Embed.from_dict({
             'title': 'Setting reminder...',
             'description': f'_"{self.text}"_\n{self.time()}...',
             'color': constants.BLURPLE
         })
+        embed.set_footer(
+            text=f"Note: Dates and times are in server timezone `{self.timezone}`")
+        return embed
 
     def time(self):
         """Generates a string to represent the time of the reminder"""
@@ -144,6 +147,8 @@ class ReminderPrompt():
             'description': f'_"{self.text}"_\n{self.time()}.',
             'color': constants.BLURPLE
         })
+        embed.set_footer(
+            text=f"Note: Dates and times are in server timezone `{self.timezone}`")
 
         # State was reached from either non-recurring or recurring path
         if 'never' in self.time_:
@@ -163,7 +168,8 @@ class ReminderPrompt():
             'description': f'_"{self.text}"_\n{self.time()}.',
             'color': constants.GREEN
         })
-        embed.set_footer(text='See your reminder using /list')
+        embed.set_footer(
+            text=f"Note: Dates and times are in server timezone `{self.timezone}`")
 
         await self.interaction.response.edit_message(embed=embed, view=self.view_)
         self.view_.stop()
@@ -178,6 +184,8 @@ class ReminderPrompt():
             'description': f'_"{self.text}"_\n{self.time()}...',
             'color': constants.RED
         })
+        embed.set_footer(
+            text=f"Note: Dates and times are in server timezone `{self.timezone}`")
 
         await self.interaction.response.edit_message(embed=embed, view=self.view_)
         self.cancelled = True
@@ -193,6 +201,8 @@ class ReminderPrompt():
             'description': f'_"{self.text}"_\n{self.time()}...',
             'color': constants.RED
         })
+        embed.set_footer(
+            text=f"Note: Dates and times are in server timezone `{self.timezone}`")
 
         await self.message.edit(embed=embed, view=self.view_)
         self.view_.stop()
