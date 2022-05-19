@@ -9,4 +9,4 @@
 - **Interactive UI** - Set reminders with an interactive prompt
 - **Recurring Reminders** - Set your reminders to recur at set intervals
 - **Intelligent Date/Time Parsing** - Support for almost every existing date and time format, as well as intelligent detection of relative times e.g. `"tomorrow"`, `"next week"`, `"in 3 months"`, etc..
-- **Timezone Support** - Configure your server's timezone so that all dates and times entered will match your timezone
+- **Timezone Support** - Configure your server's timezone so that all dates and times entered will match your timezone ([supported timezone list](https://github.com/francojreyes/reminder-bot/blob/master/tzdata/tz_countries.json))
