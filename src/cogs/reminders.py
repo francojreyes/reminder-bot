@@ -33,8 +33,8 @@ class RemindersCog(commands.Cog, name='Reminders'):
                 return
 
         # Open a new prompt
-        offset = data.get_offset(ctx.guild_id)
-        prompt = ReminderPrompt(ctx, reminder, offset)
+        timezone = data.get_timezone(ctx.guild_id)
+        prompt = ReminderPrompt(ctx, reminder, timezone)
         self.bot.prompts.append(prompt)
 
         # Set a reminder with completed prompt

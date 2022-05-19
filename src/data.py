@@ -33,29 +33,29 @@ class MyMongoClient(MongoClient):
         """Delete a reminder from the database"""
         self.db.reminders.delete_one(reminder.__dict__)
 
-    def get_offset(self, guild_id: int):
-        """Retrieve the UTC offset of the given guild"""
+    def get_timezone(self, guild_id: int):
+        """Retrieve the timezone of the given guild"""
         guild = self.db.guilds.find_one(
-            {'_id': guild_id}, {'offset': 1, '_id': 0})
+            {'_id': guild_id}, {'timezone': 1, '_id': 0})
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'offset': 0,
+                'timezone': 'UTC',
                 'target': None,
                 'role': None
             })
-            return 0
+            return 'UTC'
 
-        return guild['offset']
+        return guild['timezone']
 
-    def set_offset(self, guild_id: int, offset: int):
-        """Update the UTC offset of the given guild"""
+    def set_timezone(self, guild_id: int, timezone: str):
+        """Update the timezone of the given guild"""
         guild = self.db.guilds.find_one_and_update(
-            {'_id': guild_id}, {'$set': {'offset': offset}})
+            {'_id': guild_id}, {'$set': {'timezone': timezone}})
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'offset': offset,
+                'timezone': timezone,
                 'target': None,
                 'role': None
             })
@@ -67,7 +67,7 @@ class MyMongoClient(MongoClient):
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'offset': 0,
+                'timezone': 'UTC',
                 'target': None,
                 'role': None
             })
@@ -82,7 +82,7 @@ class MyMongoClient(MongoClient):
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'offset': 0,
+                'timezone': 'UTC',
                 'target': target,
                 'role': None
             })
@@ -94,7 +94,7 @@ class MyMongoClient(MongoClient):
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'offset': 0,
+                'timezone': 'UTC',
                 'target': None,
                 'role': None
             })
@@ -109,7 +109,7 @@ class MyMongoClient(MongoClient):
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'offset': 0,
+                'timezone': 'UTC',
                 'target': None,
                 'role': role
             })

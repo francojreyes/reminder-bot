@@ -8,13 +8,13 @@ from dateparser import parse
 from src import constants
 
 
-def str_to_datetime(string: str, offset: int):
-    """Process a string and GMT offset to an aware datetime"""
+def str_to_datetime(string: str, timezone: str):
+    """Process a string and timezone to an aware datetime"""
     string = re.sub(constants.TODAY, 'today', string)
     string = re.sub(constants.TOMORROW, 'tomorrow', string)
     settings = {
         'DATE_ORDER': 'DMY',
-        'TIMEZONE': constants.ISO_TZD(offset),
+        'TIMEZONE': timezone,
         'RETURN_AS_TIMEZONE_AWARE': True,
         'PREFER_DAY_OF_MONTH': 'first',
         'PREFER_DATES_FROM': 'future',

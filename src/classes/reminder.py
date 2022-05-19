@@ -54,9 +54,7 @@ class Reminder():
         # Get the time of reminder
         time = time_str[1].replace(', repeating', '')
         if time_str[0] == 'on':
-            time += constants.ISO_TZD(prompt.offset)
-            time = datetime.strptime(
-                time, constants.DATE_FORMAT.replace('-', '') + '%z')
+            time = parsing.str_to_datetime(time, prompt.timezone)
             time = int(time.timestamp())
         else:  # time_str[0] == 'in'
             now = int(datetime.now().timestamp())

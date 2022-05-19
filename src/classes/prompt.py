@@ -18,8 +18,8 @@ class ReminderPrompt():
         Context of the command that opened this prompt
     text: str
         Actual text of the reminder
-    offset: int
-        The GMT offset that times entered into this prompt have
+    timezone: int
+        The timezone that times entered into this prompt are in
     time_: list(str)
         Split string representing the time of the reminder
     prev_state: function
@@ -34,11 +34,11 @@ class ReminderPrompt():
         Whether this has been cancelled
     """
 
-    def __init__(self, ctx: discord.ApplicationContext, text: str, offset: int):
+    def __init__(self, ctx: discord.ApplicationContext, text: str, timezone: str):
         '''Opens a new ReminderPrompt'''
         self.ctx = ctx
         self.text = text
-        self.offset = offset
+        self.timezone = timezone
         self.time_ = []
 
         self.prev_state = None
@@ -256,8 +256,7 @@ class DateTimeModal(discord.ui.Modal):
     """Modal to take in date and time input"""
 
     def __init__(self, prompt: ReminderPrompt):
-        super().__init__(
-            title=f'Reminder Bot (GMT{constants.ISO_TZD(prompt.offset)})')
+        super().__init__(title='Reminder Bot')
         self.prompt = prompt
         self.add_item(discord.ui.InputText(
             label="Enter a day",
@@ -279,7 +278,7 @@ class DateTimeModal(discord.ui.Modal):
         time = self.children[1].value.strip()
 
         # Enforce valid datetime
-        parsed_dt = parsing.str_to_datetime(f'{date} {time}', self.prompt.offset)
+        parsed_dt = parsing.str_to_datetime(f'{date} {time}', self.prompt.timezone)
         if not parsed_dt:
             await self.prompt.ctx.respond("Invalid date or time", ephemeral=True)
             await self.prompt.back()
