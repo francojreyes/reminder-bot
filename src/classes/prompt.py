@@ -271,13 +271,13 @@ class DateTimeModal(discord.ui.Modal):
         self.add_item(discord.ui.InputText(
             label="Enter a day",
             min_length=1,
-            max_length=10,
+            max_length=30,
             placeholder="e.g. tomorrow or 26/05/2003",
         ))
         self.add_item(discord.ui.InputText(
             label="Enter a time (optional)",
             min_length=1,
-            max_length=8,
+            max_length=10,
             placeholder="e.g. 8pm or 13:37",
             required=False
         ))
