@@ -320,7 +320,7 @@ class AmountModal(discord.ui.Modal):
 
         self.add_item(discord.ui.InputText(
             label=label,
-            placeholder="Enter an amount e.g. 2 days"
+            placeholder="Enter an amount e.g. 2 weeks"
         ))
 
     async def callback(self, interaction: discord.Interaction):
