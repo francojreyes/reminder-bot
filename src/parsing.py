@@ -48,7 +48,7 @@ def normalise_relative(string: str):
             continue
 
         # Make plural if more than one
-        result.append(f"{num} {period}{'s' if float(num) > 1 else ''}")
+        result.append(f"{num} {period}{'s' if float(num) != 1 else ''}")
 
     return ', '.join(result)
 
