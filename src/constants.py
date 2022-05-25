@@ -45,4 +45,3 @@ RED = 0xed4245
 with open('tzdata/tz_countries.json', 'r') as f:
     TZ_COUNTRIES = json.load(f)
     TZ_ALL = list(itertools.chain(*[tz_list for tz_list in TZ_COUNTRIES.values()]))
-    print(TZ_ALL)
