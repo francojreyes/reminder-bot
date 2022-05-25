@@ -21,7 +21,7 @@ async def country_timezones(ctx: discord.AutocompleteContext):
         country_timezones = constants.TZ_COUNTRIES[country]
         return [tz for tz in country_timezones if inp in tz.lower()]
 
-    return [tz for tz in list(constants.TZ_DESC) if inp in tz.lower()]
+    return [tz for tz in list(constants.TZ_ALL) if inp in tz.lower()]
 
 
 class SettingsCog(commands.Cog, name='Settings'):
@@ -93,7 +93,7 @@ class SettingsCog(commands.Cog, name='Settings'):
             )
             return
         
-        if timezone in constants.TZ_DESC:
+        if timezone in constants.TZ_ALL:
             data.set_timezone(ctx.guild_id, timezone)
             embed = {
                 'color': constants.BLURPLE,
