@@ -5,7 +5,7 @@ from functools import total_ordering
 from datetime import datetime
 
 import discord
-from src import constants, parsing
+from src import parsing
 from src.classes.prompt import ReminderPrompt
 
 
@@ -110,8 +110,21 @@ class Reminder():
         if channel is None:
             # Check that channel still exists
             return
-        await channel.send(f'<@{self.author_id}> {self.text}',
+        await channel.send(f'<@{self.author_id}>\n> {self.text}',
                            allowed_mentions=discord.AllowedMentions(users=True))
+    
+    async def failure(self, bot, target=None):
+        """DM user in case of failed reminder"""
+        target_id = target if target else self.channel_id
+        channel = bot.get_channel(target_id)
+        guild = bot.get_guild(self.guild_id)
+        user = bot.get_user(self.author_id)
+        message = f'> {self.text}\n\n' \
+                   'Hi! The above reminder failed to send to' \
+                    f'{channel.mention} in {guild.name} due to missing access.\n' \
+                   'Please ensure Reminder Bot has permissions to send messages and mention people\n' \
+                   'If Reminder Bot does have correct permissions, please contact me @marsh#0943'
+        await user.send(message)
 
     def __str__(self):
         """Discord syntax string representation for listing"""
@@ -119,7 +132,7 @@ class Reminder():
         if self.interval:
             string += f' (repeats every {self.interval})'
         string += f'\n_"{self.text}"_ from <@!{self.author_id}>'
-        return string
+        return string 
 
     def __eq__(self, other):
         return self.time == other.time

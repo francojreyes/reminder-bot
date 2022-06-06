@@ -38,7 +38,10 @@ class ReminderBot(discord.Bot):
             if self.get_channel(target) is None:
                 target = None
 
-            await reminder.execute(self, target)
+            try:
+                await reminder.execute(self, target)
+            except discord.errors.Forbidden:
+                await reminder.failure(self, target)
 
             if reminder.interval:
                 data.add_reminder(reminder.generate_repeat())
