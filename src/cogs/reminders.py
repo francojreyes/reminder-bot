@@ -5,9 +5,9 @@ import discord
 from discord.ext import commands
 
 from src import constants
-from src.classes.prompt import ReminderPrompt
-from src.classes.reminder import Reminder
-from src.classes.list import ReminderList
+from src.models.prompt import ReminderPrompt
+from src.models.reminder import Reminder
+from src.models.list import ReminderList
 from src.data import data
 
 

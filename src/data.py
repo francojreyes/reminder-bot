@@ -9,7 +9,7 @@ import dotenv
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 
-from src.classes.reminder import Reminder
+from src.models.reminder import Reminder
 
 
 class MyMongoClient(MongoClient):

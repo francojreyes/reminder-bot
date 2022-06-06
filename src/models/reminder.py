@@ -6,7 +6,7 @@ from datetime import datetime
 
 import discord
 from src import parsing
-from src.classes.prompt import ReminderPrompt
+from src.models.prompt import ReminderPrompt
 
 
 @total_ordering
