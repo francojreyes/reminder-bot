@@ -4,6 +4,7 @@ Utility functions for parsing dates, times and intervals
 from datetime import datetime
 import re
 from dateparser import parse
+from regex import R
 
 from src import constants
 
@@ -41,16 +42,21 @@ def normalise_relative(string: str):
         return None
 
     # Convert to string
-    result = []
+    periods = []
     for period, num in match.groupdict().items():
         # Ignore all not found
         if num is None:
             continue
 
         # Make plural if more than one
-        result.append(f"{num} {period}{'s' if float(num) != 1 else ''}")
+        periods.append(f"{num} {period}{'s' if float(num) != 1 else ''}")
+    
+    # If it starts with 0, invalid
+    result = ', '.join(periods)
+    if result.startswith('0 '):
+        return None
 
-    return ', '.join(result)
+    return result
 
 
 def relative_to_timestamp(string: str, base: int):
