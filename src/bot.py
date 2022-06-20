@@ -40,6 +40,12 @@ class ReminderBot(discord.Bot):
     async def execute_reminders(self):
         '''Execute all reminders that are in this minute'''
         for reminder in data.current_reminders():
+            # Ensure still in guild
+            guild = self.get_guild(reminder.guild_id)
+            if not guild:
+                data.remove_guild(reminder.guild_id)
+                continue
+
             # Find target channel
             target = data.get_target(reminder.guild_id)
             if self.get_channel(target) is None:

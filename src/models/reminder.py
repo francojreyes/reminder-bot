@@ -118,10 +118,10 @@ class Reminder():
         target_id = target if target else self.channel_id
         channel = bot.get_channel(target_id)
         guild = bot.get_guild(self.guild_id)
-        user = bot.get_user(self.author_id)
+        user = await bot.get_or_fetch_user(self.author_id)
         message = f'> {self.text}\n\n' \
                    'Hi! The above reminder failed to send to' \
-                    f'{channel.mention} in {guild.name} due to missing access.\n' \
+                    f'{channel.mention} in `{guild.name}` due to missing access.\n' \
                    'Please ensure Reminder Bot has permissions to send messages and mention people\n' \
                    'If Reminder Bot does have correct permissions, please contact me @marsh#0943'
         await user.send(message)
