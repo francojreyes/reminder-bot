@@ -28,6 +28,13 @@ class ReminderBot(discord.Bot):
     async def on_ready(self):
         """Log when ready"""
         print(f'Logged on as {self.user}!')
+        guilds = data.all_guilds()
+
+        # Remove any guilds we no longer have access to
+        for g in guilds:
+            guild = self.get_guild(g['_id'])
+            if not guild:
+                data.remove_guild(g['_id'])
 
     @tasks.loop(minutes=1)
     async def execute_reminders(self):
