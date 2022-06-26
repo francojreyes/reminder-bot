@@ -60,7 +60,7 @@ class ReminderBot(discord.Bot):
             if reminder.interval:
                 data.add_reminder(reminder.generate_repeat())
 
-            asyncio.sleep(1/25)
+            await asyncio.sleep(1/25)
 
     @execute_reminders.before_loop
     async def before_my_task(self):
