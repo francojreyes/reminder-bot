@@ -103,7 +103,7 @@ class Reminder():
             interval=self.interval
         )
 
-    async def execute(self, bot, target=None):
+    async def execute(self, bot: discord.Bot, target=None):
         """Execute this reminder with given bot"""
         target_id = target if target else self.channel_id
         channel = bot.get_channel(target_id)
@@ -113,7 +113,7 @@ class Reminder():
         await channel.send(f'<@{self.author_id}>\n> {self.text}',
                            allowed_mentions=discord.AllowedMentions(users=True))
     
-    async def failure(self, bot, target=None):
+    async def failure(self, bot: discord.Bot, target=None):
         """DM user in case of failed reminder"""
         target_id = target if target else self.channel_id
         channel = bot.get_channel(target_id)
