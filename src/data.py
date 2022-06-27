@@ -143,7 +143,7 @@ class MyMongoClient(MongoClient):
         """Return all guilds"""
         return self.db.guilds.find({})
     
-    def remove_guild(self, guild_id):
+    def remove_guild(self, guild_id: int):
         """Remove guild by ID and all related reminders"""
         self.db.guilds.delete_one({'_id': guild_id})
         self.db.reminders.delete_many({'guild_id': guild_id})

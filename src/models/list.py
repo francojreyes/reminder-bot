@@ -6,6 +6,7 @@ import discord
 from discord.ext import pages
 
 from src import constants
+from src.models.reminder import Reminder
 
 BUTTONS = [
     pages.PaginatorButton('first',
@@ -24,7 +25,7 @@ BUTTONS = [
 class ReminderList(pages.Paginator):
     """Object representing a paginated reminder list"""
 
-    def __init__(self, ctx: discord.ApplicationContext, reminders):
+    def __init__(self, ctx: discord.ApplicationContext, reminders: list[Reminder]):
         self.ctx = ctx
         self.message = None
         self.reminders = list(enumerate(reminders))
@@ -70,10 +71,51 @@ class ReminderList(pages.Paginator):
         await self.message.delete()
 
 
+class ReminderListPage(pages.Page):
+    """Page of a reminder list"""
+
+    def __init__(self, reminders: list[tuple[int, Reminder]]):
+        if reminders:
+            content = '\n'.join(
+                f'**{idx+1}:** {reminder}\n' for idx, reminder in reminders)
+        else:
+            content = 'Nothing to show here...'
+
+        embed = discord.Embed(
+            colour=constants.BLURPLE,
+            title='Reminder List',
+            description=content
+        )
+        embed.set_footer(text='Note: IDs may be inaccurate if reminders have '
+                              'been added/removed since this list was opened.')
+
+        super().__init__(embeds=[embed])
+
+
+class ReminderListPageGroup(pages.PageGroup):
+    """PageGroup that represents a set of reminder"""
+
+    def __init__(self, label: str, reminders: list[tuple[int, Reminder]]):
+        if reminders:
+            page_list = []
+            for i in range(0, len(reminders), 5):
+                page_list.append(ReminderListPage(reminders[i:i+5]))
+        else:
+            page_list = [ReminderListPage(None)]
+
+        super().__init__(
+            pages=page_list,
+            label=label,
+            description=None,
+            use_default_buttons=False,
+            custom_buttons=BUTTONS,
+        )
+
+
 class ReminderListMenu(discord.ui.Select):
     """Custom Select menu for the ReminderList"""
 
-    def __init__(self, page_groups):
+    def __init__(self, page_groups: list[ReminderListPageGroup]):
         self.page_groups = page_groups
         self.paginator = None
         opts = [
@@ -102,44 +144,3 @@ class ReminderListMenu(discord.ui.Select):
             custom_view=self.paginator.custom_view,
             interaction=interaction
         )
-
-
-class ReminderListPageGroup(pages.PageGroup):
-    """PageGroup that represents a set of reminder"""
-
-    def __init__(self, label, reminders):
-        if reminders:
-            page_list = []
-            for i in range(0, len(reminders), 5):
-                page_list.append(ReminderListPage(reminders[i:i+5]))
-        else:
-            page_list = [ReminderListPage(None)]
-
-        super().__init__(
-            pages=page_list,
-            label=label,
-            description=None,
-            use_default_buttons=False,
-            custom_buttons=BUTTONS,
-        )
-
-
-class ReminderListPage(pages.Page):
-    """Page of a reminder list"""
-
-    def __init__(self, reminders):
-        if reminders:
-            content = '\n'.join(
-                f'**{idx+1}:** {reminder}\n' for idx, reminder in reminders)
-        else:
-            content = 'Nothing to show here...'
-
-        embed = discord.Embed(
-            colour=constants.BLURPLE,
-            title='Reminder List',
-            description=content
-        )
-        embed.set_footer(text='Note: IDs may be inaccurate if reminders have '
-                              'been added/removed since this list was opened.')
-
-        super().__init__(embeds=[embed])

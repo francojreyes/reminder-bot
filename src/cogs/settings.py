@@ -140,7 +140,7 @@ class SettingsCog(commands.Cog, name='Settings'):
     @discord.option('role', type=discord.Role, required=False,
                     description='The role to set as manager. '
                                 'If no role provided, unsets manager role.')
-    async def role(self, ctx: discord.ApplicationContext, role):
+    async def role(self, ctx: discord.ApplicationContext, role: discord.Role):
         """Set the manager role for this server"""
         if not ctx.author.guild_permissions.manage_guild:
             await ctx.respond(

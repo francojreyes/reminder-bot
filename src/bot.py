@@ -2,12 +2,13 @@
 The Reminder Bot bot client
 '''
 import asyncio
+
 import discord
 from discord.ext import tasks
 
+from src.cogs.help import HelpCog
 from src.cogs.reminders import RemindersCog
 from src.cogs.settings import SettingsCog
-from src.cogs.help import HelpCog
 from src.data import data
 
 

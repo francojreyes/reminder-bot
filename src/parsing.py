@@ -4,7 +4,6 @@ Utility functions for parsing dates, times and intervals
 from datetime import datetime
 import re
 from dateparser import parse
-from regex import R
 
 from src import constants
 

@@ -63,7 +63,7 @@ class ReminderPrompt():
         """Generates a string to represent the time of the reminder"""
         return ' '.join(self.time_)
 
-    def view(self, no_back=False):
+    def view(self, no_back: bool = False):
         """
         Returns the current View with a back button and cancel button added
 

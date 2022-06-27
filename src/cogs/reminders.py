@@ -21,7 +21,7 @@ class RemindersCog(commands.Cog, name='Reminders'):
 
     @commands.slash_command()
     @discord.option("reminder", type=str, description="Enter your reminder", required=True)
-    async def set(self, ctx, reminder):
+    async def set(self, ctx: discord.ApplicationContext, reminder: Reminder):
         """Set a new reminder"""
         # See if user currently has a prompt open
         for prompt in self.bot.prompts:
