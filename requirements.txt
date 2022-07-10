@@ -1,4 +1,4 @@
-py-cord==2.0.0rc1
+py-cord==2.0.0
 pymongo==4.1.1
 pymongo[srv]
 python-dotenv==0.20.0
