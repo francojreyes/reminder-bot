@@ -287,6 +287,11 @@ class DateTimeModal(discord.ui.Modal):
         date = self.children[0].value.strip()
         time = self.children[1].value.strip()
 
+        if time.isnumeric():
+            await self.prompt.ctx.respond("Invalid time, please specify AM/PM", ephemeral=True)
+            await self.prompt.back()
+            return
+
         # Enforce valid datetime
         parsed_dt = parsing.str_to_datetime(f'{date} {time}', self.prompt.timezone)
         if not parsed_dt:
