@@ -94,7 +94,7 @@ class OverviewEmbed(discord.Embed):
         # setting information about author
         self.add_field(
             name="About",
-            value="This bot is developed by [francojreyes](https://github.com/francojreyes).\n"
+            value="This bot is developed by `@marsh#0943`.\n"
                   "Feel free to report any issues or suggest new features [here](https://github.com/francojreyes/reminder-bot/issues).\n"
                   "If you like Reminder Bot, don't forget to [vote](https://top.gg/bot/973088919862263808/)!"
         )
