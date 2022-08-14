@@ -86,7 +86,8 @@ class SettingsCog(commands.Cog, name='Settings'):
         description='Select a timezone')
     async def timezone(self, ctx: discord.ApplicationContext, country: str, timezone: str):
         """Set the timezone for this server"""
-        if not ctx.author.guild_permissions.manage_guild:
+        author = ctx.guild.get_member(ctx.author.id)
+        if not author.guild_permissions.manage_guild:
             await ctx.respond(
                 "You must have the `Manage Guild` permission to edit settings!",
                 ephemeral=True
@@ -110,7 +111,8 @@ class SettingsCog(commands.Cog, name='Settings'):
                                 'If no channel provided, unsets reminder channel.')
     async def channel(self, ctx: discord.ApplicationContext, channel: discord.TextChannel):
         """Set the reminder channel for this server"""
-        if not ctx.author.guild_permissions.manage_guild:
+        author = ctx.guild.get_member(ctx.author.id)
+        if not author.guild_permissions.manage_guild:
             await ctx.respond(
                 "You must have the `Manage Guild` permission to edit settings!",
                 ephemeral=True
@@ -142,7 +144,8 @@ class SettingsCog(commands.Cog, name='Settings'):
                                 'If no role provided, unsets manager role.')
     async def role(self, ctx: discord.ApplicationContext, role: discord.Role):
         """Set the manager role for this server"""
-        if not ctx.author.guild_permissions.manage_guild:
+        author = ctx.guild.get_member(ctx.author.id)
+        if not author.guild_permissions.manage_guild:
             await ctx.respond(
                 "You must have the `Manage Guild` permission to edit settings!",
                 ephemeral=True
