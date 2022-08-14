@@ -37,6 +37,20 @@ class ReminderBot(discord.Bot):
             guild = self.get_guild(g['_id'])
             if not guild:
                 data.remove_guild(g['_id'])
+    
+    async def on_application_command_error(
+        self,
+        ctx: discord.ApplicationContext,
+        error: discord.DiscordException
+    ):
+        """Global error handler"""
+        print(error)
+        ctx.respond(
+            f"Error: {error}\n"
+            "Please contact me (`@marsh#0943`) "
+            "or report an issue on the [repo](https://github.com/francojreyes/reminder-bot/issues)."  
+        )
+
 
     @tasks.loop(minutes=1)
     async def execute_reminders(self):
@@ -68,3 +82,5 @@ class ReminderBot(discord.Bot):
         '''Wait until ready before executing reminders'''
         await self.wait_until_ready()
         data.ping()
+    
+
