@@ -86,17 +86,18 @@ class RemindersCog(commands.Cog, name='Reminders'):
             return
         reminder = reminders[id - 1]
 
-        if ctx.author.id != reminder.author_id:
+        author = ctx.guild.get_member(ctx.author.id)
+        if author.id != reminder.author_id:
             manager = data.get_role(ctx.guild_id)
             if manager:
                 role = ctx.guild.get_role(manager)
-                if not role in ctx.author.roles:
+                if not role in author.roles:
                     await ctx.respond(
                         f"You must have the {role.mention} role to remove reminders that aren't yours!",
                         ephemeral=True
                     )
                 return
-            if not ctx.author.guild_permissions.manage_messages:
+            if not author.guild_permissions.manage_messages:
                 await ctx.respond(
                     "You must have the `Manage Messages` permission to remove reminders that aren't yours!",
                     ephemeral=True
