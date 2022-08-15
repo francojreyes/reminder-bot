@@ -45,12 +45,11 @@ class ReminderBot(discord.Bot):
     ):
         """Global error handler"""
         print(error)
-        ctx.respond(
-            f"Error: {error}\n"
+        await ctx.respond(
+            f"Unknown Error: {error}\n"
             "Please contact me (`@marsh#0943`) "
             "or report an issue on the [repo](https://github.com/francojreyes/reminder-bot/issues)."  
         )
-
 
     @tasks.loop(minutes=1)
     async def execute_reminders(self):
