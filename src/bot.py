@@ -25,6 +25,8 @@ class ReminderBot(discord.Bot):
         self.add_cog(SettingsCog(self))
         self.add_cog(HelpCog(self))
 
+        self.add_check(self.valid_channel_type)
+
         self.execute_reminders.start()
 
     async def on_ready(self):
@@ -46,10 +48,17 @@ class ReminderBot(discord.Bot):
         """Global error handler"""
         print(error)
         await ctx.respond(
-            f"Unknown Error: {error}\n"
-            "Please contact me (`@marsh#0943`) "
-            "or report an issue on the [repo](https://github.com/francojreyes/reminder-bot/issues)."  
+            f"**Error:** {error}\n"
+            "If this seems like unintended behaviour, please contact me (`@marsh#0943`) "
+            "or report an issue on the [repo](https://github.com/francojreyes/reminder-bot/issues).",
+            ephemeral=True
         )
+
+    async def valid_channel_type(bot, ctx: discord.ApplicationContext):
+        '''Ensure that command was not called in private channel'''
+        if ctx.channel.type != discord.ChannelType.text:
+            raise discord.DiscordException("Reminders are not supported for private channels")
+        return True
 
     @tasks.loop(minutes=1)
     async def execute_reminders(self):
