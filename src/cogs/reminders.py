@@ -1,6 +1,8 @@
 """
 Cog for setting and removing reminders
 """
+import re
+
 import discord
 from discord.ext import commands
 
@@ -23,6 +25,20 @@ class RemindersCog(commands.Cog, name='Reminders'):
     @discord.option("reminder", type=str, description="Enter your reminder", required=True)
     async def set(self, ctx: discord.ApplicationContext, reminder: Reminder):
         """Set a new reminder"""
+        # Check if author has appropriate mention permissions
+        forbidden_mention = '@here' in reminder or '@everyone' in reminder
+        role_mentions = re.findall(r'<@&(\d+)>', reminder)
+        for role_mention in role_mentions:
+            role = ctx.guild.get_role(int(role_mention))
+            if not role.mentionable:
+                forbidden_mention = True
+        if forbidden_mention and not ctx.author.guild_permissions.mention_everyone:
+            await ctx.respond(
+                "You do not have permission for that mention",
+                ephemeral=True
+            )
+            return
+
         # See if user currently has a prompt open
         for prompt in self.bot.prompts:
             if prompt.ctx.author == ctx.author:
