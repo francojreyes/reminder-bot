@@ -3,7 +3,7 @@
 </p>
 
 # Reminder Bot
- Simple and powerful Discord bot for sending reminders. [Invite Reminder Bot to your server](https://discord.com/api/oauth2/authorize?client_id=973088919862263808&permissions=2048&scope=bot%20applications.commands)!
+ Simple and powerful Discord bot for sending reminders. [Invite Reminder Bot to your server](https://discord.com/api/oauth2/authorize?client_id=973088919862263808&permissions=133120&scope=applications.commands%20bot)!
  
  ## Key Features
 - **Interactive UI** - Set reminders with an interactive prompt
