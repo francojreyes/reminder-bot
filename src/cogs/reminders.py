@@ -12,6 +12,8 @@ from src.models.reminder import Reminder
 from src.models.list import ReminderList
 from src.data import data
 
+from discord import Message
+
 
 class RemindersCog(commands.Cog, name='Reminders'):
     """
@@ -26,12 +28,13 @@ class RemindersCog(commands.Cog, name='Reminders'):
     async def set(self, ctx: discord.ApplicationContext, reminder: Reminder):
         """Set a new reminder"""
         # Check if author has appropriate mention permissions
-        forbidden_mention = '@here' in reminder or '@everyone' in reminder
-        role_mentions = re.findall(r'<@&(\d+)>', reminder)
-        for role_mention in role_mentions:
-            role = ctx.guild.get_role(int(role_mention))
-            if not role.mentionable:
+        forbidden_mention = any(x in reminder for x in ['@everyone', '@here'])
+        role_ids = [int(x) for x in re.findall(r"<@&([0-9]{15,20})>", reminder)]
+        for role_id in role_ids:
+            role = ctx.guild.get_role(role_id)
+            if role and not role.mentionable:
                 forbidden_mention = True
+                break
         if forbidden_mention and not ctx.author.guild_permissions.mention_everyone:
             await ctx.respond(
                 "You do not have permission for that mention",
