@@ -105,13 +105,28 @@ class Reminder():
 
     async def execute(self, bot: discord.Bot, target=None):
         """Execute this reminder with given bot"""
+
+        # Check that channel still exists
         target_id = target if target else self.channel_id
         channel = bot.get_channel(target_id)
         if channel is None:
-            # Check that channel still exists
             return
+
+        # Check if author still in guild
+        author = bot.get_guild(self.guild_id).get_member(self.author_id)
+        if author is None:
+            return
+
+        # Calculate the allowed mentions of the author
+        author_perms = channel.permissions_for(author)
+        allowed_mentions = discord.AllowedMentions(
+            users=True,
+            everyone=author_perms.mention_everyone,
+            roles=author_perms.mention_everyone
+        )
+
         await channel.send(f'<@{self.author_id}>\n> {self.text}',
-                           allowed_mentions=discord.AllowedMentions(users=True))
+                           allowed_mentions=allowed_mentions)
     
     async def failure(self, bot: discord.Bot, target=None):
         """DM user in case of failed reminder"""
@@ -122,7 +137,7 @@ class Reminder():
         message = f'> {self.text}\n\n' \
                    'Hi! The above reminder failed to send to' \
                     f'{channel.mention} in `{guild.name}` due to missing access.\n' \
-                   'Please ensure Reminder Bot has permissions to send messages and mention people\n' \
+                   'Please ensure Reminder Bot has permissions to send messages and mention people.\n' \
                    'If Reminder Bot does have correct permissions, please contact me @marsh#0943'
         await user.send(message)
 
