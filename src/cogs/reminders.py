@@ -68,7 +68,7 @@ class RemindersCog(commands.Cog, name='Reminders'):
         for prompt in self.bot.prompts:
             if prompt.message.id == message.id:
                 prompt.cancelled = True
-                prompt._view.stop()
+                prompt.view_.stop()
 
     @commands.slash_command()
     async def list(self, ctx: discord.ApplicationContext):
