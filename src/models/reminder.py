@@ -103,20 +103,8 @@ class Reminder():
             interval=self.interval
         )
 
-    async def execute(self, bot: discord.Bot, target=None):
-        """Execute this reminder with given bot"""
-
-        # Check that channel still exists
-        target_id = target if target else self.channel_id
-        channel = bot.get_channel(target_id)
-        if channel is None:
-            return
-
-        # Check if author still in guild
-        author = bot.get_guild(self.guild_id).get_member(self.author_id)
-        if author is None:
-            return
-
+    async def execute(self, channel: discord.TextChannel, author: discord.Member):
+        """Execute this reminder in given channel with author's allowed mentions"""
         # Calculate the allowed mentions of the author
         author_perms = channel.permissions_for(author)
         allowed_mentions = discord.AllowedMentions(
@@ -128,18 +116,13 @@ class Reminder():
         await channel.send(f'<@{self.author_id}>\n> {self.text}',
                            allowed_mentions=allowed_mentions)
     
-    async def failure(self, bot: discord.Bot, target=None):
+    async def failure(self, channel: discord.TextChannel, author: discord.Member):
         """DM user in case of failed reminder"""
-        target_id = target if target else self.channel_id
-        channel = bot.get_channel(target_id)
-        guild = bot.get_guild(self.guild_id)
-        user = await bot.get_or_fetch_user(self.author_id)
-        message = f'> {self.text}\n\n' \
-                   'Hi! The above reminder failed to send to' \
-                    f'{channel.mention} in `{guild.name}` due to missing access.\n' \
-                   'Please ensure Reminder Bot has permissions to send messages and mention people.\n' \
-                   'If Reminder Bot does have correct permissions, please contact me @marsh#0943'
-        await user.send(message)
+        await author.send(
+                          f'The following reminder failed to send to {channel.mention} in `{channel.guild.name}`' \
+                           ' as the bot does not have permission to send messages.\n' \
+                          f'> {self.text}' \
+                         )
 
     def __str__(self):
         """Discord syntax string representation for listing"""

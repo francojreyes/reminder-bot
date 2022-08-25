@@ -46,7 +46,8 @@ class ReminderBot(discord.Bot):
         error: discord.DiscordException
     ):
         """Global error handler"""
-        print(error)
+        print(f"Error occured with /{ctx.command.qualified_name}", ctx.selected_options)
+        print(f"    {error}")
         await ctx.respond(
             f"**Error:** {error}\n"
             "If this seems like unintended behaviour, please contact me (`@marsh#0943`) "
@@ -70,15 +71,22 @@ class ReminderBot(discord.Bot):
                 data.remove_guild(reminder.guild_id)
                 continue
 
-            # Find target channel
+            # Find target channel and check it exists
             target = data.get_target(reminder.guild_id)
-            if self.get_channel(target) is None:
-                target = None
+            channel_id = target if target else reminder.channel_id
+            channel = self.get_channel(channel_id)
+            if channel is None:
+                continue
+                
+            # Check if author still in guild
+            author = self.get_guild(reminder.guild_id).get_member(reminder.author_id)
+            if author is None:
+                continue
 
             try:
-                await reminder.execute(self, target)
+                await reminder.execute(channel, author)
             except discord.errors.Forbidden:
-                await reminder.failure(self, target)
+                await reminder.failure(channel, author)
 
             if reminder.interval:
                 data.add_reminder(reminder.generate_repeat())
@@ -90,5 +98,3 @@ class ReminderBot(discord.Bot):
         '''Wait until ready before executing reminders'''
         await self.wait_until_ready()
         data.ping()
-    
-
