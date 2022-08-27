@@ -1,5 +1,5 @@
 git+https://github.com/francojreyes/dateparser.git@master#egg=dateparser
-git+https://github.com/Pycord-Development/pycord#egg=py-cord
+py-cord==2.1.1
 pymongo==4.1.1
 pymongo[srv]
 python-dotenv==0.20.0
