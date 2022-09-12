@@ -132,6 +132,7 @@ class MyMongoClient(MongoClient):
             return
 
         while True:
+            print("Retrieved reminder:", curr)
             yield Reminder.from_dict(curr)
             self.db.reminders.delete_one({'_id': curr['_id']})
             try:

@@ -68,6 +68,7 @@ class ReminderBot(discord.Bot):
             # Ensure still in guild
             guild = self.get_guild(reminder.guild_id)
             if not guild:
+                print("Guild not found, continuing")
                 data.remove_guild(reminder.guild_id)
                 continue
 
@@ -76,16 +77,21 @@ class ReminderBot(discord.Bot):
             channel_id = target if target else reminder.channel_id
             channel = self.get_channel(channel_id)
             if channel is None:
+                print("Channel not found, continuing")
                 continue
                 
             # Check if author still in guild
             author = self.get_guild(reminder.guild_id).get_member(reminder.author_id)
             if author is None:
+                print("Author not found, continuing")
                 continue
 
             try:
+                print("Executing...")
                 await reminder.execute(channel, author)
+                print("Success")
             except discord.errors.Forbidden:
+                print("Failed")
                 await reminder.failure(channel, author)
 
             if reminder.interval:
