@@ -73,7 +73,7 @@ class ReminderBot(discord.Bot):
                 continue
                 
             # Check if author still in guild
-            author = guild.get_member(reminder.author_id) or guild.fetch_member(reminder.author_id)
+            author = guild.get_member(reminder.author_id) or await guild.fetch_member(reminder.author_id)
             if author is None:
                 print("Author not found, continuing")
                 continue
