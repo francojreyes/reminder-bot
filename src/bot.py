@@ -32,13 +32,6 @@ class ReminderBot(discord.Bot):
     async def on_ready(self):
         """Log when ready"""
         print(f'Logged on as {self.user}!')
-        guilds = data.all_guilds()
-
-        # Remove any guilds we no longer have access to
-        for g in guilds:
-            guild = self.get_guild(g['_id'])
-            if not guild:
-                data.remove_guild(g['_id'])
     
     async def on_application_command_error(
         self,
@@ -73,15 +66,14 @@ class ReminderBot(discord.Bot):
                 continue
 
             # Find target channel and check it exists
-            target = data.get_target(reminder.guild_id)
-            channel_id = target if target else reminder.channel_id
+            channel_id = data.get_target(reminder.guild_id) or reminder.channel_id
             channel = self.get_channel(channel_id)
             if channel is None:
                 print("Channel not found, continuing")
                 continue
                 
             # Check if author still in guild
-            author = self.get_guild(reminder.guild_id).get_member(reminder.author_id)
+            author = guild.get_member(reminder.author_id) or guild.fetch_member(reminder.author_id)
             if author is None:
                 print("Author not found, continuing")
                 continue
