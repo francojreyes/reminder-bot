@@ -58,7 +58,11 @@ class RemindersCog(commands.Cog, name='Reminders'):
         """List all reminders"""
         for list_ in self.bot.lists:
             if list_.ctx.author == ctx.author:
-                await list_.close()
+                try:
+                    await list_.close()
+                except:
+                    pass
+                self.bot.lists.remove(list_)
 
         # Open a new list
         list_ = ReminderList(ctx, data.guild_reminders(ctx.guild_id))
