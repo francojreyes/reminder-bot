@@ -82,7 +82,7 @@ class ReminderPrompt():
         self.view_.clear_items()
         self.view_.add_item(InitialSelect(self))
         res = await self.ctx.respond(embed=self.embed(), view=self.view(no_back=True))
-        self.message = await res.original_message()
+        self.message = await res.original_response()
         return await self.view_.wait()
 
     async def restart(self):
