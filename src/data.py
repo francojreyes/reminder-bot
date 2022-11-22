@@ -128,7 +128,7 @@ class MyMongoClient(MongoClient):
 
         try:
             curr = next(cursor)
-        except StopIteration:
+        except:
             return
 
         while True:
@@ -137,7 +137,7 @@ class MyMongoClient(MongoClient):
             self.db.reminders.delete_one({'_id': curr['_id']})
             try:
                 curr = next(cursor)
-            except StopIteration:
+            except:
                 break
     
     def all_guilds(self):
