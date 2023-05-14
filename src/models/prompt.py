@@ -1,7 +1,7 @@
-'''
+"""
 Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
-'''
+"""
 from datetime import datetime, timezone
 
 import discord
@@ -9,7 +9,7 @@ import discord
 from src import constants, parsing
 
 
-class ReminderPrompt():
+class ReminderPrompt:
     """
     Object for a Reminder Prompt
 
@@ -34,17 +34,17 @@ class ReminderPrompt():
         Whether this has been cancelled
     """
 
-    def __init__(self, ctx: discord.ApplicationContext, text: str, timezone: str):
-        '''Opens a new ReminderPrompt'''
+    def __init__(self, ctx: discord.ApplicationContext, text: str, tz: str):
+        """Opens a new ReminderPrompt"""
         self.ctx = ctx
         self.text = text
-        self.timezone = timezone
+        self.timezone = tz
         self.time_ = []
 
         self.prev_state = None
         self.view_: PromptView = PromptView(self)
-        self.message: discord.InteractionMessage = None
-        self.interaction: discord.Interaction = None
+        self.message: discord.InteractionMessage | None = None
+        self.interaction: discord.Interaction | None = None
 
         self.cancelled = False
 
@@ -68,7 +68,7 @@ class ReminderPrompt():
         Returns the current View with a back button and cancel button added
 
         no_back (bool)
-            Whether or not the back button should be disabled
+            Whether the back button should be disabled
         """
         self.view_.add_item(BackButton(self, disabled=no_back))
         self.view_.add_item(CancelButton(self))
@@ -320,7 +320,7 @@ class AmountModal(discord.ui.Modal):
 
         if self.state == 'in':
             label = "Remind me in..."
-        elif self.state == 'repeat':
+        else:  # self.state == 'repeat':
             label = "Remind me again every..."
 
         self.add_item(discord.ui.InputText(

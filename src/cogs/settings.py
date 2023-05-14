@@ -1,6 +1,6 @@
-'''
+"""
 Cog for server settings commands
-'''
+"""
 
 import discord
 from discord.ext import commands
@@ -14,7 +14,7 @@ async def get_countries(ctx: discord.AutocompleteContext):
     return [x for x in constants.TZ_COUNTRIES if x.lower().startswith(inp)]
 
 
-async def country_timezones(ctx: discord.AutocompleteContext):
+async def get_country_timezones(ctx: discord.AutocompleteContext):
     inp = ctx.value.lower()
     country = ctx.options['country']
     if country and country in constants.TZ_COUNTRIES:
@@ -81,9 +81,9 @@ class SettingsCog(commands.Cog, name='Settings'):
 
     @settings_group.command()
     @discord.option('country', autocomplete=get_countries, required=True,
-        description='Enter a country to filter timezone list')
-    @discord.option('timezone', autocomplete=country_timezones, required=True,
-        description='Select a timezone')
+                    description='Enter a country to filter timezone list')
+    @discord.option('timezone', autocomplete=get_country_timezones, required=True,
+                    description='Select a timezone')
     async def timezone(self, ctx: discord.ApplicationContext, country: str, timezone: str):
         """Set the timezone for this server"""
         author = ctx.guild.get_member(ctx.author.id)

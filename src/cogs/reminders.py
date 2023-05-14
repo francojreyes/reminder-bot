@@ -1,12 +1,11 @@
 """
 Cog for setting and removing reminders
 """
-import re
-
 import discord
 from discord.ext import commands
 
 from src import constants
+from src.bot import ReminderBot
 from src.models.prompt import ReminderPrompt
 from src.models.reminder import Reminder
 from src.models.list import ReminderList
@@ -18,12 +17,12 @@ class RemindersCog(commands.Cog, name='Reminders'):
     Commands for setting and managing reminders
     """
 
-    def __init__(self, bot: discord.Bot):
+    def __init__(self, bot: ReminderBot):
         self.bot = bot
 
     @commands.slash_command()
     @discord.option("reminder", type=str, description="Enter your reminder", required=True)
-    async def set(self, ctx: discord.ApplicationContext, reminder: Reminder):
+    async def set(self, ctx: discord.ApplicationContext, reminder: str):
         """Set a new reminder"""
         # See if user currently has a prompt open
         for prompt in self.bot.prompts:
@@ -60,7 +59,7 @@ class RemindersCog(commands.Cog, name='Reminders'):
             if list_.ctx.author == ctx.author:
                 try:
                     await list_.close()
-                except:
+                except discord.errors.DiscordException:
                     pass
                 self.bot.lists.remove(list_)
 
@@ -83,21 +82,21 @@ class RemindersCog(commands.Cog, name='Reminders'):
     @commands.slash_command()
     @discord.option("id", type=int, description="ID of reminder to remove",
                     min_value=1, required=True)
-    async def remove(self, ctx: discord.ApplicationContext, id: int):
+    async def remove(self, ctx: discord.ApplicationContext, _id: int):
         """Remove a reminder (use /list to get the reminder ID)"""
 
         reminders = data.guild_reminders(ctx.guild_id)
-        if len(reminders) < id:
+        if len(reminders) < _id:
             await ctx.respond('No reminder exists with that ID', ephemeral=True)
             return
-        reminder = reminders[id - 1]
+        reminder = reminders[_id - 1]
 
         author = ctx.guild.get_member(ctx.author.id)
         if author.id != reminder.author_id:
             manager = data.get_role(ctx.guild_id)
             if manager:
                 role = ctx.guild.get_role(manager)
-                if not role in author.roles:
+                if role not in author.roles:
                     await ctx.respond(
                         f"You must have the {role.mention} role to remove reminders that aren't yours!",
                         ephemeral=True
@@ -115,6 +114,6 @@ class RemindersCog(commands.Cog, name='Reminders'):
         embed = discord.Embed(
             colour=constants.RED,
             title='Reminder removed!',
-            description=f'**{id}:** {reminder}'
+            description=f'**{_id}:** {reminder}'
         )
         await ctx.respond(embed=embed)

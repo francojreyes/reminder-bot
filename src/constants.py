@@ -1,6 +1,6 @@
-'''
+"""
 Constants used by the application
-'''
+"""
 import itertools
 import re
 import json

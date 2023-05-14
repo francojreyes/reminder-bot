@@ -74,7 +74,7 @@ class ReminderList(pages.Paginator):
 class ReminderListPage(pages.Page):
     """Page of a reminder list"""
 
-    def __init__(self, reminders: list[tuple[int, Reminder]]):
+    def __init__(self, reminders: list[tuple[int, Reminder]] | None):
         if reminders:
             content = '\n'.join(
                 f'**{idx+1}:** {reminder}\n' for idx, reminder in reminders)
@@ -131,14 +131,14 @@ class ReminderListMenu(discord.ui.Select):
         selection = self.values[0]
         if selection == 'Show all reminders':
             self.placeholder = 'Showing all reminders...'
-            pages = self.page_groups[0].pages
+            new_pages = self.page_groups[0].pages
         else:  # 'Show my reminders'
             name = self.paginator.user.display_name
             self.placeholder = f"Showing {name}'s reminders..."
-            pages = self.page_groups[1].pages
+            new_pages = self.page_groups[1].pages
 
         await self.paginator.update(
-            pages=pages,
+            pages=new_pages,
             use_default_buttons=False,
             custom_buttons=BUTTONS,
             custom_view=self.paginator.custom_view,

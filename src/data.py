@@ -48,14 +48,14 @@ class MyMongoClient(MongoClient):
 
         return guild['timezone']
 
-    def set_timezone(self, guild_id: int, timezone: str):
+    def set_timezone(self, guild_id: int, tz: str):
         """Update the timezone of the given guild"""
         guild = self.db.guilds.find_one_and_update(
-            {'_id': guild_id}, {'$set': {'timezone': timezone}})
+            {'_id': guild_id}, {'$set': {'timezone': tz}})
         if not guild:
             self.db.guilds.insert_one({
                 '_id': guild_id,
-                'timezone': timezone,
+                'timezone': tz,
                 'target': None,
                 'role': None
             })
@@ -128,7 +128,7 @@ class MyMongoClient(MongoClient):
 
         try:
             curr = next(cursor)
-        except:
+        except StopIteration:
             return
 
         while True:
@@ -137,7 +137,7 @@ class MyMongoClient(MongoClient):
             self.db.reminders.delete_one({'_id': curr['_id']})
             try:
                 curr = next(cursor)
-            except:
+            except StopIteration:
                 break
     
     def all_guilds(self):

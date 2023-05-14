@@ -1,15 +1,19 @@
-'''
+"""
 The Reminder Bot bot client
-'''
+"""
 import asyncio
 
 import discord
 from discord.ext import tasks
 
-from src.cogs.help import HelpCog
-from src.cogs.reminders import RemindersCog
-from src.cogs.settings import SettingsCog
 from src.data import data
+
+
+async def valid_channel_type(ctx: discord.ApplicationContext):
+    """Ensure that command was not called in private channel"""
+    if ctx.channel.type != discord.ChannelType.text:
+        raise discord.DiscordException("Reminders are not supported for private channels")
+    return True
 
 
 class ReminderBot(discord.Bot):
@@ -21,11 +25,16 @@ class ReminderBot(discord.Bot):
         self.prompts = []
         self.lists = []
 
+        from src.cogs.reminders import RemindersCog
         self.add_cog(RemindersCog(self))
+
+        from src.cogs.settings import SettingsCog
         self.add_cog(SettingsCog(self))
+
+        from src.cogs.help import HelpCog
         self.add_cog(HelpCog(self))
 
-        self.add_check(self.valid_channel_type)
+        self.add_check(valid_channel_type)
 
         self.execute_reminders.start()
 
@@ -39,7 +48,7 @@ class ReminderBot(discord.Bot):
         error: discord.DiscordException
     ):
         """Global error handler"""
-        print(f"Error occured with /{ctx.command.qualified_name}", ctx.selected_options)
+        print(f"Error occurred with /{ctx.command.qualified_name}", ctx.selected_options)
         print(f"    {error}")
         await ctx.respond(
             f"**Error:** {error}\n"
@@ -48,15 +57,9 @@ class ReminderBot(discord.Bot):
             ephemeral=True
         )
 
-    async def valid_channel_type(bot, ctx: discord.ApplicationContext):
-        '''Ensure that command was not called in private channel'''
-        if ctx.channel.type != discord.ChannelType.text:
-            raise discord.DiscordException("Reminders are not supported for private channels")
-        return True
-
     @tasks.loop(minutes=1)
     async def execute_reminders(self):
-        '''Execute all reminders that are in this minute'''
+        """Execute all reminders that are in this minute"""
         for reminder in data.current_reminders():
             # Ensure still in guild
             guild = self.get_guild(reminder.guild_id)
@@ -96,6 +99,6 @@ class ReminderBot(discord.Bot):
 
     @execute_reminders.before_loop
     async def before_my_task(self):
-        '''Wait until ready before executing reminders'''
+        """Wait until ready before executing reminders"""
         await self.wait_until_ready()
         data.ping()

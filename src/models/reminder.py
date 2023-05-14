@@ -1,6 +1,6 @@
-'''
+"""
 Reminder object
-'''
+"""
 from functools import total_ordering
 from datetime import datetime
 
@@ -10,7 +10,7 @@ from src.models.prompt import ReminderPrompt
 
 
 @total_ordering
-class Reminder():
+class Reminder:
     """
     Represents a reminder
 
@@ -119,10 +119,10 @@ class Reminder():
     async def failure(self, channel: discord.TextChannel, author: discord.Member):
         """DM user in case of failed reminder"""
         await author.send(
-                          f'The following reminder failed to send to {channel.mention} in `{channel.guild.name}`' \
-                           ' as the bot does not have permission to send messages.\n' \
-                          f'> {self.text}' \
-                         )
+            f'The following reminder failed to send to {channel.mention} in `{channel.guild.name}`'
+            ' as the bot does not have permission to send messages.\n'
+            f'> {self.text}'
+        )
 
     def __str__(self):
         """Discord syntax string representation for listing"""

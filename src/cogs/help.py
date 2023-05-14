@@ -1,13 +1,13 @@
-'''
+"""
 Cog that implements the modular help command
-'''
+"""
 import discord
 from discord.ext import commands
 
 
 def cog_commands(cog: discord.Cog):
     """Returns all commands of a cog (not groups)"""
-    return [x for x in cog.walk_commands() if not isinstance(x, discord.SlashCommandGroup)]
+    return [x for x in cog.walk_commands() if isinstance(x, discord.SlashCommand)]
 
 
 def help_autocomplete(ctx: discord.AutocompleteContext):
@@ -20,12 +20,12 @@ def help_autocomplete(ctx: discord.AutocompleteContext):
         # Any cog
         if cog.lower().startswith(inp):
             result.append(cog)
-        
+
         # Any command that starts with input or input without slash
         for command in cog_commands(ctx.bot.cogs[cog]):
             command_name = command.qualified_name.lower()
             if command_name.startswith(inp) or \
-                (inp.startswith('/') and command_name.startswith(inp[1:])):
+                    (inp.startswith('/') and command_name.startswith(inp[1:])):
                 result.append(f'/{command.qualified_name}')
 
     return result
@@ -41,39 +41,39 @@ class HelpCog(commands.Cog, name='Other'):
 
     @commands.slash_command()
     @discord.option('input', str, required=False, autocomplete=help_autocomplete,
-        description='Specific module or command')
-    async def help(self, ctx: discord.ApplicationContext, input: str):
+                    description='Specific module or command')
+    async def help(self, ctx: discord.ApplicationContext, _input: str):
         """Help command"""
-        if input and input.startswith('/'):
-            input = input[1:]
+        if _input and _input.startswith('/'):
+            _input = _input[1:]
 
         # If no parameter given, send overview
-        if not input:
+        if not _input:
             await ctx.respond(embed=OverviewEmbed(self.bot))
             return
 
         # iterate through cogs
         for cog in self.bot.cogs:
             # check if cog is the matching one
-            if cog.lower() == input.lower():
+            if cog.lower() == _input.lower():
                 await ctx.respond(embed=CogEmbed(self.bot.cogs[cog]))
                 return
 
-            # or look it in its commands to see if its there
+            # or look it in its commands to see if it's there
             for command in cog_commands(self.bot.cogs[cog]):
-                if command.qualified_name.lower() == input.lower():
+                if command.qualified_name.lower() == _input.lower():
                     await ctx.respond(embed=CommandEmbed(command))
                     return
 
         # if no matches found
         await ctx.respond(embed=discord.Embed(
             title="Not Found",
-            description=f"No module or command found called `{input}`",
+            description=f"No module or command found called `{_input}`",
             color=discord.Color.brand_red()))
 
 
 class OverviewEmbed(discord.Embed):
-    '''Overview when help command has no option'''
+    """Overview when help command has no option"""
 
     def __init__(self, bot: discord.Bot):
         # build Embed
@@ -120,22 +120,22 @@ class CogEmbed(discord.Embed):
 class CommandEmbed(discord.Embed):
     """Embed describing the options of a command"""
 
-    def __init__(self, command: discord.ApplicationCommand):
+    def __init__(self, command: discord.SlashCommand):
         # Generate usage of the form `/command <opt1> <opt2>`
         usage = f"/{command.qualified_name} {' '.join(f'<{opt.name}>' for opt in command.options)}"
 
-        # Build emebed
+        # Build embed
         super().__init__(
             title=f'Help: /{command.qualified_name}',
             description=f"{command.description}.\n Usage: `{usage.strip(' ')}`",
             color=discord.Color.blurple(),
         )
 
-        # Getting optiosn from command
+        # Getting option from command
         for option in command.options:
             self.add_field(
                 name=f'`<{option.name}>`' +
-                (' (Optional)' if not option.required else ''),
+                     (' (Optional)' if not option.required else ''),
                 value=option.description,
                 inline=False
             )

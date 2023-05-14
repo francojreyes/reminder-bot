@@ -1,4 +1,4 @@
-'''Main file to run bot from'''
+"""Main file to run bot from"""
 import os
 
 import discord
