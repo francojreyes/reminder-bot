@@ -52,7 +52,7 @@ class ReminderBot(discord.Bot):
         print(f"    {error}")
         await ctx.respond(
             f"**Error:** {error}\n"
-            "If this seems like unintended behaviour, please contact me (`@marsh#0943`) "
+            "If this seems like unintended behaviour, please contact me (`@marshdapro`) "
             "or report an issue on the [repo](https://github.com/francojreyes/reminder-bot/issues).",
             ephemeral=True
         )
