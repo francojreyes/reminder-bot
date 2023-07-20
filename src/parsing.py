@@ -23,6 +23,15 @@ def str_to_datetime(string: str, timezone: str):
     return parse(string, languages=['en'], settings=settings)
 
 
+def str_to_timedelta(string: str):
+    """
+    Read a relative time string into a timedelta object
+    """
+    base = datetime.now()
+    relative = relative_to_timestamp(string, int(base.timestamp()))
+    return datetime.fromtimestamp(relative) - base
+
+
 def normalise_relative(string: str):
     """
     Read an arbitrary relative time string and convert it to

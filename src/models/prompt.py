@@ -345,6 +345,11 @@ class AmountModal(discord.ui.Modal):
 
         # Choose path based on what function sent this Modal
         if self.state == 'repeat':
+            min_minutes = 5
+            if parsing.str_to_timedelta(res).total_seconds() < min_minutes * 60:
+                await self.prompt.ctx.respond(f'Repeat interval must be at least {min_minutes} minutes', ephemeral=True)
+                await self.prompt.back()
+                return
             self.prompt.time_.append(res)
             await self.prompt.confirm()
         elif self.state == 'in':
