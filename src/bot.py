@@ -91,6 +91,9 @@ class ReminderBot(discord.Bot):
             except discord.errors.Forbidden:
                 print("Failed")
                 await reminder.failure(channel, author)
+            except discord.errors.DiscordServerError:
+                print("Discord server error - waiting till next minute")
+                break
 
             if reminder.interval:
                 data.add_reminder(reminder.generate_repeat())
