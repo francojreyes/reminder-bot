@@ -24,8 +24,11 @@ class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.allowed_mentions = discord.AllowedMentions.none()
+
         self.prompts: list[ReminderPrompt] = []
+        self.promptsLock = asyncio.Lock()
         self.lists: list[ReminderList] = []
+        self.listsLock = asyncio.Lock()
 
         from src.cogs.reminders import RemindersCog
         self.add_cog(RemindersCog(self))
