@@ -65,7 +65,6 @@ class RemindersCog(commands.Cog, name='Reminders'):
                         await list_.close()
                     except discord.errors.DiscordException:
                         pass
-                    self.bot.lists.remove(list_)
 
             # Open a new list
             list_ = ReminderList(ctx, data.guild_reminders(ctx.guild_id))
