@@ -27,7 +27,6 @@ class ReminderList(pages.Paginator):
 
     def __init__(self, ctx: discord.ApplicationContext, reminders: list[Reminder]):
         self.ctx = ctx
-        self.message = None
         self.reminders = list(enumerate(reminders))
         self.my_reminders = [
             r for r in self.reminders if r[1].author_id == ctx.author.id]
@@ -37,8 +36,7 @@ class ReminderList(pages.Paginator):
             ReminderListPageGroup('Show my reminders only', self.my_reminders)
         ]
 
-        view = discord.ui.View(ReminderListMenu(page_groups))
-        view.children[0].paginator = self
+        view = discord.ui.View(ReminderListMenu(page_groups, self))
 
         super().__init__(
             pages=page_groups[0].pages,
@@ -115,9 +113,9 @@ class ReminderListPageGroup(pages.PageGroup):
 class ReminderListMenu(discord.ui.Select):
     """Custom Select menu for the ReminderList"""
 
-    def __init__(self, page_groups: list[ReminderListPageGroup]):
+    def __init__(self, page_groups: list[ReminderListPageGroup], paginator: ReminderList):
         self.page_groups = page_groups
-        self.paginator = None
+        self.paginator = paginator
         opts = [
             discord.SelectOption(
                 label=page_group.label,

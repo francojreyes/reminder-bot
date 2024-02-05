@@ -3,6 +3,7 @@ Reminder prompt UI that uses the Discord Interaction API
 to take user input on a reminder.
 """
 from datetime import datetime, timezone
+from typing import Callable, Awaitable
 
 import discord
 
@@ -39,9 +40,9 @@ class ReminderPrompt:
         self.ctx = ctx
         self.text = text
         self.timezone = tz
-        self.time_ = []
+        self.time_: list[str] = []
 
-        self.prev_state = None
+        self.prev_state: Callable[[], Awaitable[None]] | None = None
         self.view_: PromptView = PromptView(self)
         self.message: discord.InteractionMessage | None = None
         self.interaction: discord.Interaction | None = None

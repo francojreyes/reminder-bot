@@ -7,6 +7,8 @@ import discord
 from discord.ext import tasks
 
 from src.data import data
+from src.models.list import ReminderList
+from src.models.prompt import ReminderPrompt
 
 
 async def valid_channel_type(ctx: discord.ApplicationContext):
@@ -22,8 +24,8 @@ class ReminderBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.allowed_mentions = discord.AllowedMentions.none()
-        self.prompts = []
-        self.lists = []
+        self.prompts: list[ReminderPrompt] = []
+        self.lists: list[ReminderList] = []
 
         from src.cogs.reminders import RemindersCog
         self.add_cog(RemindersCog(self))
