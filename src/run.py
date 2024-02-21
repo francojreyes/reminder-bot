@@ -11,7 +11,6 @@ ping = data.db.command('ping')
 print('Connected to MongoDB', ping)
 
 intents = discord.Intents.default()
-intents.message_content = True
 activity = discord.Activity(type=discord.ActivityType.listening, name="/help")
 client = ReminderBot(intents=intents, activity=activity)
 
