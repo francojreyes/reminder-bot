@@ -28,6 +28,6 @@ Your data is stored in a secure MongoDB Atlas instance, so you are guarded by th
 # Removing your data
 All data for a given server, as well as all reminders associated with that server, are removed from the database if Reminder Bot is removed from the server or the server is deleted.
 
-Reminders deleted with `/remove` are removed from the database instantly.
+Completed reminders and reminders deleted with `/remove` are removed from the database instantly.
 
 Otherwise, data can be removed on request. Please contact me if you wish to remove your data.
