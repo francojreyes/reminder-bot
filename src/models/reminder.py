@@ -118,11 +118,15 @@ class Reminder:
     
     async def failure(self, channel: discord.TextChannel, author: discord.Member):
         """DM user in case of failed reminder"""
-        await author.send(
-            f'The following reminder failed to send to {channel.mention} in `{channel.guild.name}`'
-            ' as the bot does not have permission to send messages.\n'
-            f'> {self.text}'
-        )
+        try:
+            await author.send(
+                f'The following reminder failed to send to {channel.mention} in `{channel.guild.name}`'
+                ' as the bot does not have permission to send messages.\n'
+                f'> {self.text}'
+            )
+        except discord.Forbidden as e:
+            print(f'The following reminder failed to send, and failed to notify author:\n  {repr(self)}\n'
+                  f'The cause was\n{e}')
 
     def __str__(self):
         """Discord syntax string representation for listing"""
@@ -130,7 +134,11 @@ class Reminder:
         if self.interval:
             string += f' (repeats every {self.interval})'
         string += f'\n_"{self.text}"_ for <@!{self.author_id}>'
-        return string 
+        return string
+
+    def __repr__(self):
+        return (f'Reminder(text={self.text}, author_id={self}, guild_id={self.guild_id}, channel_id={self.channel_id}, '
+                f'time={self.time}), interval={self.interval})')
 
     def __eq__(self, other):
         return self.time == other.time
