@@ -125,8 +125,8 @@ class Reminder:
                 f'> {self.text}'
             )
         except discord.Forbidden as e:
-            print(f'The following reminder failed to send, and failed to notify author:\n  {repr(self)}\n'
-                  f'The cause was\n{e}')
+            print(f'The following reminder failed to send, and failed to notify author: {repr(self)}\n'
+                  f'The cause was: {e}')
 
     def __str__(self):
         """Discord syntax string representation for listing"""
@@ -137,8 +137,8 @@ class Reminder:
         return string
 
     def __repr__(self):
-        return (f'Reminder(text={self.text}, author_id={self}, guild_id={self.guild_id}, channel_id={self.channel_id}, '
-                f'time={self.time}), interval={self.interval})')
+        return (f'Reminder(text={self.text}, author_id={self.author_id}, guild_id={self.guild_id}, '
+                f'channel_id={self.channel_id}, time={self.time}, interval={self.interval})')
 
     def __eq__(self, other):
         return self.time == other.time
