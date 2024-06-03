@@ -40,35 +40,35 @@ class HelpCog(commands.Cog, name='Other'):
         self.bot = bot
 
     @commands.slash_command()
-    @discord.option('input', str, required=False, autocomplete=help_autocomplete,
+    @discord.option('topic', str, required=False, autocomplete=help_autocomplete,
                     description='Specific module or command')
-    async def help(self, ctx: discord.ApplicationContext, _input: str):
+    async def help(self, ctx: discord.ApplicationContext, topic: discord.Option(str),):
         """Help command"""
-        if _input and _input.startswith('/'):
-            _input = _input[1:]
+        if topic and topic.startswith('/'):
+            _input = topic[1:]
 
         # If no parameter given, send overview
-        if not _input:
+        if not topic:
             await ctx.respond(embed=OverviewEmbed(self.bot))
             return
 
         # iterate through cogs
         for cog in self.bot.cogs:
             # check if cog is the matching one
-            if cog.lower() == _input.lower():
+            if cog.lower() == topic.lower():
                 await ctx.respond(embed=CogEmbed(self.bot.cogs[cog]))
                 return
 
             # or look it in its commands to see if it's there
             for command in cog_commands(self.bot.cogs[cog]):
-                if command.qualified_name.lower() == _input.lower():
+                if command.qualified_name.lower() == topic.lower():
                     await ctx.respond(embed=CommandEmbed(command))
                     return
 
         # if no matches found
         await ctx.respond(embed=discord.Embed(
             title="Not Found",
-            description=f"No module or command found called `{_input}`",
+            description=f"No module or command found called `{topic}`",
             color=discord.Color.brand_red()))
 
 
