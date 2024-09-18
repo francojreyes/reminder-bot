@@ -30,8 +30,8 @@ def str_to_timedelta(string: str):
     """
     Read a relative time string into a timedelta object
     """
-    base = datetime.now()
-    relative = add_interval(string, datetime.now())
+    base = datetime.now(tz=ZoneInfo("UTC"))
+    relative = add_interval(string, base)
     return relative - base
 
 
