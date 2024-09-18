@@ -101,7 +101,8 @@ class ReminderBot(discord.Bot):
                 break
 
             if reminder.interval:
-                data.add_reminder(reminder.generate_repeat())
+                tz = data.get_timezone(reminder.guild_id)
+                data.add_reminder(reminder.generate_repeat(tz))
 
             await asyncio.sleep(1/25)
 

@@ -1,9 +1,12 @@
 """
 Utility functions for parsing dates, times and intervals
 """
-from datetime import datetime
 import re
+from datetime import datetime, tzinfo
+from zoneinfo import ZoneInfo
+
 from dateparser import parse
+from dateutil.relativedelta import relativedelta
 
 from src import constants
 
@@ -28,8 +31,8 @@ def str_to_timedelta(string: str):
     Read a relative time string into a timedelta object
     """
     base = datetime.now()
-    relative = relative_to_timestamp(string, int(base.timestamp()))
-    return datetime.fromtimestamp(relative) - base
+    relative = add_interval(string, datetime.now())
+    return relative - base
 
 
 def normalise_relative(string: str):
@@ -57,7 +60,7 @@ def normalise_relative(string: str):
             continue
 
         # Make plural if more than one
-        periods.append(f"{num} {period}{'s' if float(num) != 1 else ''}")
+        periods.append(f"{num} {period if float(num) != 1 else period[:-1]}")
     
     # If it starts with 0, invalid
     result = ', '.join(periods)
@@ -67,21 +70,22 @@ def normalise_relative(string: str):
     return result
 
 
-def relative_to_timestamp(string: str, base: int):
+RELATIVE_UNITS = ["days", "weeks", "months", "years"]
+def add_interval(interval: str, dt: datetime):
     """
-    Given an relative time string and a UNIX timestamp, returns the timestamp
-    representing the interval added to the timestamp
+    Given a string describing an interval and a datetime, returns a new datetime
+    that is `interval` after the original datetime
     """
-    settings = {
-        'TIMEZONE': 'UTC',
-        'TO_TIMEZONE': 'UTC',
-        'PREFER_DATES_FROM': 'future',
-        'RELATIVE_BASE': datetime.fromtimestamp(base),
-        'PARSERS': ['relative-time']
-    }
-    res = parse(string, locales=['en-AU'], settings=settings)
+    tz: tzinfo = dt.tzinfo or ZoneInfo('UTC')
 
-    if not res:
-        raise ValueError('Unable to convert')
+    units_dict = constants.INTERVAL_REGEX.match(interval).groupdict()
+    units_dict = {k: (int(v) if v else 0) for k, v in units_dict.items()}
 
-    return int(res.timestamp())
+    # Handle relative units by adding to the corresponding component
+    dt += relativedelta(**{k: units_dict[k] for k in RELATIVE_UNITS})
+
+    # Handle absolute units (seconds) by adding directly to the timestamp
+    delta = units_dict.get("hours", 0) * 3600 + units_dict.get("minutes", 0) * 60 + units_dict.get("seconds", 0)
+    dt = datetime.fromtimestamp(dt.timestamp() + delta, tz=tz)
+
+    return dt

@@ -3,6 +3,7 @@ Reminder object
 """
 from functools import total_ordering
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import discord
 from src import parsing
@@ -55,10 +56,9 @@ class Reminder:
         time = time_str[1].replace(', repeating', '')
         if time_str[0] == 'on':
             time = parsing.str_to_datetime(time, prompt.timezone)
-            time = int(time.timestamp())
         else:  # time_str[0] == 'in'
-            now = int(datetime.now().timestamp())
-            time = parsing.relative_to_timestamp(time, now)
+            time = parsing.add_interval(time, datetime.now(tz=ZoneInfo(prompt.timezone)))
+        time = int(time.timestamp())
 
         # Get the repeat interval
         if 'never' in time_str:
@@ -87,12 +87,12 @@ class Reminder:
             interval=dic['interval']
         )
 
-    def generate_repeat(self):
+    def generate_repeat(self, tz: str = "UTC"):
         """Create reminder that is the repeat of self"""
         if not self.interval:
             raise ValueError('This reminder has no repeat interval set')
 
-        time = parsing.relative_to_timestamp(self.interval, self.time)
+        time = parsing.add_interval(self.interval, datetime.fromtimestamp(self.time, tz=ZoneInfo(tz)))
 
         return Reminder(
             text=self.text,
