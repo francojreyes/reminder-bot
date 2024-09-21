@@ -71,7 +71,7 @@ def normalise_relative(string: str):
 
 
 RELATIVE_UNITS = ["days", "weeks", "months", "years"]
-def add_interval(interval: str, dt: datetime):
+def add_interval(interval: str, dt: datetime) -> datetime:
     """
     Given a string describing an interval and a datetime, returns a new datetime
     that is `interval` after the original datetime

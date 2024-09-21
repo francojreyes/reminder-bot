@@ -58,7 +58,6 @@ class Reminder:
             time = parsing.str_to_datetime(time, prompt.timezone)
         else:  # time_str[0] == 'in'
             time = parsing.add_interval(time, datetime.now(tz=ZoneInfo(prompt.timezone)))
-        time = int(time.timestamp())
 
         # Get the repeat interval
         if 'never' in time_str:
@@ -71,7 +70,7 @@ class Reminder:
             author_id=prompt.ctx.author.id,
             guild_id=prompt.ctx.guild_id,
             channel_id=prompt.ctx.channel_id,
-            time=time,
+            time=int(time.timestamp()),
             interval=interval
         )
 
@@ -99,7 +98,7 @@ class Reminder:
             author_id=self.author_id,
             guild_id=self.guild_id,
             channel_id=self.channel_id,
-            time=time,
+            time=int(time.timestamp()),
             interval=self.interval
         )
 
